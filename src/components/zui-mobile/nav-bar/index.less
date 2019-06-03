@@ -1,0 +1,32 @@
+@import "../style/index.less";
+
+@navbar-prefix-cls: ~"@{zui-prefix}-navbar";
+
+.@{navbar-prefix-cls} {
+    position: relative;
+
+    &.am-navbar-light {
+        .hairline('bottom');
+    }
+
+    &.index {
+        .hairline-remove('bottom');
+    }
+
+    .am-navbar-right {
+
+        .content-item {
+            display: flex;
+            width: 50px;
+            height: 45px;
+            margin-right: -15px;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+}

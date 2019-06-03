@@ -1,0 +1,40 @@
+@import "../style/index.less";
+
+@stepper-prefix-cls: ~"@{zui-prefix}-stepper";
+
+.@{stepper-prefix-cls} {
+    width: 100%;
+    min-width: 100px;
+    height: 22px;
+    line-height: 22px;
+
+    &.showNumber {
+        width: 100%;
+    }
+
+    .am-stepper-handler {
+        width: 22px;
+        height: 22px;
+        line-height: 16px;
+        border-radius: 3px;
+        border-color: @theme_color;
+
+        &.am-stepper-handler-up {
+            color: #fff;
+            background-color: @theme_color;
+        }
+
+        &.am-stepper-handler-down {
+            color: @theme_color;
+        }
+    }
+
+    .am-stepper-input-wrap {
+        height: 22px;
+        line-height: 22px;
+
+        .am-stepper-input {
+            font-size: 17px;
+        }
+    }
+}

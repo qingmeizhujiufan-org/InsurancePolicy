@@ -1,0 +1,20 @@
+@import "../style/index.less";
+
+@list-prefix-cls: ~"@{zui-prefix}-list";
+
+.@{list-prefix-cls} {
+
+    &-item {
+        min-height: 50px;
+        padding-left: 22px;
+
+        .am-list-line {
+            padding-right: 18px;
+
+            .am-list-content {
+                font-size: 14px;
+                color: #999999;
+            }
+        }
+    }
+}

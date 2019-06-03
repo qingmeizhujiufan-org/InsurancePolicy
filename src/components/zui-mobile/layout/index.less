@@ -1,0 +1,27 @@
+@import "../style/index.less";
+
+@layout-prefix-cls: ~"@{zui-prefix}-layout";
+
+.@{layout-prefix-cls} {
+    display: grid;
+    grid-template-rows: auto;
+    height: 100vh;
+
+    &.with-footer {
+        grid-template-rows: auto @footer-height-base;
+    }
+
+    &-content {
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    &-footer {
+        overflow: hidden;
+        background-color: #ffffff;
+
+        .wrap-submit-btn {
+            padding: 10px 15px;
+        }
+    }
+}

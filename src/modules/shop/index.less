@@ -1,0 +1,205 @@
+.shop {
+    width: 100%;
+    background-color: #F7F7F7;
+
+    .zui-content {
+        height: 100vh;
+    }
+
+    .goodsCart {
+
+        margin: 5px 5px;
+        color: #bbb;
+        width: calc(~'(100vw - 40px) / 2');
+        background-color: #fff;
+        border: 1px solid #e3f2fb;
+        overflow: hidden;
+
+        .goodsImg {
+            width: 100%;
+            height: calc(~'(100vw - 30px) / 2.5');
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .goodsBody {
+            padding: 10px 10px;
+
+            .goodsHeader {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                font-size: 14px;
+                height: 20px;
+                color: #000;
+                .isTop {
+                    display: inline-block;
+                    padding: 2px 4px;
+                    margin-right: 5px;
+                    font-size: 12px;
+                    color: #FF5745;
+                    text-align: center;
+                    background-color: #ffe9e7;
+                    border: 1px solid #FF5745;
+                    border-radius: 5px;
+                }
+            }
+
+            .goodsContent {
+                padding-top: 5px;
+                line-height: 24px;
+                height: .3rem;
+                font-size: .22rem;
+                color: #999999;
+                overflow: hidden;
+
+                .goodsAddress {
+                    width: 45%;
+                    margin-right: .2rem;
+                    text-align: right;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .goodsLabel {
+                    width: 45%;
+                    text-align: left;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .goodsFooter {
+                padding: .19rem .09rem .18rem .09rem;
+                font-size: .24rem;
+                font-weight: 500;
+                color: rgba(231, 57, 57, 1);
+                line-height: .33rem;
+                letter-spacing: .01rem;
+            }
+        }
+    }
+
+    .goods-store {
+        background-color: #fff;
+        background-image: url("../../assets/img/shop-bg.png");
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-size: 100% auto;
+
+        .goods-store-header {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+
+            .goods-store-logo {
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                color: #907E40;
+                font-size: .34rem;
+                border: 1px solid #907E40;
+                border-radius: 25px;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .goods-store-info {
+                padding: 10px;
+                flex: 1 1 auto;
+                font-size: .32rem;
+                color: #0C0C0C;
+
+                > div {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+
+                    &:first-child {
+                        margin-bottom: 5px;
+                        font-weight: 600;
+                    }
+
+                    &:last-child {
+                        color: #797979;
+                    }
+                }
+            }
+
+            .goods-store-into {
+                width: auto;
+                padding: 5px 10px;
+                color: #C13636;
+                border: 1px solid #C13636;
+                border-radius: 20px;
+            }
+        }
+
+        .goods-store-body {
+            padding: 10px 15px;
+            font-size: .28rem;
+            color: #0C0C0C;
+            line-height: .5rem;
+        }
+    }
+
+    .goods-info {
+        margin-top: 10px;
+
+        .goods-info-list {
+            background-color: #FFFFFF;
+
+            .am-list-header {
+                color: #000000;
+                font-weight: 600;
+            }
+
+            .am-list-item {
+                div {
+                    font-size: 14px;
+                    color: #797979;
+                }
+            }
+        }
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+        height: 55px;
+        line-height: 55px;
+        background-color: #fff;
+        border: 1px solid #e3f2fb;
+        z-index: 100;
+
+        > div {
+            text-align: center;
+        }
+
+        .service {
+            flex: 1;
+        }
+
+        .add, .buy {
+            flex: 1.5;
+            color: #fff;
+        }
+
+        .add {
+            background-color: #ffb836;
+        }
+
+        .buy {
+            background-color: #FF0036;
+
+        }
+    }
+}

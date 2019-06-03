@@ -1,0 +1,51 @@
+@import "../style/index.less";
+
+.zui-list-unstyled.base-info {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    background: #FFFFFF;
+    overflow: hidden;
+
+    & > li {
+        position: relative;
+        min-height: 50px;
+        padding: 0 18px 0 23px;
+        line-height: 24px;
+        .hairline('bottom');
+
+        &:after {
+            left: 23px !important;
+        }
+
+        & > span {
+
+            &:first-child {
+                float: left;
+                display: block;
+                width: 115px;
+                padding: 13px 0;
+                color: #999999;
+            }
+
+            &:last-child {
+                position: relative;
+                display: block;
+                padding: 13px 0;
+                color: #606060;
+                word-break: break-word;
+                overflow: hidden;
+                text-align: right;
+            }
+        }
+
+        &:before, &:after {
+            content: '';
+            display: block;
+            clear: both;
+            line-height: 1;
+        }
+    }
+}

@@ -1,0 +1,273 @@
+@import "./pub/style/index.less";
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+*:not(input,textarea) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+html {
+    font-size: 10000/750vw;
+}
+
+body {
+    font-family: @font-family;
+    font-size: 1rem;
+}
+
+.am-search {
+    height: 50px;
+    background-color: #FFFFFF;
+    .am-search-input {
+        background-color: #efeff4;
+    }
+    .am-search-cancel {
+        color: #000;
+    }
+}
+
+.am-tabs-default-bar-tab-active {
+    color: #F83F3F !important;
+}
+
+.am-tab-bar-item {
+    position: relative;
+}
+
+.sub-title {
+    padding: 13px 0 0 23px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0C0C0C;
+    background-color: #ffffff;
+}
+
+.zui-sub-content {
+    overflow-y: scroll;
+    position: fixed;
+    top: 44px;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.zui-list-unstyled {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.zui-clearfix:after,
+.zui-clearfix:before {
+    display: table;
+    content: ' ';
+}
+
+.zui-clearfix:after {
+    clear: both;
+}
+
+.zui-pull-right {
+    float: right;
+}
+
+.zui-show {
+    display: inline-block;
+}
+
+.zui-hidden {
+    display: none !important;
+}
+
+.text-green {
+    color: @theme_color !important;
+}
+
+.text-blue {
+    color: #1ea5f5 !important;
+}
+
+.text-orange {
+    color: #fe821e !important;
+}
+
+.text-red {
+    color: #FF5745 !important;
+}
+
+.text-gray {
+    color: #A6A6A6 !important;
+}
+
+.bg-blue {
+    background-color: #e3f2fb !important;
+}
+
+.bg-white {
+    background-color: #FFFFFF !important;
+}
+
+.bg-green {
+    background-color: @theme_color !important;
+}
+
+.bg-orange {
+    background-color: #fe821e !important;
+}
+
+.marginBottom45 {
+    margin-bottom: 45px;
+}
+
+.marginBttom60 {
+    margin-bottom: 60px;
+}
+
+.zui-scroll-wrapper {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.zui-scroll {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    transform: translateZ(0);
+}
+
+.tab-button-group {
+    padding: 30px 0 0 0;
+
+    .tab-button {
+        display: inline-block;
+        width: 90px;
+        margin-top: 15px;
+        margin-right: 15px;
+        padding: 7px 0;
+        font-size: 12px;
+        color: #888888;
+        letter-spacing: 0.86px;
+        background: #E9E9E9;
+        border-radius: 100px;
+        text-align: center;
+
+        &.active {
+            color: #fff;
+            background-image: linear-gradient(-90deg, #6862FF 0%, #A5AEFF 100%);
+        }
+    }
+}
+
+.wrap-no-data {
+    width: 40vw;
+    margin: 20vw auto 0;
+
+    img {
+        width: 100%;
+    }
+}
+
+.am-tabs-default-bar-tab {
+    height: 50px !important;
+    line-height: 50px !important;
+}
+
+.am-tabs-default-bar-tab-active {
+    color: @theme_color !important;
+}
+
+.am-tabs-default-bar-underline {
+    border-color: @theme_color !important;
+}
+
+/* 文章样式 */
+.article {
+    background-color: #fff;
+
+    &.zui-scroll-wrapper {
+        background-color: #fff;
+    }
+
+    h2 {
+        margin: 0;
+        padding: 20px;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    .create-time {
+        margin: -5px 0 10px;
+        padding: 0 20px;
+        color: #999;
+    }
+
+    .desc {
+        position: relative;
+        padding: 20px;
+        background-color: #f5f5f5;
+        line-height: 1.8;
+
+        &:before,
+        &:after {
+            position: absolute;
+            font-size: 24px;
+            color: #999;
+        }
+
+        &:before {
+            content: '“';
+            top: 0;
+            left: 0;
+
+        }
+
+        &:after {
+            content: '”';
+            bottom: -10px;
+            right: 0;
+        }
+    }
+
+    .wrap-html {
+        padding: 15px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        background-color: #fff;
+
+        p {
+            margin: 0;
+            line-height: 2;
+            font-size: 14px !important;
+            color: #606060 !important;
+
+            * {
+                font-size: 14px !important;
+                color: #606060 !important;
+            }
+        }
+
+        img {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100%;
+            margin: 5px 0;
+        }
+    }
+}
+
+.am-list-item .am-list-line .am-list-extra {
+    text-overflow: initial !important;
+    white-space: initial !important;
+}

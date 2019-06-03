@@ -1,0 +1,31 @@
+@import "../style/index.less";
+
+@search-prefix-cls: ~"@{zui-prefix}-search";
+
+.@{search-prefix-cls} {
+    font-size: .24rem;
+
+    &.am-search {
+        height: 55px;
+
+        .am-search-input {
+            height: 34px;
+            background-color: #F7F7F7;
+
+            .am-search-synthetic-ph,
+            input[type="search"] {
+                height: 34px;
+                line-height: 34px;
+            }
+
+            .am-search-clear {
+                padding: 9.5px 6.5px;
+            }
+
+            .am-search-synthetic-ph-placeholder {
+                color: #BCBCBC;
+                font-size: 12px;
+            }
+        }
+    }
+}

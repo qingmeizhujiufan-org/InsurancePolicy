@@ -1,0 +1,74 @@
+.address {
+  .am-list-body {
+    background-color: transparent;
+  }
+  .address-item {
+    position: relative;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    .am-list-item {
+      .am-list-line {
+        padding-bottom: 0;
+      }
+      .am-list-extra,.am-list-brief {
+        color: #000;
+      }
+      .am-list-brief {
+        white-space:normal;
+        word-break:break-all;
+        word-wrap:break-word;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2; //文本行数
+      }
+    }
+    .is-default {
+      font-size: 12px;
+    }
+    .address-btn {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      color: #FF0036;
+      &:before {
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 50%;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        background-color: #949494;
+      }
+    }
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    height: 55px;
+    line-height: 55px;
+    background-color: #fff;
+    border: 1px solid #e3f2fb;
+    z-index: 100;
+    > div {
+      text-align: center;
+    }
+    .total {
+      flex: 3;
+      color: #fff;
+    }
+    .submit {
+      flex: 2;
+      font-size: 16px;
+      color: #FFFFFF;
+      background-color: #FF0036;
+    }
+  }
+}
