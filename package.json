@@ -66,7 +66,7 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "theme": {
-    "brand-primary": "#F83F3F",
-    "brand-primary-tap": "#f35151"
+    "brand-primary": "#2B8BFF",
+    "brand-primary-tap": "#2B8BFF"
   }
 }

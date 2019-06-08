@@ -35,19 +35,9 @@ const Index = Loadable({
     loading: Loading
 });
 
-/* 食品首页详情 */
-const Food = Loadable({
-    loader: () => import('../modules/food/component/index'),
-    loading: Loading
-})
-const FoodDetail = Loadable({
-    loader: () => import('../modules/food/component/foodDetail'),
-    loading: Loading
-})
-
-/* 店铺详情 */
-const ShopDetail = Loadable({
-    loader: () => import('../modules/shop/component/shopDetail'),
+/* 订单列表 */
+const OrderList = Loadable({
+    loader: () => import('../modules/order/component/orderList'),
     loading: Loading
 })
 
@@ -57,35 +47,71 @@ const OrderAdd = Loadable({
     loading: Loading
 })
 
+/* 客户列表 */
+const CustomList = Loadable({
+    loader: () => import('../modules/custom/component/customLsit'),
+    loading: Loading
+})
+
+/* 添加客户 */
+const CustomAdd = Loadable({
+    loader: () => import('../modules/custom/component/customAdd'),
+    loading: Loading
+})
+
+// 个人中心
 const Personal = Loadable({
     loader: () => import('../modules/user/component'),
     loading: Loading
 })
-const Vip = Loadable({
-    loader: () => import('../modules/user/component/vip'),
+
+// 登录
+const Login = Loadable({
+    loader: () => import('../modules/public/component/login'),
+    loading: Loading
+})
+
+// 注册
+const Register = Loadable({
+    loader: () => import('../modules/public/component/register'),
+    loading: Loading
+})
+
+// 找回密码
+const Retrievepsd = Loadable({
+    loader: () => import('../modules/public/component/retrievepsd'),
+    loading: Loading
+})
+
+// 修改密码
+const Changepsd = Loadable({
+    loader: () => import('../modules/public/component/changepsd'),
     loading: Loading
 })
 
 module.exports = (
     <Route path="/" component={App}>
         <IndexRoute component={Index}/>
-        <Route path="food" component={App}>
-            <IndexRoute component={Food}/>
-            <Route path="index" component={Food}/>
-            <Route path="detail/:id" component={FoodDetail}/>
-        </Route>
-        <Route path="shop" component={App}>
-            <IndexRoute component={ShopDetail}/>
-            <Route path="detail/:id" component={ShopDetail}/>
+        <Route path="public" component={App}>
+            <IndexRoute component={Login}/>
+            <Route path="login" component={Login}/>
+            <Route path="register" component={Register}/>
+            <Route path="retrievepad" component={Retrievepsd}/>
+            <Route path="changepsd" component={Changepsd}/>
         </Route>
         <Route path="order" component={App}>
-            <IndexRoute component={OrderAdd}/>
+            <IndexRoute component={OrderList}/>
+            <Route path="list/:id" component={OrderList}/>
             <Route path="add/:id" component={OrderAdd}/>
+        </Route>
+        <Route path="custom" component={App}>
+            <IndexRoute component={CustomList}/>
+            <Route path="list/:id" component={CustomList}/>
+            <Route path="add/:id" component={CustomAdd}/>
         </Route>
         <Route>
             <IndexRoute component={Personal}/>
             <Route path="personal" component={Personal}/>
-            <Route path="vip" component={Vip}/>
         </Route>
     </Route>
 );
