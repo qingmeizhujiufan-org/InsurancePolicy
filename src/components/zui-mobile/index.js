@@ -10,7 +10,6 @@ import FixedMenu from './fixed-menu';
 import Switch from './switch';
 import BaseInfo from './base-info';
 import DistPicker from './distpicker';
-import GoodsCard from './goods-card';
 import Stepper from './stepper';
 import SearchBar from './search-bar';
 import Empty from './empty';
@@ -28,7 +27,6 @@ module.exports = {
     Switch,
     BaseInfo,
     DistPicker,
-    GoodsCard,
     Stepper,
     SearchBar,
     Empty,

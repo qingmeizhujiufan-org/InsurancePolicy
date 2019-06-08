@@ -42,11 +42,11 @@ module.exports = {
             Comps: path.resolve(__dirname, 'src/components/'),//组件
             RestUrl: path.resolve(__dirname, 'src/actions/RestUrl/'),//rest、http服务地址
             Img: path.resolve(__dirname, 'src/assets/img/'),//图片
+            'zui-mobile': path.resolve(__dirname, 'src/components/zui-mobile'),//组件
         }
     },
 
-    externals: {
-    },
+    externals: {},
 
     module: {
         rules: [
