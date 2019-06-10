@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import {Route, IndexRoute} from 'react-router';
-import {Icon} from 'antd-mobile';
+import { Route, IndexRoute } from 'react-router';
+import { Icon } from 'antd-mobile';
 import Loadable from 'react-loadable';
 
 function Loading(props) {
@@ -17,7 +17,7 @@ function Loading(props) {
             <div style={{
                 padding: '30px 0',
                 textAlign: 'center'
-            }}><Icon type='loading'/></div>
+            }}><Icon type='loading' /></div>
         );
     } else {
         return null;
@@ -59,12 +59,6 @@ const CustomAdd = Loadable({
     loading: Loading
 })
 
-// 个人中心
-const Personal = Loadable({
-    loader: () => import('../modules/user/component'),
-    loading: Loading
-})
-
 // 登录
 const Login = Loadable({
     loader: () => import('../modules/public/component/login'),
@@ -83,35 +77,48 @@ const Retrievepsd = Loadable({
     loading: Loading
 })
 
+// 个人中心
+const Personal = Loadable({
+    loader: () => import('../modules/user/component'),
+    loading: Loading
+})
+
+// 修改个人信息
+const Edit = Loadable({
+    loader: () => import('../modules/user/component/edit'),
+    loading: Loading
+})
+
 // 修改密码
 const Changepsd = Loadable({
-    loader: () => import('../modules/public/component/changepsd'),
+    loader: () => import('../modules/user/component/changepsd'),
     loading: Loading
 })
 
 module.exports = (
     <Route path="/" component={App}>
-        <IndexRoute component={Index}/>
+        <IndexRoute component={Index} />
         <Route path="public" component={App}>
-            <IndexRoute component={Login}/>
-            <Route path="login" component={Login}/>
-            <Route path="register" component={Register}/>
-            <Route path="retrievepad" component={Retrievepsd}/>
-            <Route path="changepsd" component={Changepsd}/>
+            <IndexRoute component={Login} />
+            <Route path="login" component={Login} />
+            <Route path="register" component={Register} />
+            <Route path="retrievepad" component={Retrievepsd} />
         </Route>
         <Route path="order" component={App}>
-            <IndexRoute component={OrderList}/>
-            <Route path="list/:id" component={OrderList}/>
-            <Route path="add/:id" component={OrderAdd}/>
+            <IndexRoute component={OrderList} />
+            <Route path="list/:id" component={OrderList} />
+            <Route path="add/:id" component={OrderAdd} />
         </Route>
         <Route path="custom" component={App}>
-            <IndexRoute component={CustomList}/>
-            <Route path="list/:id" component={CustomList}/>
-            <Route path="add/:id" component={CustomAdd}/>
+            <IndexRoute component={CustomList} />
+            <Route path="list/:id" component={CustomList} />
+            <Route path="add/:id" component={CustomAdd} />
         </Route>
-        <Route>
-            <IndexRoute component={Personal}/>
-            <Route path="personal" component={Personal}/>
+        <Route path="user" component={App}>
+            <IndexRoute component={Personal} />
+            <Route path="personal" component={Personal} />
+            <Route path="edit" component={Edit} />
+            <Route path="changepsd" component={Changepsd} />
         </Route>
     </Route>
 );

@@ -1,350 +1,90 @@
-#userCenter {
-    height: 100%;
-    background-color: transparent;
+.personal {
+    font-size: .28rem;
 
-    .img-area {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        height: calc(41.87vw);
-        background-color: #DEB87D;
-        background-image: url("../../assets/img/user_bg.png");
-        background-repeat: no-repeat;
-        background-size: cover;
-        z-index: 10;
-    }
+    .user-info-container {
+        background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
 
-    .main-area {
-        position: relative;
-        height: auto;
-        padding: 0 10px;
-        background-color: transparent;
-        margin-top: 60px;
-        z-index: 101;
+        .user-info-detail {
+            color: #fff;
 
-        .vip {
-            height: 85px;
-            margin: 20px 0;
-            padding: 20px 40px;
-            border-radius: 6px;
-            overflow: hidden;
-            background-color: #F9DCA4;
-            background-image: url("../../assets/img/vipBanner.png");
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        .info-area {
-            margin-bottom: 15px;
-            border-radius: 6px;
-            overflow: hidden;
-            background-color: #fff;
-
-            .info-list {
-                .am-list-body:after, .am-list-body:before {
-                    height: 0;
-                }
-
-                .iconfont {
-                    display: block;
-                    color: #89492E;
-                    font-size: .36rem;
-                }
-
-                .am-list-item {
-                    height: 60px;
-                }
-
-                .am-list-content {
-                    font-size: 16px;
-                    color: #333333;
-                }
-            }
-
-            .vip-rule {
-                padding: 25px 20px;
-
-                &-title {
-                    margin-bottom: 15px;
-                    line-height: 20px;
-                    color: #70564E;
-                    font-size: 15px;
-                }
-
-                &-desc {
-                    color: #837055;
-                    font-size: 12px;
-                    line-height: 25px;
-                }
-
-                .am-button {
-                    height: 40px;
-                    line-height: 40px;
-                    font-size: 16px;
-                    background: linear-gradient(to right, #BB8444, #E3B053);
-
-                    &:before {
-                        border: none !important;
-                    }
-                }
-            }
-        }
-
-        .user-area {
-            height: 130px;
-            padding-left: 26px;
-            margin-bottom: 15px;
-            border-radius: 7px;
-            background-color: #fff;
-            background-image: url("../../assets/img/user_info_bg.png");
-            background-repeat: no-repeat;
-            background-size: cover;
-
-            .user-info {
-                display: flex;
-                height: 130px;
-                align-items: center;
-
-                .user-img {
-                    width: 55px;
-                    height: 55px;
-                    border-radius: 50%;
-                    overflow: hidden;
-
-                    img {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-
-                .user-detail {
-                    display: flex;
-                    height: .8rem;
-                    margin-left: 10px;
-                    flex-direction: column;
-                    justify-content: space-between;
-
-                    .user-name {
-                        height: .4rem;
-                        font-size: .36rem;
-                        color: #70564E;
-                        line-height: .4rem;
-                    }
-
-                    .user-points {
-                        font-size: .24rem;
-                        color: #70564E;
-                        line-height: .33rem;
-                    }
-
-                    .is-vip {
-                        color: #FCA82A;
-                        font-size: .24rem;
-
-                        img {
-                            width: 12px;
-                            height: 12px;
-                        }
-                    }
-                }
-            }
-
-            .order-list {
-                display: flex;
-                justify-content: space-around;
-                padding: 0 20px;
-                height: 60px;
-
-                .order-item {
-                    flex: 1;
-                    padding: 5px 10px;
-                    text-align: center;
-
-                    .order-number {
-                        font-size: .32rem;
-                        margin-bottom: .1rem;
-                    }
-
-                    .order-label {
-                        font-size: .24rem;
-                        color: #797979;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.hotel-order,
-.travel-order,
-.travel-order-detail,
-.hotel-detail-order,
-.hotel-comment-order {
-
-    .order-card,
-    .detail-card {
-        margin-top: .2rem;
-        padding: 0;
-    }
-
-    .am-card-header {
-        height: 1rem;
-        padding: 0 .36rem 0 .3rem;
-        font-size: .28rem;
-        color: #0C0C0C;
-
-        .iconfont {
-            margin-right: .2rem;
-            font-size: .4rem;
-        }
-    }
-
-    .am-card-body {
-        padding: .3rem;
-        font-size: .24rem;
-        color: #999999;
-
-        .card-body-title {
-            height: .33rem;
-            line-height: .33rem;
-            color: #0C0C0C;
-        }
-
-        .card-body-middle {
-            margin: .2rem 0;
-
-            > span:first-child {
-                display: inline-block;
-                width: 1.2rem;
-            }
-
-            > div {
-                display: inline-block;
+            .user-logo {
+                flex: 1;
                 margin-right: .2rem;
             }
 
-            .highlight {
-                color: #0C0C0C;
-            }
-        }
-        .card-body-desc {
-            margin-bottom: .1rem;
-        }
+            .user-name {
+                flex: 4;
 
-        .card-body-footer {
-            color: #E73939;
-
-            .money {
-                font-size: .32rem;
-            }
-        }
-    }
-
-    .am-card-header-extra {
-        font-size: .28rem;
-        color: #787171;
-    }
-
-    .am-card-footer {
-        display: flex;
-        align-items: center;
-        height: .93rem;
-        border-top: .01rem solid #EBEBEB;
-
-        .footer-btn {
-            display: inline-block;
-            height: .57rem;
-            line-height: .57rem;
-            font-size: .28rem;
-            color: #787171;
-            overflow: initial;
-
-            &:before {
-                border-color: #787171 !important;
+                >div:first-child {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: .12rem;
+                }
             }
 
-            &.comment {
-                margin-left: .2rem;
-                color: #E73939;
+            .user-btn {
+                width: auto;
+                padding: .12rem .2rem;
+                border-radius: 10px;
+                background-color: #8eb9ff;
+                opacity: .8; // background-color: rgba(142, ​185, ​255, 0.7);
+            }
 
-                &:before {
-                    border-color: #E73939 !important;
+            .am-flexbox-item {
+                text-align: center;
+
+                >div {
+                    &:first-child {
+                        margin-bottom: .1rem;
+                    }
                 }
             }
         }
     }
-}
 
-.hotel-detail-order {
+    .user-gird-container {
+        display: flex;
+        justify-content: space-around;
+        padding: .3rem;
 
-    .hotel-info {
-        padding-bottom: .3rem;
-        border-bottom: .01rem solid #EBEBEB;
+        .user-gird {
+            position: relative;
+            width: 40vw;
+            height: 40vw;
 
-        > div {
-            height: .4rem;
-            font-size: .28rem;
-            line-height: .4rem;
-
-            .iconfont {
-                font-size: .24rem;
+            img {
+                width: 100%;
+                height: 100%;
             }
-        }
-    }
 
-    .room-info {
-        padding-top: .3rem;
-        font-size: .28rem;
-        color: #000;
-    }
-
-    .order-info {
-        margin-top: .2rem;
-        font-size: .28rem;
-        color: #000;
-    }
-
-    .reservations-info {
-
-        .am-card-body {
-            padding: 0;
-        }
-
-        .zui-list-unstyled.base-info > li {
-            padding: 0 18px 0 .36rem;
-            min-height: initial;
-
-            &:after {
-                display: none;
+            .user-gird-text {
+                position: absolute;
+                bottom: .3rem;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: .36rem;
             }
-        }
-
-        .zui-list-unstyled.base-info > li > span:first-child {
-            width: 80px;
-            padding: 5px 0;
-        }
-
-        .zui-list-unstyled.base-info > li > span:last-child {
-            padding: 5px 0;
-            text-align: left;
         }
     }
 }
 
-.hotel-comment-order {
-
-    .detail-card {
-        margin-top: 0;
+.user {
+    .am-list-body {
+        background: transparent;
     }
 
-    .zui-layout-footer {
+    .am-image-picker-list {
+        display: flex;
+        margin-bottom: 0;
+        padding: 0;
 
-        .am-button {
-            height: .8rem;
-            line-height: .8rem;
-            margin-top: .15rem;
-            background: rgba(241, 107, 107, 1);
-            border-radius: 6px;
+        .am-flexbox {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .am-image-picker-item .am-image-picker-item-content {
+            border-radius: 50%;
         }
     }
 }

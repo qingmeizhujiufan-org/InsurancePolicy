@@ -1,25 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {List, NavBar, Icon} from 'antd-mobile';
+import { List, Flex, WingBlank, WhiteSpace, Icon } from 'antd-mobile';
+import { Layout } from 'zui-mobile';
 import '../index.less';
-import vipBadge from 'Img/VIP_badge.png';
-import {Layout} from "Comps/zui-mobile";
 import DocumentTitle from "react-document-title";
+import axios from 'Utils/axios';
+import restUrl from "RestUrl";
 
 const Item = List.Item;
-
+const Brief = Item.Brief;
 class Index extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            data: {
-                isPayed: 1,
-                isDoned: 2,
-                toPayed: 1
-            }
         }
-    }
+    };
 
     componentWillMount() {
     }
@@ -27,57 +23,81 @@ class Index extends React.Component {
     componentDidMount() {
     }
 
-    viewVIP = () => {
-        this.context.router.push('vip');
+    showHotel = id => {
+        this.context.router.push(`/hotel/detail/${id}`);
+    }
+
+    showTravel = id => {
+        this.context.router.push(`/travel/detail/${id}`);
+    }
+
+    userCenter = () => {
+        this.context.router.push(`/personal`);
     }
 
     render() {
-        const {data} = this.state;
+        const { } = this.state;
 
         return (
             <DocumentTitle title='个人中心'>
-                <div id="goodsDetail">
-                    <Layout>
-                        <Layout.Content>
-                            <div className="zui-content">
-                                <div id="userCenter">
-                                    <div className='img-area'></div>
-                                    <div className='main-area'>
-                                        <div className='user-area'>
-                                            <div className='user-info'>
-                                                <div className='user-img'>
-                                                    <img src={sessionStorage.headimgurl} alt=""/>
-                                                </div>
-                                                <div className='user-detail'>
-                                                    <div className='user-name'>{sessionStorage.nickname}</div>
-                                                    <div className='is-vip'><img src={vipBadge}/> VIP</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className='vip' onClick={this.viewVIP}>
-                                        </div>
-                                        <div className='info-area'>
-                                            <List className='info-list'>
-                                                <Item
-                                                    thumb={<span className='iconfont icon-fangjianxinxi'></span>}
-                                                    arrow="horizontal"
-                                                    onClick={() => this.context.router.push('/hotelOrder')}
-                                                >民宿订单</Item>
-                                                <Item
-                                                    thumb={<span className='iconfont icon-gerenzhongxin-lvyoudingdan'></span>}
-                                                    onClick={() => {
-                                                      this.context.router.push('/travelOrder')
-                                                    }}
-                                                    arrow="horizontal"
-                                                >旅游订单</Item>
-                                            </List>
-                                        </div>
+                <Layout className="personal">
+                    <Layout.Content>
+                        <div className="user-info-container">
+                            <WhiteSpace size="lg" />
+                            <WhiteSpace size="lg" />
+
+                            <WingBlank>
+                                <Flex justify="center" className="user-info-detail">
+                                    <div className="user-logo">
+                                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt="" />
                                     </div>
-                                </div>
+                                    <div className="user-name">
+                                        <div>王玮</div>
+                                        <div>阿大大</div>
+                                    </div>
+                                    <div className="user-btn">新增订单</div>
+                                </Flex>
+                                <WhiteSpace size="lg" />
+
+                                <Flex justify="center" className="user-info-detail">
+                                    <Flex.Item>
+                                        <div>1</div>
+                                        <div>排名</div>
+                                    </Flex.Item>
+                                    <Flex.Item>
+                                        <div>1</div>
+                                        <div>个人保费</div>
+                                    </Flex.Item>
+                                    <Flex.Item>
+                                        <div>1</div>
+                                        <div>产品销量</div>
+                                    </Flex.Item>
+                                    <Flex.Item>
+                                        <div>1232323</div>
+                                        <div>公司赔偿</div>
+                                    </Flex.Item>
+                                    <Flex.Item>
+                                        <div>123</div>
+                                        <div>点赞</div>
+                                    </Flex.Item>
+                                </Flex>
+                            </WingBlank>
+                            <WhiteSpace size="lg" />
+                            <WhiteSpace size="lg" />
+
+                        </div>
+                        <div className="user-gird-container">
+                            <div className="user-gird">
+                                <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt="" />
+                                <div className="user-gird-text">我的订单</div>
                             </div>
-                        </Layout.Content>
-                    </Layout>
-                </div>
+                            <div className="user-gird">
+                                <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt="" />
+                                <div className="user-gird-text">我的客户</div>
+                            </div>
+                        </div>
+                    </Layout.Content>
+                </Layout>
             </DocumentTitle>
         );
     }

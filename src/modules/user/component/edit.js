@@ -7,12 +7,22 @@ import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 
+import classify_1 from 'Img/classify_1.png';
+
+const Item = List.Item;
+const Brief = Item.Brief;
+const data = [{
+    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+    id: '2121',
+}];
+
 class Index extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            files: data,
+            multiple: false,
         }
     };
 
@@ -29,11 +39,11 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { } = this.state;
+        const { files } = this.state;
 
         return (
-            <DocumentTitle title='密码修改'>
-                <Layout className="public">
+            <DocumentTitle title='个人信息修改'>
+                <Layout className="user">
                     <Layout.Content>
                         <form>
                             <List
@@ -44,6 +54,19 @@ class Index extends React.Component {
 
                                 }
                             >
+                                <WhiteSpace size="lg" />
+                                <Item
+                                    extra={
+                                        <ImagePicker
+                                            length="1"
+                                            files={files}
+                                            onChange={this.onChange}
+                                            onImageClick={(index, fs) => console.log(index, fs)}
+                                            multiple={this.state.multiple}
+                                            disableDelete="true"
+                                        />
+                                    }
+                                    onClick={() => this.selectAvtaor}>头像</Item>
                                 <WhiteSpace size="lg" />
                                 <InputItem
                                     {...getFieldProps('telphone', {
@@ -56,22 +79,9 @@ class Index extends React.Component {
                                     onErrorClick={() => {
                                         Toast.info(getFieldError('telphone').join('、'));
                                     }}
-                                    placeholder="请输入旧密码"
-                                >旧密码</InputItem>
-                                <InputItem
-                                    {...getFieldProps('telphone', {
-                                        rules: [
-                                            { required: true, message: '请输入用户手机号' }
-                                        ]
-                                    })}
-                                    type="password"
-                                    clear
-                                    error={!!getFieldError('telphone')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('telphone').join('、'));
-                                    }}
-                                    placeholder="请输入新密码"
-                                >新密码</InputItem>
+                                    placeholder="请输入注册手机号"
+                                >昵称</InputItem>
+
                                 <InputItem
                                     {...getFieldProps('password', {
                                         rules: [
@@ -79,21 +89,24 @@ class Index extends React.Component {
                                             { validator: this.validatePhone },
                                         ],
                                     })}
-                                    type="password"
                                     clear
                                     error={!!getFieldError('password')}
                                     onErrorClick={() => {
                                         Toast.info(getFieldError('password').join('、'));
                                     }}
-                                    placeholder="请再次输入新密码"
-                                    extra={<span className="tip-btn" onClick={this.showPSD}>显示</span>}
-                                >确认密码</InputItem>
+                                    placeholder="请输入注册密码"
+                                >所属公司</InputItem>
+                                <WhiteSpace size="lg" />
+
+                                <Item arrow="horizontal" onClick={() => { this.onChangePSD }}>修改密码</Item>
                             </List>
                             <WingBlank>
                                 <Button type="primary" onClick={this.onSubmit}>提交</Button>
                             </WingBlank>
                         </form>
                     </Layout.Content>
+                    <WhiteSpace size="lg" />
+
                 </Layout>
             </DocumentTitle>
         );
@@ -103,6 +116,6 @@ class Index extends React.Component {
 Index.contextTypes = {
     router: PropTypes.object
 }
-const Changepsd = createForm()(Index);
+const Register = createForm()(Index);
 
-export default Changepsd;
+export default Register;

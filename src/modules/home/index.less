@@ -2,10 +2,33 @@
     font-size: .28rem;
 
     .user-info-container {
-        background: linear-gradient(to right, #402bf5, #6565ff);
+        background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
 
         .user-info-detail {
             color: #fff;
+
+            .user-logo {
+                flex: 1;
+                margin-right: .2rem;
+            }
+
+            .user-name {
+                flex: 4;
+
+                >div:first-child {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: .12rem;
+                }
+            }
+
+            .user-btn {
+                width: auto;
+                padding: .12rem .2rem;
+                border-radius: 10px;
+                background-color: #8eb9ff;
+                opacity: .8; // background-color: rgba(142, ​185, ​255, 0.7);
+            }
 
             .am-flexbox-item {
                 text-align: center;
@@ -17,5 +40,46 @@
                 }
             }
         }
+    }
+
+    .sort-item-left {
+        display: flex;
+        align-items: center;
+
+        .item-sort-num {
+            font-size: .32rem;
+            margin-right: .2rem;
+        }
+    }
+
+    .sort-item-right {
+        display: flex;
+        align-items: center;
+
+        .item-fee-num {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: .4rem;
+            color: #2B8BFF;
+            margin-right: .1rem;
+        }
+
+        .item-like-num {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: .24rem;
+        }
+    }
+
+    .my-drawer .am-drawer-sidebar .am-list {
+        width: 80vw;
+        padding: 0;
     }
 }
