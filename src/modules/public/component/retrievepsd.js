@@ -12,7 +12,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-
+            reset: false
         }
     };
 
@@ -29,55 +29,104 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { } = this.state;
+        const { reset } = this.state;
 
         return (
             <DocumentTitle title='找回密码'>
                 <Layout className="public">
                     <Layout.Content>
-                        <form>
-                            <List
-                                renderFooter={
-                                    () =>
-                                        getFieldError('telphone')
-                                        && getFieldError('password')
+                        {
+                            reset ? (
+                                <form>
+                                    <List
+                                        renderFooter={
+                                            () =>
+                                                getFieldError('telphone')
+                                                && getFieldError('password')
 
-                                }
-                            >
-                                <WhiteSpace size="lg" />
-                                <InputItem
-                                    {...getFieldProps('telphone', {
-                                        rules: [
-                                            { required: true, message: '请输入用户手机号' }
-                                        ]
-                                    })}
-                                    clear
-                                    error={!!getFieldError('telphone')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('telphone').join('、'));
-                                    }}
-                                    placeholder="请输入注册手机号"
-                                >手机号</InputItem>
-                                <InputItem
-                                    {...getFieldProps('password', {
-                                        rules: [
-                                            { required: true, message: '请输入用户密码' },
-                                            { validator: this.validatePhone },
-                                        ],
-                                    })}
-                                    clear
-                                    error={!!getFieldError('password')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password').join('、'));
-                                    }}
-                                    placeholder="请输入验证码"
-                                    extra={<span className="tip-btn">获取验证码</span>}
-                                >验证码</InputItem>
-                            </List>
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                            </WingBlank>
-                        </form>
+                                        }
+                                    >
+                                        <WhiteSpace size="lg" />
+                                        <InputItem
+                                            {...getFieldProps('telphone', {
+                                                rules: [
+                                                    { required: true, message: '请输入用户手机号' }
+                                                ]
+                                            })}
+                                            clear
+                                            error={!!getFieldError('telphone')}
+                                            onErrorClick={() => {
+                                                Toast.info(getFieldError('telphone').join('、'));
+                                            }}
+                                            placeholder="请输入注册手机号"
+                                        >手机号</InputItem>
+                                        <InputItem
+                                            {...getFieldProps('password', {
+                                                rules: [
+                                                    { required: true, message: '请输入用户密码' },
+                                                    { validator: this.validatePhone },
+                                                ],
+                                            })}
+                                            clear
+                                            error={!!getFieldError('password')}
+                                            onErrorClick={() => {
+                                                Toast.info(getFieldError('password').join('、'));
+                                            }}
+                                            placeholder="请输入验证码"
+                                            extra={<span className="tip-btn">获取验证码</span>}
+                                        >验证码</InputItem>
+                                    </List>
+                                    <WingBlank>
+                                        <Button type="primary" onClick={this.onSubmit}>提交</Button>
+                                    </WingBlank>
+                                </form>)
+                                : (
+                                    <form>
+                                        <List
+                                            renderFooter={
+                                                () =>
+                                                    getFieldError('telphone')
+                                                    && getFieldError('password')
+
+                                            }
+                                        >
+                                            <WhiteSpace size="lg" />
+                                            <InputItem
+                                                {...getFieldProps('telphone', {
+                                                    rules: [
+                                                        { required: true, message: '请输入用户手机号' }
+                                                    ]
+                                                })}
+                                                clear
+                                                error={!!getFieldError('telphone')}
+                                                onErrorClick={() => {
+                                                    Toast.info(getFieldError('telphone').join('、'));
+                                                }}
+                                                placeholder="请输入注册手机号"
+                                            >手机号</InputItem>
+                                            <InputItem
+                                                {...getFieldProps('password', {
+                                                    rules: [
+                                                        { required: true, message: '请输入用户密码' },
+                                                        { validator: this.validatePhone },
+                                                    ],
+                                                })}
+                                                clear
+                                                error={!!getFieldError('password')}
+                                                onErrorClick={() => {
+                                                    Toast.info(getFieldError('password').join('、'));
+                                                }}
+                                                placeholder="请输入验证码"
+                                                extra={<span className="tip-btn">获取验证码</span>}
+                                            >验证码</InputItem>
+                                        </List>
+                                        <WingBlank>
+                                            <Button type="primary" onClick={this.onNext}>下一步</Button>
+                                        </WingBlank>
+                                    </form>
+                                )
+                        }
+
                     </Layout.Content>
                 </Layout>
             </DocumentTitle>

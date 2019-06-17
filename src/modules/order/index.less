@@ -1,7 +1,153 @@
 .order {
+
+    .order-card {
+        .am-card-header {
+            font-size: .32rem;
+
+            .order-company {
+                margin-top: .2rem;
+                font-size: .3rem;
+                color: #888;
+            }
+        }
+
+        .am-card-body {
+            padding: 0 .3rem;
+
+            &::before {
+                top: auto;
+                bottom: 0;
+            }
+
+            .order-detail {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: .2rem;
+
+                >div {
+                    flex: 50%;
+                    padding: .1rem 0;
+                    color: #888;
+                }
+            }
+        }
+
+        .order-footer {
+            padding: .2rem 0;
+        }
+
+    }
+
+    .am-list-item {
+        .am-list-content {}
+
+        .am-input-control {
+            input {
+                text-align: right;
+            }
+        }
+    }
+
+    .am-calendar {
+        font-size: .32rem;
+    }
+
+    .range-date {
+        height: 1rem;
+        font-size: .28rem;
+        color: #6F6F6F;
+        background-color: #efeff4;
+
+        &-between {
+            flex-basis: 100%;
+            padding: 0 .3rem;
+
+            .wrap-date {
+                flex-basis: 45%;
+                height: .68rem;
+                padding-left: .43rem;
+                border-radius: .68rem;
+                background-color: #ffffff;
+
+                .iconfont {
+                    margin-right: .18rem;
+                    font-size: .24rem;
+                }
+            }
+
+            .separate {
+                flex-basis: 10%;
+                font-size: .5rem;
+                text-align: center;
+            }
+        }
+
+        &-days {
+            flex-basis: 15%;
+        }
+    }
+
     .bottom-foot {
         position: fixed;
         bottom: 0;
         height: 1rem;
+    }
+
+    .order-list {
+
+        .am-list-body {
+
+            &::before,
+            &::after {
+                height: 0;
+            }
+
+            .am-list-item {
+                padding: 0 0 .3rem;
+
+                >div {
+                    padding: 0
+                }
+            }
+        }
+
+        .am-list-brief {
+            font-size: .3rem;
+        }
+
+        .am-list-content {
+            font-size: .3rem;
+            color: #888;
+        }
+
+        .am-list-extra {
+            .order-extra {
+                >.am-list-brief {
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .order-add-list {
+        .am-list-header {
+            position: relative;
+            padding: 10px;
+            font-size: .32rem;
+
+            &::before {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+                display: block;
+                width: .05rem;
+                height: 50%;
+                background-color: #2B8BFF;
+                content: '',
+            }
+        }
     }
 }

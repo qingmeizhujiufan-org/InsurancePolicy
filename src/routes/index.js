@@ -49,7 +49,7 @@ const OrderAdd = Loadable({
 
 /* 客户列表 */
 const CustomList = Loadable({
-    loader: () => import('../modules/custom/component/customLsit'),
+    loader: () => import('../modules/custom/component/customList'),
     loading: Loading
 })
 

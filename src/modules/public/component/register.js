@@ -45,6 +45,8 @@ class Index extends React.Component {
             <DocumentTitle title='用户注册'>
                 <Layout className="public">
                     <Layout.Content>
+                        <WhiteSpace size="lg" />
+
                         <form>
                             <List
                                 renderFooter={
@@ -54,7 +56,6 @@ class Index extends React.Component {
 
                                 }
                             >
-                                <WhiteSpace size="lg" />
                                 <InputItem
                                     {...getFieldProps('telphone', {
                                         rules: [
@@ -115,7 +116,7 @@ class Index extends React.Component {
 
                                 <WhiteSpace size="lg" />
 
-                                <Item
+                                {/* <Item
                                     extra={
                                         <ImagePicker
                                             length="1"
@@ -154,11 +155,12 @@ class Index extends React.Component {
                                         Toast.info(getFieldError('password').join('、'));
                                     }}
                                     placeholder="请输入注册密码"
-                                >所属公司</InputItem>
+                                >所属公司</InputItem> */}
                             </List>
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>注册</Button>
-                            </WingBlank>
+                            <WhiteSpace size="sm" />
+
+                            <Button type="primary" onClick={this.onSubmit}>注册</Button>
+                            <WhiteSpace size="sm" />
                         </form>
                     </Layout.Content>
                     <WhiteSpace size="lg" />

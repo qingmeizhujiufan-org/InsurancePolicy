@@ -22,7 +22,8 @@
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.1",
@@ -46,7 +47,6 @@
     "js-cookie": "^2.2.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
-    "moment": "^2.24.0",
     "postcss": "^5.2.5",
     "postcss-loader": "^1.1.0",
     "postcss-pxtorem": "^3.3.1",
