@@ -1,68 +1,134 @@
 .personal {
     font-size: .28rem;
 
-    .user-info-container {
+    .user-img-container {
+        position: relative;
         background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
 
-        .user-info-detail {
-            color: #fff;
+        .am-image-picker {
+            width: 100%;
+            height: 20vh;
 
-            .user-logo {
-                flex: 1;
-                margin-right: .2rem;
-            }
+            .am-image-picker-list {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
 
-            .user-name {
-                flex: 4;
+                .am-flexbox.am-flexbox-align-center {
+                    margin: 0;
+                    width: 100%;
+                    height: 100%;
 
-                >div:first-child {
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: .12rem;
-                }
-            }
+                    &:last-child {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 50vw;
+                        height: .6rem;
+                        transform: translate(-50%, -50%);
+                        background-color: transparent;
 
-            .user-btn {
-                width: auto;
-                padding: .12rem .2rem;
-                border-radius: 10px;
-                background-color: #8eb9ff;
-                opacity: .8; // background-color: rgba(142, ​185, ​255, 0.7);
-            }
+                        .am-image-picker-upload-btn {
+                            background-color: transparent;
+                            border: none;
 
-            .am-flexbox-item {
-                text-align: center;
+                            &:after {
+                                width: auto;
+                                height: auto;
+                                content: "点击替换背景";
+                                background-color: transparent;
+                                color: #fff;
+                            }
 
-                >div {
-                    &:first-child {
-                        margin-bottom: .1rem;
+                            &:before {
+                                width: auto;
+                                height: 0;
+                                // content: "\e703";
+                                color: #fff;
+                            }
+                        }
+                    }
+
+                    .am-flexbox-item {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
                     }
                 }
             }
         }
     }
 
-    .user-gird-container {
-        display: flex;
-        justify-content: space-around;
-        padding: .3rem;
+    .user-info-container {
+        position: relative;
+        padding-top: .5rem;
+        text-align: center;
+        background-color: #fff;
+        overflow: visible;
 
-        .user-gird {
-            position: relative;
-            width: 40vw;
-            height: 40vw;
+        .user-logo {
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: .5rem;
+            overflow: hidden;
 
             img {
                 width: 100%;
                 height: 100%;
             }
+        }
 
-            .user-gird-text {
-                position: absolute;
-                bottom: .3rem;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: .36rem;
+        .user-name {}
+
+        .user-company {
+            color: #888;
+        }
+    }
+
+    .am-tabs {
+        height: auto;
+
+        .am-tabs-tab-bar-wrap {
+            padding: 0 .3rem;
+            background-color: #fff;
+        }
+
+        .user-tab-item {
+            padding: .2rem .3rem;
+            // height: 2rem;
+            background-color: #fff;
+
+            .user-sum-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .sum-item {
+                    flex: 50%;
+                    padding: .2rem 0;
+                    font-size: 14px;
+                    text-align: center;
+
+                    .sum-info {
+                        font-size: 18px;
+                    }
+
+                    .sum-title {
+                        margin-top: .12rem;
+                        color: #888;
+                    }
+                }
             }
         }
     }

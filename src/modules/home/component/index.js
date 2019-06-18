@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Flex, WingBlank, WhiteSpace, Icon, Drawer, Radio, Button } from 'antd-mobile';
+import { List, Flex, WingBlank, WhiteSpace, Icon, Modal, Radio, Button } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -34,9 +34,17 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            open: false,
-            param1: 0,
-            param2: 0
+            modalShow: false,
+            time: {
+                value: 0,
+                label: '月度排行'
+            },
+            condition: {
+                value: 0,
+                label: '累计保费'
+            },
+            tempTime: {},
+            tempCondition: {},
         }
     };
 
@@ -46,130 +54,151 @@ class Index extends React.Component {
     componentDidMount() {
     }
 
-    showDrawer = () => {
+    /** 
+     * 新增订单
+     */
+    onAddOrder = () => {
+        const id = '1';
+        this.context.router.push(`/order/add/${id}`);
+    }
+
+    showModal = () => {
+        const { time, condition } = this.state;
         this.setState({
-            open: true
-        });
+            tempTime: time,
+            tempCondition: condition,
+            modalShow: true
+        })
+    }
+
+    onClose = () => {
+        const { time, condition } = this.state;
+        this.setState({
+            modalShow: false
+        })
     }
 
     onChange1 = (value) => {
         this.setState({
-            param1: value,
+            tempTime: value,
         });
     }
-
 
     onChange2 = (value) => {
         this.setState({
-            param2: value,
+            tempCondition: value,
         });
     }
 
-    showHotel = id => {
-        this.context.router.push(`/hotel/detail/${id}`);
+    onOk = () => {
+        const { tempTime, tempCondition } = this.state;
+        this.setState({
+            time: tempTime,
+            condition: tempCondition,
+            modalShow: false
+        }, () => {
+            this.querySortList(tempTime.value, tempCondition.value);
+        })
     }
 
-    showTravel = id => {
+    toUserCenter = () => {
+        console.log(11);
+        const id = '1';
+        this.context.router.push(`/user/personal`);
+    }
+
+    onLike = id => {
         this.context.router.push(`/travel/detail/${id}`);
     }
 
-    userCenter = () => {
-        this.context.router.push(`/personal`);
+    querySortList = (key1, key2) => {
+
     }
 
     render() {
-        const { open, param1, param2 } = this.state;
-        const data1 = [
+        const { modalShow, time, condition, tempTime, tempCondition } = this.state;
+        const times = [
             { value: 0, label: '月度排行' },
             { value: 1, label: '季度排行' },
             { value: 2, label: '年度排行' },
         ];
-        const data2 = [
-            { value: 0, label: 'basketball', extra: 'details' },
-            { value: 1, label: 'football', extra: 'details' },
+        const conditions = [
+            { value: 0, label: '累计保费' },
+            { value: 1, label: '保单数量' },
         ];
-        const sidebar = (
-            <div>
-                <h3>时间段</h3>
-                <List>
-                    <div className="sidebar-item">
-                        <h3>时间段</h3>
-                        {data1.map(i => {
-                            let type = param1 === i.value ? 'primary' : 'default';
-                            return (
-                                <Button
-                                    key={i.value}
-                                    type={type}
-                                    onClick={() => this.onChange1(i.value)}>
-                                    {i.label}
-                                </Button>)
-                        }
-                        )}
-                    </div>
-                    <div className="sidebar-item">
-                        <h3>现实条件</h3>
-                        {data2.map(i => {
-                            let type = param1 === i.value ? 'primary' : 'default';
-                            return (
-                                <Button
-                                    key={i.value}
-                                    type={type}
-                                    onClick={() => this.onChange1(i.value)}>
-                                    {i.label}
-                                </Button>)
-                        })
-                        }
-                    </div>
-                </List >
+        const CutModal = ({ className = '', data, ...restProps }) => (
+            <div className="condition-container">
+                <div className="condition-title">时间段</div>
+                <div className="condition-item">
+                    {times.map(i => {
+                        let type = tempTime.value === i.value ? 'primary' : 'default';
+                        return (
+                            <Button
+                                key={i.value}
+                                type={type}
+                                size='small'
+                                onClick={() => this.onChange1(i)}>
+                                {i.label}
+                            </Button>)
+                    }
+                    )}
+                </div>
+                <div className="condition-title">显示条件</div>
+                <div className="condition-item">
+                    {conditions.map(i => {
+                        let type = tempCondition.value === i.value ? 'primary' : 'default';
+                        return (
+                            <Button
+                                key={i.value}
+                                type={type}
+                                size='small'
+                                onClick={() => this.onChange2(i)}>
+                                {i.label}
+                            </Button>)
+                    })
+                    }
+                </div>
+                <WhiteSpace size="lg" />
+                <div className="condition-btn" onClick={() => { this.onOk() }}>
+                    <Icon type="check" />确认
+                </div>
+                <div className="condition-other-btn" onClick={() => { this.toOuterUrl() }}>
+                    <Button size="small" className="green-blue-btn" style={{ marginRight: '10px' }}>产品销量榜<Icon type="right" /></Button>
+                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right" /></Button>
+                </div>
             </div>
         );
 
         return (
-            <DocumentTitle title='保险微信平台'>
+            <DocumentTitle title='保联榜'>
                 <Layout className="home">
                     <Layout.Content>
                         <div className="user-info-container">
-                            <WhiteSpace size="lg" />
                             <WingBlank>
                                 <Flex justify="center" className="user-info-detail">
                                     <div className="user-logo">
                                         <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt="" />
                                     </div>
-                                    <div className="user-name">
-                                        <div>王玮</div>
-                                        <div>阿大大</div>
+                                    <div className="user-name">王玮获得了第1名</div>
+                                    <div className="user-operation">
+                                        <div className="user-btn" onClick={() => { this.onAddOrder() }}>新增订单</div>
+                                        <div className="user-btn" onClick={() => { this.showModal() }}>
+                                            <div>{time.label}</div>
+                                            <div>—</div>
+                                            <div>{condition.label}</div>
+                                        </div>
                                     </div>
-                                    <div className="user-btn">新增订单</div>
-                                </Flex>
-                                <WhiteSpace size="lg" />
-
-                                <Flex justify="center" className="user-info-detail">
-                                    <Flex.Item>
-                                        <div>1</div>
-                                        <div>排名</div>
-                                    </Flex.Item>
-                                    <Flex.Item>
-                                        <div>1</div>
-                                        <div>个人保费</div>
-                                    </Flex.Item>
-                                    <Flex.Item>
-                                        <div>1</div>
-                                        <div>产品销量</div>
-                                    </Flex.Item>
-                                    <Flex.Item>
-                                        <div>1232323</div>
-                                        <div>公司赔偿</div>
-                                    </Flex.Item>
-                                    <Flex.Item>
-                                        <div>123</div>
-                                        <div>点赞</div>
-                                    </Flex.Item>
                                 </Flex>
                             </WingBlank>
-                            <WhiteSpace size="lg" />
                         </div>
                         <List>
-                            <Item arrow="horizontal" onClick={() => this.showDrawer()}>月排行-个人保费</Item>
+                            <Item
+                                onClick={() => { this.toUserCenter() }}
+                                multipleLine
+                                thumb={<SortItemLeft />}
+                                extra={<SortItemRight />}>
+                                Title <Brief>subtitle</Brief>
+                            </Item>
                         </List>
                         <WhiteSpace size="lg" />
                         <List>
@@ -193,18 +222,18 @@ class Index extends React.Component {
                             </Item>
                         </List>
 
+                        <Modal
+                            className="home-modal"
+                            visible={modalShow}
+                            transparent
+                            maskClosable={true}
+                            onClose={() => this.onClose()}
+                            wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+                        >
+                            <CutModal />
+                        </Modal>
+
                     </Layout.Content>
-                    <Drawer
-                        className="my-drawer"
-                        style={{ minHeight: document.documentElement.clientHeight }}
-                        position="right"
-                        enableDragHandle
-                        contentStyle={{ color: '#A6A6A6', textAlign: 'center' }}
-                        sidebar={sidebar}
-                        open={open}
-                        onOpenChange={this.onOpenChange}
-                    >
-                    </Drawer>
                 </Layout>
             </DocumentTitle >
         );
