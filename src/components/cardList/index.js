@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {PullToRefresh, ListView, Toast} from 'antd-mobile';
+import { PullToRefresh, ListView, Toast } from 'antd-mobile';
 import assign from 'lodash/assign';
 import isEqual from 'lodash/isEqual';
 import axios from 'axios';
@@ -42,49 +42,49 @@ class Index extends React.Component {
     }
 
     componentDidMount() {
-        const {dataSource} = this.state;
+        const { dataSource } = this.state;
         this.settingHeight();
         setTimeout(() => {
             this.setState({
-                    refreshing: true
-                }, () => {
-                    this.getListData(
-                        (data) => {
-                            if (data.success && data.backData) {
-                                const content = data.backData.content ? data.backData.content : [];
-                                let listData = this.genData(content);
-                                this.setState({
-                                    dataSource: dataSource.cloneWithRows(listData),
-                                    listData: content,
-                                    totalPages: data.backData.totalPages,
-                                    hasMore: this.state.pageIndex < data.backData.totalPages - 1
-                                });
-                            } else {
-                                Toast.info(data.backMsg);
-                            }
+                refreshing: true
+            }, () => {
+                this.getListData(
+                    (data) => {
+                        if (data.success && data.backData) {
+                            const content = data.backData.content ? data.backData.content : [];
+                            let listData = this.genData(content);
                             this.setState({
-                                refreshing: false,
-                                initLoaded: true
+                                dataSource: dataSource.cloneWithRows(listData),
+                                listData: content,
+                                totalPages: data.backData.totalPages,
+                                hasMore: this.state.pageIndex < data.backData.totalPages - 1
                             });
+                        } else {
+                            Toast.info(data.backMsg);
                         }
-                    );
-                }
+                        this.setState({
+                            refreshing: false,
+                            initLoaded: true
+                        });
+                    }
+                );
+            }
             );
         }, 100);
     }
 
     componentWillReceiveProps(nextProps) {
-        const {dataSource} = this.state;
+        const { dataSource } = this.state;
         if (('pageUrl' in nextProps && isEqual(this.props.pageUrl, nextProps.pageUrl) === false)
             || ('params' in nextProps && isEqual(this.props.params, nextProps.params) === false)) {
             this.setState({
-                    dataSource: dataSource.cloneWithRows({}),
-                    listData: [],
-                    refreshing: true,
-                    isLoading: true,
-                    pageIndex: 0,
-                    params: nextProps.params
-                },
+                dataSource: dataSource.cloneWithRows({}),
+                listData: [],
+                refreshing: true,
+                isLoading: true,
+                pageIndex: 0,
+                params: nextProps.params
+            },
                 () => {
                     ReactDOM.findDOMNode(this.lv).scrollTop = 0;
                     this.getListData(
@@ -128,7 +128,7 @@ class Index extends React.Component {
         const clientRect = _domNode.getBoundingClientRect();
         const height = clientHeight - clientRect.top;
 
-        this.setState({height});
+        this.setState({ height });
     }
 
     genData(data) {
@@ -140,7 +140,7 @@ class Index extends React.Component {
     }
 
     onRefresh = () => {
-        const {dataSource} = this.state;
+        const { dataSource } = this.state;
         this.setState(
             {
                 refreshing: true,
@@ -164,7 +164,7 @@ class Index extends React.Component {
     }
 
     onEndReached = event => {
-        const {hasMore} = this.state;
+        const { hasMore } = this.state;
         if (!hasMore) {
             return;
         }
@@ -174,7 +174,7 @@ class Index extends React.Component {
                 pageIndex: ++this.state.pageIndex
             }, () => {
                 this.getListData(data => {
-                    const {listData, pageIndex, totalPages} = this.state;
+                    const { listData, pageIndex, totalPages } = this.state;
                     const content = listData.concat(data.backData.content ? data.backData.content : []);
                     this.rData = this.genData(content);
                     let dataSource = this.state.dataSource.cloneWithRows(this.rData);
@@ -190,28 +190,28 @@ class Index extends React.Component {
     }
 
     getListData = (callback) => {
-        let {params, pageIndex} = this.state;
-        params = assign(params, {pageNumber: ++pageIndex});
-        axios.get(this.props.pageUrl, {params}).then(res => res.data).then(data => {
-                if (typeof callback === 'function')
-                    callback(data);
-            }
+        let { params, pageIndex } = this.state;
+        params = assign(params, { pageNumber: ++pageIndex });
+        axios.get(this.props.pageUrl, { params }).then(res => res.data).then(data => {
+            if (typeof callback === 'function')
+                callback(data);
+        }
         );
     }
 
     render() {
-        const {dataSource, initLoaded, refreshing, isLoading} = this.state;
-        const {row} = this.props;
+        const { dataSource, initLoaded, refreshing, isLoading } = this.state;
+        const { row } = this.props;
         return (
             <ListView
                 ref={el => this.lv = el}
                 dataSource={dataSource}
-                renderFooter={() => (<div style={{padding: 30, textAlign: 'center'}}>
+                renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
                     {
                         initLoaded && !refreshing ? (isLoading ? '正在加载...' : '没有了啦~') : null
                     }
                 </div>)}
-                renderBodyComponent={() => <MyBody/>}
+                renderBodyComponent={() => <MyBody />}
                 renderRow={row}
                 className="zui-cardlist"
                 style={{

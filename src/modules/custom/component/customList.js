@@ -12,28 +12,62 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-
+            id: null,
+            params: {
+                pageNumber: 1,
+                pageSize: 10,
+            }
         }
     };
 
     componentWillMount() {
+        this.setState({
+            id: 1
+        }, () => {
+            this.queryCustomList();
+        });
     }
 
     componentDidMount() {
     }
 
+    queryCustomList = () => {
+        const { id, params } = this.state;
+        const param = {
+            userId: id,
+            ...params
+        }
+        axios.get('custom/queryList', {
+            params: param
+        }).then(res => res.data).then(data => {
+            if (data.backData) {
+                const backData = data.backData;
+            }
+        })
+    }
+
+    onSearch = keyWords => {
+        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    }
 
     onAdd = () => {
-        const id = '1';
+        const id = this.state.id;
         this.context.router.push(`/custom/add/${id}`);
     }
 
     render() {
-        const { } = this.state;
+        const { id, params } = this.state;
+        params.userId = id;
+
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <List.item key={rowID} onClick={() => this.detail(obj.id)}></List.item>
+                <List.item
+                    extra={obj.customName}
+                    key={rowID}
+                    onClick={() => this.detail(obj)}>
+                    {obj.customTel}
+                </List.item>
             );
         };
         return (
@@ -41,22 +75,21 @@ class Index extends React.Component {
                 <Layout className="order">
                     <Layout.Content>
                         <SearchBar placeholder="请输入搜索关键字" maxLength={16} onSubmit={this.onSearch} />
-                        <List>
+                        {/* <List>
                             <List.Item extra="extra content" arrow="horizontal" onClick={() => { }}>Title</List.Item>
                             <List.Item extra="extra content" arrow="horizontal" onClick={() => { }}>Title</List.Item>
-                        </List>
+                        </List> */}
                         {/* <CardList
-                            pageUrl={'food/queryList'}
+                            pageUrl={'custom/queryList'}
                             params={params}
                             row={row}
                             multi
                         /> */}
                         <WhiteSpace size="lg" />
-
                     </Layout.Content>
                     <Layout.Footer>
                         <WingBlank>
-                            <WhiteSpace />
+                            <WhiteSpace size="sm" />
                             <Button type="primary" onClick={this.onAdd}>新增客户</Button>
                             <WhiteSpace />
                         </WingBlank>
