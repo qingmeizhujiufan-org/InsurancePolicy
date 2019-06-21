@@ -7,6 +7,7 @@ import { assign } from 'lodash';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
+import moment from 'moment';
 
 import classify_1 from 'Img/classify_1.png';
 
@@ -26,26 +27,51 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            id: null,
+            userId: null,
             custId: null,
-            custom: {}
+            custom: {},
+            type: 'add'
         }
     };
 
     componentWillMount() {
         this.setState({
-            id: this.props.params.id
+            userId: 1
         });
     }
 
     componentDidMount() {
-        if (this.props.params.custId) {
+        if (this.props.params.id) {
             this.setState({
-                custId: this.props.params.custId
+                custId: this.props.params.id,
+                type: 'update'
             }, () => {
-                this.queryCustDetail(this.props.param.custId)
+                this.queryCustDetail()
             });
         }
+    }
+
+    queryCustDetail = id => {
+        Toast.loading('正在加载', 0);
+        const { userId, custId } = this.state;
+        const param = {
+            id: custId,
+            userId
+        }
+        axios.get('custom/qureyOneCustom', {
+            params: param
+        }).then(res => res.data).then(data => {
+            if (data.backData) {
+                const backData = data.backData;
+                this.setState({
+                    custom: backData
+                });
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
     }
 
     validateDatePicker = (rule, date, callback) => {
@@ -68,16 +94,24 @@ class Index extends React.Component {
     onSubmit = () => {
         this.props.form.validateFields({ force: true }, (error) => {
             if (!error) {
+                const { custId, userId, type } = this.state;
+                Toast.loading('正在提交', 1);
                 const values = this.props.form.getFieldsValue();
-                const param = assign({}, { userId: this.state.id }, values);
+                const param = assign({}, { userId }, values);
                 param.customSex = param.customSex[0];
-                axios.post('custom/add', param).then(res => res.data).then(data => {
+                if (custId) {
+                    param.id = custId;
+                }
+
+                axios.post(`custom/${type}`, param).then(res => res.data).then(data => {
                     if (data.success) {
-                        Toast.success('添加成功', 1);
+                        Toast.success('提交成功', 1);
                         this.context.router.push(`/custom/list/${this.state.id}`);
                     } else {
-                        Toast.fail('添加失败', 2);
+                        Toast.fail('提交失败', 2);
                     }
+                }).catch(() => {
+                    Toast.fail('服务异常', 2);
                 })
             } else {
                 let errors = [];
@@ -116,7 +150,7 @@ class Index extends React.Component {
                                 >客户姓名</InputItem>
                                 <DatePicker
                                     {...getFieldProps('customBirth', {
-                                        initialValue: custom.customBirth,
+                                        initialValue: new Date(custom.customBirth),
                                         rules: [
                                             { required: true, message: '请选择客户生日' },
                                             { validator: this.validateDatePicker },
