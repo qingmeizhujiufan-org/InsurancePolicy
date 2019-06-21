@@ -66,6 +66,7 @@ class Index extends React.Component {
                 this.setState({
                     custom: backData
                 });
+                Toast.hide()
             } else {
                 Toast.fail('查询失败', 2);
             }
@@ -95,7 +96,7 @@ class Index extends React.Component {
         this.props.form.validateFields({ force: true }, (error) => {
             if (!error) {
                 const { custId, userId, type } = this.state;
-                Toast.loading('正在提交', 1);
+                Toast.loading('正在提交', 0);
                 const values = this.props.form.getFieldsValue();
                 const param = assign({}, { userId }, values);
                 param.customSex = param.customSex[0];
@@ -105,8 +106,8 @@ class Index extends React.Component {
 
                 axios.post(`custom/${type}`, param).then(res => res.data).then(data => {
                     if (data.success) {
-                        Toast.success('提交成功', 1);
-                        this.context.router.push(`/custom/list/${this.state.id}`);
+                        Toast.success('提交成功', 2);
+                        this.context.router.push(`/custom/list/${userId}`);
                     } else {
                         Toast.fail('提交失败', 2);
                     }
