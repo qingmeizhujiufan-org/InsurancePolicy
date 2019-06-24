@@ -48,14 +48,12 @@ class Index extends React.Component {
     }
 
     toOrderList = () => {
-        const id = '1';
-        this.context.router.push(`/order/list/${id}`);
+        this.context.router.push(`/order/list`);
 
     }
 
     toCustomList = () => {
-        const id = '1';
-        this.context.router.push(`/custom/list/${id}`);
+        this.context.router.push(`/custom/list`);
     }
 
     render() {

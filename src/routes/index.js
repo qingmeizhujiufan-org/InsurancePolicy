@@ -106,13 +106,13 @@ module.exports = (
         </Route>
         <Route path="order" component={App}>
             <IndexRoute component={OrderList} />
-            <Route path="list/:id" component={OrderList} />
-            <Route path="add/:id" component={OrderAdd} />
+            <Route path="list" component={OrderList} />
+            <Route path="add" component={OrderAdd} />
         </Route>
         <Route path="custom" component={App}>
             <IndexRoute component={CustomList} />
-            <Route path="list/:id" component={CustomList} />
-            <Route path="add/:id" component={CustomAdd} />
+            <Route path="list" component={CustomList} />
+            <Route path="add" component={CustomAdd} />
         </Route>
         <Route path="user" component={App}>
             <IndexRoute component={Personal} />

@@ -54,7 +54,12 @@ class Index extends React.Component {
     // }
 
     queryDetail = id => {
-        this.context.router.push(`/custom/add/${id}`);
+        this.context.router.push({
+            pathname: '/custom/add',
+            query: {
+                custId: id
+            }
+        });
     }
 
     onSearch = keyWords => {
@@ -70,8 +75,10 @@ class Index extends React.Component {
     }
 
     onAdd = () => {
-        const id = this.state.id;
-        this.context.router.push(`/custom/add/${id}`);
+        this.context.router.push({
+            pathname: '/custom/add',
+            query: {},
+        });
     }
 
     render() {

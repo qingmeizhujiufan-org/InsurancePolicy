@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, DatePicker, Toast, Button, SearchBar, WingBlank, WhiteSpace, Flex, Calendar, Card } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import moment from 'moment';
-
+import { assign } from 'lodash';
 import { CardList } from 'Comps';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -18,15 +18,22 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
+            userId: null,
             show: false,
-            rangeDate: {
-                beginDate: moment().format('YYYY-MM-DD'),
-                endDate: moment().add(1, 'd').format('YYYY-MM-DD')
+            beginDate: moment().subtract(1, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
+            params: {
+                pageNumber: 1,
+                pageSize: 10
             },
+
         }
     };
 
     componentWillMount() {
+        this.setState({
+            userId: 1
+        });
     }
 
     componentDidMount() {
@@ -43,85 +50,117 @@ class Index extends React.Component {
     onConfirm = (startDateTime, endDateTime) => {
         console.log('startDateTime == ', startDateTime);
         console.log('endDateTime == ', endDateTime);
-        const beginDate = new moment(startDateTime).format('YYYY-MM-DD');
-        const endDate = new moment(endDateTime).format('YYYY-MM-DD');
+        const beginDate = moment(startDateTime).format('YYYY-MM-DD');
+        const endDate = moment(endDateTime).format('YYYY-MM-DD');
         this.setState({
-            show: false,
-            rangeDate: {
+            params: assign({}, this.state.params, {
                 beginDate,
                 endDate,
+            }),
+            show: false,
+            beginDate,
+            endDate
 
-            }
         }, () => {
 
         });
     }
 
+    onSearch = keyWords => {
+        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    }
+
+    onCancel = (keyWords) => {
+        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    }
+
+    onClear = (keyWords) => {
+        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    }
 
     onAddOrder = () => {
-        const id = '1';
-        this.context.router.push(`/order/add/${id}`);
+        this.context.router.push({
+            pathname: '/order/add',
+            query: {},
+        });
+    }
+
+    onDetail = id => {
+        this.context.router.push({
+            pathname: '/order/add',
+            query: {
+                orderId: id
+            },
+        });
     }
 
     render() {
-        const { rangeDate, show } = this.state;
+        const { beginDate, endDate, show, params, userId } = this.state;
+        params.userId = userId;
+        params.beginDate = beginDate;
+        params.endDate = endDate;
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <List.item key={rowID} onClick={() => this.detail(obj.id)}></List.item>
+                <Card full className="order-card" onClick={() => { this.onDetail(obj.id) }}>
+                    <Card.Header
+                        title={
+                            <div className="order-title">
+                                <div className="order-id">保单号：{obj.insurancePolicyNo}</div>
+                                <div className="order-company">产品名称：{obj.insuranceName}</div>
+                            </div>
+                        }
+                    />
+                    <Card.Body>
+                        <div className="order-detail">
+                            <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
+                            <div className="order-detail-item"> 投保日期：{obj.insuredTime}</div>
+                            <div className="order-detail-item">被保人：{obj.insuredName}</div>
+                            <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
+                            <div className="order-detail-item">保费：{obj.insurance} 元</div>
+                            <div className="order-detail-item">订单渠道：{obj.orderChannel}</div>
+                        </div>
+                    </Card.Body>
+                    <Card.Footer content={
+                        <div className="order-footer">
+                            备注：<span>{obj.mark}</span>
+                        </div>
+                    } />
+                </Card>
             );
         };
         return (
             <DocumentTitle title='我的订单'>
                 <Layout className="order">
                     <Layout.Content>
-                        <SearchBar placeholder="请输入要搜索的商品" maxLength={16} onSubmit={this.onSearch} />
+                        <SearchBar
+                            placeholder="请输入要搜索的商品"
+                            maxLength={16}
+                            onSubmit={this.onSearch}
+                            onClear={this.onClear}
+                            onCancel={this.onCancel} />
                         <Flex justify='between' className='range-date' onClick={this.onShowCalendar}>
                             <div className='range-date-between'>
                                 <Flex>
                                     <Flex className='wrap-date'>
                                         <span className='iconfont icon-kaishishijian'></span>
-                                        <span>{rangeDate.beginDate}</span>
+                                        <span>{beginDate}</span>
                                     </Flex>
                                     <div className='separate'>-</div>
                                     <Flex className='wrap-date'>
                                         <span className='iconfont icon-kaishishijian'></span>
-                                        <span>{rangeDate.endDate}</span>
+                                        <span>{endDate}</span>
                                     </Flex>
                                 </Flex>
                             </div>
                         </Flex>
-                        <Card full className="order-card">
-                            <Card.Header
-                                title={
-                                    <div className="order-title">
-                                        <div className="order-id">保单号：13123131313</div>
-                                        <div className="order-company">产品名称：人寿</div>
-                                    </div>
-                                }
-                            />
-                            <Card.Body>
-                                <div className="order-detail">
-                                    <div className="order-detail-item"> 投保人：李四</div>
-                                    <div className="order-detail-item"> 生效日期：2019-06-17</div>
-                                    <div className="order-detail-item">被保人：威利斯</div>
-                                    <div className="order-detail-item">缴费年限：2年</div>
-                                    <div className="order-detail-item">保费：12123元</div>
-                                    <div className="order-detail-item">订单渠道：人寿</div>
-                                </div>
-                            </Card.Body>
-                            <Card.Footer content={
-                                <div className="order-footer">
-                                    备注：<span>dasda</span>
-                                </div>
-                            } />
-                        </Card>
-                        {/* <CardList
-                            pageUrl={'food/queryList'}
+
+                        <CardList
+                            pageUrl={'order/queryList'}
                             params={params}
                             row={row}
                             multi
-                        /> */}
+                        />
                         <WhiteSpace size="lg" />
 
                     </Layout.Content>
@@ -137,6 +176,8 @@ class Index extends React.Component {
                         onCancel={this.onCloseCalendar}
                         onConfirm={this.onConfirm}
                         defaultDate={now}
+                        showShortcut={true}
+                        defaultValue={[new Date(beginDate), new Date(endDate)]}
                         // minDate={new Date(+now)}
                         maxDate={new Date(+now)}
                     />

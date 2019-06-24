@@ -22,6 +22,8 @@ const sexs = [{
     value: 0,
 }];
 
+const now = new Date();
+
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -41,13 +43,16 @@ class Index extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.params.id) {
+        let data = this.props.location.query;
+        if (data.custId) {
             this.setState({
-                custId: this.props.params.id,
+                custId: data.custId,
                 type: 'update'
-            }, () => {
-                this.queryCustDetail()
             });
+            setTimeout(() => {
+                this.queryCustDetail()
+
+            }, 0);
         }
     }
 
@@ -58,7 +63,7 @@ class Index extends React.Component {
             id: custId,
             userId
         }
-        axios.get('custom/qureyOneCustom', {
+        axios.get('custom/queryOne', {
             params: param
         }).then(res => res.data).then(data => {
             if (data.backData) {
@@ -107,7 +112,7 @@ class Index extends React.Component {
                 axios.post(`custom/${type}`, param).then(res => res.data).then(data => {
                     if (data.success) {
                         Toast.success('提交成功', 2);
-                        this.context.router.push(`/custom/list/${userId}`);
+                        this.context.router.push(`/custom/list`);
                     } else {
                         Toast.fail('提交失败', 2);
                     }
@@ -151,7 +156,7 @@ class Index extends React.Component {
                                 >客户姓名</InputItem>
                                 <DatePicker
                                     {...getFieldProps('customBirth', {
-                                        initialValue: new Date(custom.customBirth),
+                                        initialValue: custom.customBirth ? new Date(custom.customBirth) : '',
                                         rules: [
                                             { required: true, message: '请选择客户生日' },
                                             { validator: this.validateDatePicker },
@@ -184,7 +189,7 @@ class Index extends React.Component {
                                     data={sexs}
                                     cols={1}
                                     {...getFieldProps('customSex', {
-                                        initialValue: [custom.customSex || 1],
+                                        initialValue: custom.customSex ? [custom.customSex] : '',
                                         rules: [
                                             { required: true, message: '请选择客户性别' }
                                         ],
@@ -200,7 +205,9 @@ class Index extends React.Component {
                             <WhiteSpace size="lg" />
 
                             <WhiteSpace size="sm" />
-                            <Button type="primary" onClick={this.onSubmit}>提交</Button>
+                            <WingBlank>
+                                <Button type="primary" onClick={this.onSubmit}>提交</Button>
+                            </WingBlank>
                             <WhiteSpace size="sm" />
 
                         </form>
