@@ -34,6 +34,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
+            userId: null,
             modalShow: false,
             time: {
                 value: 0,
@@ -49,6 +50,9 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
+        this.setState({
+            userId: sessionStorage.getItem('userId')
+        });
     }
 
     componentDidMount() {
@@ -58,7 +62,7 @@ class Index extends React.Component {
      * 新增订单
      */
     onAddOrder = () => {
-        const id = '1';
+        const id = sessionStorage.getItem('userId');
         this.context.router.push(`/order/add/${id}`);
     }
 
@@ -102,8 +106,6 @@ class Index extends React.Component {
     }
 
     toUserCenter = () => {
-        console.log(11);
-        const id = '1';
         this.context.router.push(`/user/personal`);
     }
 

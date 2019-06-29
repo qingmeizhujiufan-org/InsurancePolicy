@@ -7,7 +7,7 @@ import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 
-import classify_1 from 'Img/classify_1.png';
+import classify_1 from 'Img/hand-loging.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;

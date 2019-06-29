@@ -6,8 +6,7 @@ import { createForm } from 'rc-form';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
-
-import classify_1 from 'Img/classify_1.png';
+import classify_1 from 'Img/hand-loging.png';
 
 class Index extends React.Component {
     constructor(props) {

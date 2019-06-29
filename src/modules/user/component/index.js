@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Tabs, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
+import { List, Tabs, Toast, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -23,17 +23,53 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
+            userId: null,
             files: data,
-            sum1: {},
-            sum2: {},
-            sum: {}
+            user: {},
+            month: {},
+            quarter: {},
+            year: {}
         }
     };
 
     componentWillMount() {
+        this.setState({
+            userId: sessionStorage.getItem('userId')
+        });
+        setTimeout(() => {
+            this.queryUserDetail()
+        }, 0);
     }
 
     componentDidMount() {
+    }
+
+    queryUserDetail = () => {
+        Toast.loading('正在加载', 0);
+
+        const param = {
+            id: this.state.userId
+        };
+
+        axios.get('user/qureyUserSum', {
+            params: param
+        }).then(res => res.data).then(data => {
+            if (data.backData) {
+                const backData = data.backData;
+                this.setState({
+                    user: backData.user || {},
+                    month: backData.month || {},
+                    quarter: backData.quarter || {},
+                    year: backData.year || {}
+                });
+                Toast.hide()
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
+
     }
 
     onChange = (files, type, index) => {
@@ -41,6 +77,7 @@ class Index extends React.Component {
         this.setState({
             files,
         });
+
     }
 
     toEdit = () => {
@@ -57,16 +94,16 @@ class Index extends React.Component {
     }
 
     render() {
-        const { files } = this.state;
+        const { files, user, month, quarter, year } = this.state;
 
         const UserSumItem = ({ className = '', data, ...restProps }) => (
             <div className={`${className} user-sum-item`} {...restProps}>
                 <div className="sum-item">
-                    <div><span className="sum-info">4343434</span>元</div>
+                    <div><span className="sum-info">{data.sum}</span>元</div>
                     <div className="sum-title">累计保费</div>
                 </div>
                 <div className="sum-item">
-                    <div><span className="sum-info">23232</span>件</div>
+                    <div><span className="sum-info">{data.count}</span>件</div>
                     <div className="sum-title">保单数量</div>
                 </div>
             </div>
@@ -88,14 +125,14 @@ class Index extends React.Component {
                         <div className="user-info-container">
                             <WhiteSpace size="lg" />
                             <div className="user-name">
-                                张三
-                                <Icon
-                                    type="check"
+                                {user.realname}
+                                <i
+                                    className="iconfont iconbianji"
                                     style={{ verticalAlign: 'middle', marginLeft: '10px' }}
                                     onClick={() => { this.toEdit() }} />
                             </div>
                             <WhiteSpace size="sm" />
-                            <div className="user-company">中国人寿</div>
+                            <div className="user-company">{user.company}</div>
                             <WhiteSpace size="lg" />
                             <div className="user-logo">
                                 <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
@@ -105,24 +142,26 @@ class Index extends React.Component {
                         <Tabs
                             className="user-tab"
                             tabs={tabs}
-                            initialPage={1}
+                            initialPage={0}
                             renderTab={tab => <span>{tab.title}</span>}
                         >
                             <div className="user-tab-item">
-                                <UserSumItem />
+                                <UserSumItem data={month} />
                             </div>
                             <div className="user-tab-item">
-                                <UserSumItem />
+                                <UserSumItem data={quarter} />
                             </div>
                             <div className="user-tab-item">
-                                <UserSumItem />
+                                <UserSumItem data={year} />
                             </div>
                         </Tabs>
                         <WhiteSpace size="lg" />
 
                         <List className="my-list">
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconwodekehu" />
+                                }
                                 arrow="horizontal" onClick={() => { this.toCustomList() }}>
                                 我的客户
                             </Item>

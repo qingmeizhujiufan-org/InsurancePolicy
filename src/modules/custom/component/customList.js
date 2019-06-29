@@ -14,7 +14,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            id: 1,
+            userId: 1,
             params: {
                 pageNumber: 1,
                 pageSize: 10,
@@ -25,7 +25,7 @@ class Index extends React.Component {
     componentWillMount() {
 
         this.setState({
-            id: 1
+            userId: sessionStorage.getItem('userId')
         });
     }
 
@@ -82,8 +82,8 @@ class Index extends React.Component {
     }
 
     render() {
-        const { id, params } = this.state;
-        params.userId = id;
+        const { userId, params } = this.state;
+        params.userId = userId;
 
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;

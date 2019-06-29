@@ -32,7 +32,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: 1
+            userId: sessionStorage.getItem('userId')
         });
     }
 
