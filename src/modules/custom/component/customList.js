@@ -14,7 +14,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            userId: 1,
+            userId: null,
             params: {
                 pageNumber: 1,
                 pageSize: 10,

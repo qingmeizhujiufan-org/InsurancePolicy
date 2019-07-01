@@ -145,8 +145,9 @@ class Index extends React.Component {
 
         axios.post(`order/${type}`, param).then(res => res.data).then(data => {
           if (data.success) {
-            Toast.success('提交成功', 2);
-            this.context.router.push(`/order/list`);
+            Toast.success('提交成功', 1, () => {
+              this.context.router.push(`/order/list`);
+            });
           } else {
             Toast.fail('提交失败', 2);
           }

@@ -21,14 +21,36 @@
 
     .am-list {
         .am-list-body {
+            padding-left: .2rem;
+            background: transparent;
+
             &::before {
                 height: 0;
             }
 
-            .am-list-item.am-input-item {
-                height: 1.2rem;
+            .am-list-item {
+                padding-left: 0;
+                background: transparent;
+
+                &.am-input-item {
+                    height: 1.2rem;
+                }
+
+                .am-input-label {
+                    width: 20px;
+                    color: #888;
+                }
             }
         }
+    }
+
+    .tip-btn {
+        font-size: .28rem;
+        color: #888;
+    }
+
+    .text-right {
+        text-align: right;
     }
 }
 
@@ -53,11 +75,6 @@
     }
 }
 
-.tip-btn {
-    font-size: .28rem;
-    color: #2B8BFF;
-}
-
-.text-right {
-    text-align: right;
+.blue {
+    color: #2B8CFF;
 }

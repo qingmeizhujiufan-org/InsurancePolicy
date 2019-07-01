@@ -1,6 +1,18 @@
 .personal {
     font-size: .28rem;
 
+    .blue::before {
+        background: linear-gradient(to bottom right, #008AFF, #49D1FE);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .orange::before {
+        background: linear-gradient(to bottom right, #FFD382, #FF7B00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
     .user-img-container {
         position: relative;
         background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
@@ -152,5 +164,10 @@
         .am-image-picker-item .am-image-picker-item-content {
             border-radius: 50%;
         }
+    }
+
+    .tip-btn {
+        font-size: .24rem;
+        color: #888;
     }
 }

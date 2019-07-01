@@ -144,12 +144,12 @@ class Index extends React.Component {
                                 <Flex>
                                     <Flex className='wrap-date'>
                                         <span className='iconfont icon-kaishishijian'></span>
-                                        <span>{beginDate}</span>
+                                        <span>始：{beginDate}</span>
                                     </Flex>
                                     <div className='separate'>-</div>
                                     <Flex className='wrap-date'>
                                         <span className='iconfont icon-kaishishijian'></span>
-                                        <span>{endDate}</span>
+                                        <span>终：{endDate}</span>
                                     </Flex>
                                 </Flex>
                             </div>

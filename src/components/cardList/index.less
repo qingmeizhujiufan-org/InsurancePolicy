@@ -6,7 +6,7 @@
     font-size: .24rem;
 
     /* 下拉loading */
-    .ball-beat > div {
+    .ball-beat>div {
         background-color: @theme_color;
         width: 10px;
         height: 10px;
@@ -19,14 +19,12 @@
         animation: ball-beat 0.7s 0s infinite linear;
     }
 
-    .ball-beat > div:nth-child(2n-1) {
+    .ball-beat>div:nth-child(2n-1) {
         -webkit-animation-delay: 0.35s !important;
         animation-delay: 0.35s !important;
     }
 
-    .am-pull-to-refresh-indicator {
-
-    }
+    .am-pull-to-refresh-indicator {}
 
     @keyframes ball-beat {
         50% {
@@ -43,7 +41,7 @@
     }
 
     &-body {
-        padding: 10px;
+        // padding: 10px;
 
         .list-view-section-body:before,
         .list-view-section-body:after {

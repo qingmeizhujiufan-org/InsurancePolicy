@@ -98,6 +98,9 @@ const Changepsd = Loadable({
 module.exports = (
     <Route path="/" component={App}>
         <IndexRoute component={Index} />
+        <Route path="index" component={App}>
+            <IndexRoute component={Index} />
+        </Route>
         <Route path="public" component={App}>
             <IndexRoute component={Login} />
             <Route path="login" component={Login} />

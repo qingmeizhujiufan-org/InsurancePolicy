@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Flex, WingBlank, WhiteSpace, Icon, Modal, Radio, Button } from 'antd-mobile';
+import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
+import { CardList } from 'Comps';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -11,30 +12,20 @@ const Item = List.Item;
 const Brief = Item.Brief;
 const RadioItem = Radio.RadioItem;
 
-const SortItemLeft = ({ className = '', data, ...restProps }) => (
-    <div className={`${className} sort-item-left`} {...restProps}>
-        <div className="item-sort-num">1</div>
-        <div className="item-src">
-            <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
-        </div>
-    </div>
-);
-
-const SortItemRight = ({ className = '', data, ...restProps }) => (
-    <div className={`${className} sort-item-right`} {...restProps}>
-        <div className="item-fee-num">7777</div>
-        <div className="item-like-num">
-            <div>12345</div>
-            <Icon type="check" />
-        </div>
-    </div>
-);
 class Index extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             userId: null,
+            userInfo: {},
+            params: {
+                pageNumber: 1,
+                pageSize: 10,
+                time: 0, // 统计时间
+                condition: 0, //统计类型
+            },
+            firstName: null,
             modalShow: false,
             time: {
                 value: 0,
@@ -56,14 +47,15 @@ class Index extends React.Component {
     }
 
     componentDidMount() {
+        const { time, condition } = this.state;
+        this.querySumOne(time.value, condition.value);
     }
 
     /** 
      * 新增订单
      */
     onAddOrder = () => {
-        const id = sessionStorage.getItem('userId');
-        this.context.router.push(`/order/add/${id}`);
+        this.context.router.push(`/order/add`);
     }
 
     showModal = () => {
@@ -99,10 +91,16 @@ class Index extends React.Component {
         this.setState({
             time: tempTime,
             condition: tempCondition,
-            modalShow: false
-        }, () => {
-            this.querySortList(tempTime.value, tempCondition.value);
+            modalShow: false,
+            params: {
+                ...params,
+                time: tempTime.value,
+                condition: tempCondition.value
+            }
         })
+        setTimeout(() => {
+            this.querySumOne(tempTime.value, tempCondition.value);
+        }, 0);
     }
 
     toUserCenter = () => {
@@ -113,12 +111,33 @@ class Index extends React.Component {
         this.context.router.push(`/travel/detail/${id}`);
     }
 
-    querySortList = (key1, key2) => {
-
+    querySumOne = (key1, key2) => {
+        Toast.loading('正在加载', 0);
+        const { userId } = this.state;
+        const param = {
+            id: userId,
+            time: key1,
+            condition: key2
+        };
+        axios.get('user/querySumOne', {
+            params: param
+        }).then(res => res.data).then(data => {
+            if (data.backData) {
+                const backData = data.backData;
+                this.setState({
+                    userInfo: backData
+                });
+                Toast.hide()
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
     }
 
     render() {
-        const { modalShow, time, condition, tempTime, tempCondition } = this.state;
+        const { modalShow, time, condition, tempTime, tempCondition, params, userInfo } = this.state;
         const times = [
             { value: 0, label: '月度排行' },
             { value: 1, label: '季度排行' },
@@ -171,6 +190,45 @@ class Index extends React.Component {
             </div>
         );
 
+        const SortItemLeft = ({ className = '', data, ...restProps }) => (
+            <div className={`${className} sort-item-left`} {...restProps}>
+                <div className="item-sort-num">1</div>
+                <div className="item-src">
+                    <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
+                </div>
+                <div className="item-info">
+
+                </div>
+            </div>
+        );
+
+        const SortItemRight = ({ className = '', data, ...restProps }) => (
+            <div className={`${className} sort-item-right`} {...restProps}>
+                <div className="item-fee-num">7777</div>
+                <div className="item-like-num">
+                    <div>12345</div>
+                    <Icon type="check" />
+                </div>
+            </div>
+        );
+
+        const SortItem = ({ className = '', data, ...restProps }) => (
+            <div className={`${className} list-item`} {...restProps}>
+                <SortItemLeft />
+                <SortItemRight />
+            </div>
+        );
+
+        const row = (rowData, sectionID, rowID) => {
+            const obj = rowData;
+            return (
+                <SortItem
+                    key={rowID}
+                    onClick={() => this.queryDetail(obj.id)}>
+                </SortItem>
+            );
+        };
+
         return (
             <DocumentTitle title='保联榜'>
                 <Layout className="home">
@@ -203,26 +261,13 @@ class Index extends React.Component {
                             </Item>
                         </List>
                         <WhiteSpace size="lg" />
-                        <List>
-                            <Item
-                                multipleLine
-                                thumb={<SortItemLeft />}
-                                extra={<SortItemRight />}>
-                                Title <Brief>subtitle</Brief>
-                            </Item>
-                            <Item
-                                multipleLine
-                                thumb={<SortItemLeft />}
-                                extra={<SortItemRight />}>
-                                Title <Brief>subtitle</Brief>
-                            </Item>
-                            <Item
-                                multipleLine
-                                thumb={<SortItemLeft />}
-                                extra={<SortItemRight />}>
-                                Title <Brief>subtitle</Brief>
-                            </Item>
-                        </List>
+                        {/* <CardList
+                            className="user-sum-list"
+                            pageUrl={'user/querySumList'}
+                            params={params}
+                            row={row}
+                            multi
+                        /> */}
 
                         <Modal
                             className="home-modal"

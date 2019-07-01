@@ -51,7 +51,7 @@ class Index extends React.Component {
             id: this.state.userId
         };
 
-        axios.get('user/qureyUserSum', {
+        axios.get('user/queryUserSum', {
             params: param
         }).then(res => res.data).then(data => {
             if (data.backData) {
@@ -69,7 +69,6 @@ class Index extends React.Component {
         }).catch(err => {
             Toast.fail('服务异常', 2);
         })
-
     }
 
     onChange = (files, type, index) => {
@@ -128,7 +127,7 @@ class Index extends React.Component {
                                 {user.realname}
                                 <i
                                     className="iconfont iconbianji"
-                                    style={{ verticalAlign: 'middle', marginLeft: '10px' }}
+                                    style={{ verticalAlign: 'middle', marginLeft: '10px', fontSize: '14px' }}
                                     onClick={() => { this.toEdit() }} />
                             </div>
                             <WhiteSpace size="sm" />
@@ -160,17 +159,21 @@ class Index extends React.Component {
                         <List className="my-list">
                             <Item
                                 thumb={
-                                    <i className="iconfont iconwodekehu" />
+                                    <i className="iconfont iconwodekehu blue" />
                                 }
                                 arrow="horizontal" onClick={() => { this.toCustomList() }}>
                                 我的客户
                             </Item>
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconwodedingdan blue" />
+                                }
                                 arrow="horizontal" onClick={() => { this.toOrderList() }}>我的订单
                             </Item>
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconjifenshangcheng blue" />
+                                }
                                 arrow="horizontal" onClick={() => { this.toMall() }}>积分商城
                             </Item>
                         </List>
@@ -179,20 +182,22 @@ class Index extends React.Component {
 
                         <List className="my-list">
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconkefuzixun orange" />
+                                }
                                 arrow="horizontal" onClick={() => { }}>客户咨询
                             </Item>
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconyijianfankui orange" />
+                                }
                                 arrow="horizontal" onClick={() => { }}>意见反馈
                             </Item>
                             <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                thumb={
+                                    <i className="iconfont iconguanyu orange" />
+                                }
                                 arrow="horizontal" onClick={() => { }}>关于保联汇
-                            </Item>
-                            <Item
-                                thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-                                arrow="horizontal" onClick={() => { }}>Title
                             </Item>
                         </List>
                         <WhiteSpace size="lg" />
