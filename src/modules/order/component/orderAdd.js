@@ -70,11 +70,14 @@ class Index extends React.Component {
       order: {},
       type: 'add',
       Channel: Channel,
-      Client: Client
+      Client: Client,
+      companyList: []
     }
   };
 
   componentWillMount() {
+    this.queryCompanyList();
+
     this.setState({
       userId: sessionStorage.getItem('userId')
     });
@@ -91,6 +94,32 @@ class Index extends React.Component {
         this.queryOrderDetail()
       }, 0);
     }
+  }
+
+  queryCompanyList = () => {
+    const param = {
+      pageSize: 1000,
+      pageNumber: 1
+    };
+    axios.get('insuranceCompany/queryList', {
+      params: param
+    }).then(res => res.data).then(data => {
+      if (data.success) {
+        let backData = data.backData.content || [];
+        let companyList = backData.map(item => {
+          return {
+            value: item.id,
+            label: item.companyName
+          }
+        })
+        console.log(companyList)
+        this.setState({
+          companyList: companyList,
+        });
+      }
+    }).catch(err => {
+      Toast.fail('服务异常', 2);
+    })
   }
 
   queryOrderDetail = id => {
@@ -166,7 +195,7 @@ class Index extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const { order, Channel, Client } = this.state;
+    const { order, Channel, Client, companyList } = this.state;
 
     return (
       <DocumentTitle title='新增订单'>
@@ -203,20 +232,18 @@ class Index extends React.Component {
                   }}
                   placeholder="请输入"
                 >产品名称</InputItem>
-                <InputItem
+                <Picker
+                  data={companyList}
+                  cols={1}
                   {...getFieldProps('insuranceCompany', {
-                    initialValue: order.insuranceCompany,
+                    initialValue: order.insuranceCompany ? [order.insuranceCompany] : '',
                     rules: [
                       { required: true, message: '请输入保险公司' }
-                    ]
+                    ],
                   })}
-                  clear
-                  error={!!getFieldError('insuranceCompany')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insuranceCompany').join('、'));
-                  }}
-                  placeholder="请输入"
-                >保险公司</InputItem>
+                >
+                  <Item arrow="horizontal">保险公司</Item>
+                </Picker>
                 <DatePicker
                   {...getFieldProps('insuredTime', {
                     initialValue: order.insuredTime ? new Date(order.insuredTime) : '',

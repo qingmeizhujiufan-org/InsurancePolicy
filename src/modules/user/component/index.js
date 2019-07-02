@@ -98,11 +98,11 @@ class Index extends React.Component {
         const UserSumItem = ({ className = '', data, ...restProps }) => (
             <div className={`${className} user-sum-item`} {...restProps}>
                 <div className="sum-item">
-                    <div><span className="sum-info">{data.sum}</span>元</div>
+                    <div><span className="sum-info">{data.orderSum || 0}</span>元</div>
                     <div className="sum-title">累计保费</div>
                 </div>
                 <div className="sum-item">
-                    <div><span className="sum-info">{data.count}</span>件</div>
+                    <div><span className="sum-info">{data.orderNum || 0}</span>件</div>
                     <div className="sum-title">保单数量</div>
                 </div>
             </div>
@@ -131,7 +131,7 @@ class Index extends React.Component {
                                     onClick={() => { this.toEdit() }} />
                             </div>
                             <WhiteSpace size="sm" />
-                            <div className="user-company">{user.company}</div>
+                            <div className="user-company">{user.InsuranceCompany && user.InsuranceCompany.companyName}</div>
                             <WhiteSpace size="lg" />
                             <div className="user-logo">
                                 <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />

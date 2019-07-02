@@ -17,7 +17,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            userId: null,
+            userId: sessionStorage.getItem('userId'),
             userInfo: {},
             params: {
                 pageNumber: 1,
@@ -41,12 +41,6 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
-        this.setState({
-            userId: sessionStorage.getItem('userId')
-        });
-    }
-
-    componentDidMount() {
         const { time, condition } = this.state;
         this.querySumOne(time.value, condition.value);
     }
@@ -122,7 +116,7 @@ class Index extends React.Component {
         axios.get('user/querySumOne', {
             params: param
         }).then(res => res.data).then(data => {
-            if (data.backData) {
+            if (data.success) {
                 const backData = data.backData;
                 this.setState({
                     userInfo: backData
@@ -138,6 +132,7 @@ class Index extends React.Component {
 
     render() {
         const { modalShow, time, condition, tempTime, tempCondition, params, userInfo } = this.state;
+        console.log(userInfo)
         const times = [
             { value: 0, label: '月度排行' },
             { value: 1, label: '季度排行' },
@@ -197,7 +192,8 @@ class Index extends React.Component {
                     <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
                 </div>
                 <div className="item-info">
-
+                    <div>{data.realname}</div>
+                    <div>{data.company}</div>
                 </div>
             </div>
         );
@@ -214,8 +210,8 @@ class Index extends React.Component {
 
         const SortItem = ({ className = '', data, ...restProps }) => (
             <div className={`${className} list-item`} {...restProps}>
-                <SortItemLeft />
-                <SortItemRight />
+                <SortItemLeft data={data} />
+                <SortItemRight data={data} />
             </div>
         );
 
@@ -224,7 +220,8 @@ class Index extends React.Component {
             return (
                 <SortItem
                     key={rowID}
-                    onClick={() => this.queryDetail(obj.id)}>
+                // onClick={() => this.queryDetail(obj.id)}
+                >
                 </SortItem>
             );
         };
@@ -251,15 +248,8 @@ class Index extends React.Component {
                                 </Flex>
                             </WingBlank>
                         </div>
-                        <List>
-                            <Item
-                                onClick={() => { this.toUserCenter() }}
-                                multipleLine
-                                thumb={<SortItemLeft />}
-                                extra={<SortItemRight />}>
-                                Title <Brief>subtitle</Brief>
-                            </Item>
-                        </List>
+                        <SortItem className="user-sum-item" data={userInfo} onClick={() => { this.toUserCenter() }} />
+
                         <WhiteSpace size="lg" />
                         {/* <CardList
                             className="user-sum-list"
