@@ -18,7 +18,7 @@ class Index extends React.Component {
 
         this.state = {
             userId: sessionStorage.getItem('userId'),
-            userInfo: {},
+            userInfo: null,
             params: {
                 pageNumber: 1,
                 pageSize: 10,
@@ -81,7 +81,7 @@ class Index extends React.Component {
     }
 
     onOk = () => {
-        const { tempTime, tempCondition } = this.state;
+        const { tempTime, tempCondition, params } = this.state;
         this.setState({
             time: tempTime,
             condition: tempCondition,
@@ -132,7 +132,7 @@ class Index extends React.Component {
 
     render() {
         const { modalShow, time, condition, tempTime, tempCondition, params, userInfo } = this.state;
-        console.log(userInfo)
+
         const times = [
             { value: 0, label: '月度排行' },
             { value: 1, label: '季度排行' },
@@ -185,44 +185,37 @@ class Index extends React.Component {
             </div>
         );
 
-        const SortItemLeft = ({ className = '', data, ...restProps }) => (
-            <div className={`${className} sort-item-left`} {...restProps}>
-                <div className="item-sort-num">1</div>
-                <div className="item-src">
-                    <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
-                </div>
-                <div className="item-info">
-                    <div>{data.realname}</div>
-                    <div>{data.company}</div>
-                </div>
-            </div>
-        );
-
-        const SortItemRight = ({ className = '', data, ...restProps }) => (
-            <div className={`${className} sort-item-right`} {...restProps}>
-                <div className="item-fee-num">7777</div>
-                <div className="item-like-num">
-                    <div>12345</div>
-                    <Icon type="check" />
-                </div>
-            </div>
-        );
-
         const SortItem = ({ className = '', data, ...restProps }) => (
             <div className={`${className} list-item`} {...restProps}>
-                <SortItemLeft data={data} />
-                <SortItemRight data={data} />
+                <div className="sort-item-left">
+                    <div className="item-sort-num">1</div>
+                    <div className="item-src">
+                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
+                    </div>
+                    <div className="item-info">
+                        <div>{data && data.realname}</div>
+                        <div>{data && data.companyName}</div>
+                    </div>
+                </div>
+                <div className="sort-item-center">{
+                    condition.value === 0
+                        ? <div className="item-fee-num">{data && data.order.orderSum} 元</div>
+                        : <div className="item-fee-num">{data && data.order.orderNum} 件</div>
+                }
+                </div>
+                <div className="sort-item-right">
+                    <div className="item-like-num">
+                        <div>{data && data.like.likeNum}</div>
+                        <div className="iconfont icondianzan-weixuanzhong"></div>
+                    </div>
+                </div>
             </div>
         );
 
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <SortItem
-                    key={rowID}
-                // onClick={() => this.queryDetail(obj.id)}
-                >
-                </SortItem>
+                <SortItem key={rowID}></SortItem>
             );
         };
 

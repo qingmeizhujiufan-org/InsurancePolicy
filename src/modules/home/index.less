@@ -61,6 +61,7 @@
     .list-item {
         position: relative;
         display: flex;
+        align-items: center;
         width: 100%;
         padding: .2rem 0 .2rem .3rem;
         background-color: #fff;
@@ -112,6 +113,8 @@
         }
 
         .item-info {
+            margin-left: 5px;
+
             >div {
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -124,13 +127,12 @@
         }
     }
 
-    .sort-item-right {
-        display: flex;
-        align-items: center;
-        flex: 2;
+    .sort-item-center {
+        flex: 1;
+        text-align: right;
+        margin-right: .1rem;
 
         .item-fee-num {
-            flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -138,16 +140,26 @@
             color: #2B8BFF;
             margin-right: .1rem;
         }
+    }
+
+    .sort-item-right {
+        display: flex;
+        align-items: center;
+        flex: 1;
 
         .item-like-num {
             display: flex;
             align-items: center;
             flex-direction: column;
+            justify-content: space-between;
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: .24rem;
+
+            div {
+                font-size: .28rem;
+            }
         }
     }
 }
