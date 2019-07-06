@@ -38,7 +38,8 @@ module.exports = {
             Utils: path.resolve(__dirname, 'src/util/'),//本地工具包
             Comps: path.resolve(__dirname, 'src/components/'),//组件
             RestUrl: path.resolve(__dirname, 'src/actions/RestUrl/'),//rest、http服务地址
-            Img: path.resolve(__dirname, 'src/assets/img/'),//图片
+            Img: path.resolve(__dirname, 'src/assets/img/'),//图片,
+            'zui-mobile': path.resolve(__dirname, 'src/components/zui-mobile'),//组件
         }
     },
 

@@ -1,10 +1,10 @@
 {
-  "name": "WuJieMall",
+  "name": "InsurancePolicy",
   "version": "1.0.0",
   "main": "lib/index",
   "scripts": {
     "start": "webpack-dev-server --devtool eval-source-map --port 8010 --open",
-    "prod": "webpack -p --progress --colors --config webpack.prod.config.js"
+    "build": "webpack -p --progress --colors --config webpack.prod.config.js"
   },
   "license": "MIT",
   "dependencies": {
