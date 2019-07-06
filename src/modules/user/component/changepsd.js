@@ -141,6 +141,9 @@ class Index extends React.Component {
 
                                 >确认密码</InputItem>
                             </List>
+                            <WhiteSpace size="lg" />
+                            <WhiteSpace size="lg" />
+
                             <WingBlank>
                                 <Button type="primary" onClick={this.onSubmit}>提交</Button>
                             </WingBlank>

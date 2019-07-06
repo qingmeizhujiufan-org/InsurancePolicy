@@ -244,13 +244,13 @@ class Index extends React.Component {
                         <SortItem className="user-sum-item" data={userInfo} onClick={() => { this.toUserCenter() }} />
 
                         <WhiteSpace size="lg" />
-                        {/* <CardList
+                        <CardList
                             className="user-sum-list"
                             pageUrl={'user/querySumList'}
                             params={params}
                             row={row}
                             multi
-                        /> */}
+                        />
 
                         <Modal
                             className="home-modal"

@@ -34,53 +34,25 @@ const Duration = [{
   value: 3,
 }]
 
-const Channel = [{
-  label: '1年',
-  value: '1',
-},
-{
-  label: '2年',
-  value: '2',
-}, {
-  label: '3年',
-  value: '3',
-}]
-
-
-const Client = [{
-  label: '1年',
-  value: '1',
-},
-{
-  label: '2年',
-  value: '2',
-}, {
-  label: '3年',
-  value: '3',
-}]
-
-
 class Index extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userId: null,
+      userId: sessionStorage.getItem('userId'),
       orderId: null,
       order: {},
       type: 'add',
-      Channel: Channel,
-      Client: Client,
+      Channel: [],
+      Client: [],
       companyList: []
     }
   };
 
   componentWillMount() {
     this.queryCompanyList();
-
-    this.setState({
-      userId: sessionStorage.getItem('userId')
-    });
+    this.queryClientList();
+    this.queryChannelList();
   }
 
   componentDidMount() {
@@ -94,6 +66,58 @@ class Index extends React.Component {
         this.queryOrderDetail()
       }, 0);
     }
+  }
+
+  queryChannelList = () => {
+    const param = {
+      pageSize: 1000,
+      pageNumber: 1,
+      userId: this.state.userId
+    };
+    axios.get('channel/queryList', {
+      params: param
+    }).then(res => res.data).then(data => {
+      if (data.success) {
+        let backData = data.backData.content || [];
+        let list = backData.map(item => {
+          return {
+            value: item.id,
+            label: item.channelName
+          }
+        })
+        this.setState({
+          Channel: list,
+        });
+      }
+    }).catch(err => {
+      Toast.fail('服务异常', 2);
+    })
+  }
+
+  queryClientList = () => {
+    const param = {
+      pageSize: 1000,
+      pageNumber: 1,
+      userId: this.state.userId
+    };
+    axios.get('custom/queryList', {
+      params: param
+    }).then(res => res.data).then(data => {
+      if (data.success) {
+        let backData = data.backData.content || [];
+        let list = backData.map(item => {
+          return {
+            value: item.id,
+            label: item.customName
+          }
+        })
+        this.setState({
+          Client: list,
+        });
+      }
+    }).catch(err => {
+      Toast.fail('服务异常', 2);
+    })
   }
 
   queryCompanyList = () => {
@@ -112,7 +136,7 @@ class Index extends React.Component {
             label: item.companyName
           }
         })
-        console.log(companyList)
+
         this.setState({
           companyList: companyList,
         });

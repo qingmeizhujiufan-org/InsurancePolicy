@@ -115,7 +115,6 @@ class Index extends React.Component {
                             row={row}
                             multi
                         />
-                        <WhiteSpace size="lg" />
                     </Layout.Content>
                     <Layout.Footer>
                         <WingBlank>
