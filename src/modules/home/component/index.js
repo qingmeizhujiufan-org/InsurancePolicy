@@ -24,9 +24,7 @@ class Index extends React.Component {
             firstUser: {},
             params: {
                 pageNumber: 1,
-                pageSize: 10,
-                time: 0, // 统计时间
-                condition: 0, //统计类型
+                pageSize: 10
             },
             firstName: null,
             modalShow: false,
@@ -44,7 +42,15 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
-        const { time, condition } = this.state;
+        const { time, condition, params, userId } = this.state;
+        this.setState({
+            params: {
+                ...params,
+                time: time.value,
+                condition: condition.value,
+                userId,
+            }
+        });
         this.querySumOne(time.value, condition.value);
     }
 
@@ -84,7 +90,7 @@ class Index extends React.Component {
     }
 
     onOk = () => {
-        const { tempTime, tempCondition, params } = this.state;
+        const { tempTime, tempCondition, params, userId } = this.state;
         this.setState({
             time: tempTime,
             condition: tempCondition,
@@ -92,7 +98,8 @@ class Index extends React.Component {
             params: {
                 ...params,
                 time: tempTime.value,
-                condition: tempCondition.value
+                condition: tempCondition.value,
+                userId,
             }
         })
         setTimeout(() => {
@@ -104,15 +111,11 @@ class Index extends React.Component {
         this.context.router.push(`/user/personal`);
     }
 
-    onLike = id => {
-        this.context.router.push(`/travel/detail/${id}`);
-    }
-
     querySumOne = (key1, key2) => {
         Toast.loading('正在加载', 0);
         const { userId } = this.state;
         const param = {
-            id: '30b13970-0052-11e9-8735-190581b1698c',
+            id: userId,
             time: key1,
             condition: key2
         };
@@ -124,7 +127,6 @@ class Index extends React.Component {
                 this.setState({
                     userInfo: backData.user,
                     firstUser: backData.firstUser
-
                 });
                 Toast.hide()
             } else {
@@ -135,11 +137,42 @@ class Index extends React.Component {
         })
     }
 
+    handleLike = (type, thumbupId) => {
+        const { time, condition, params, userId } = this.state;
+        console.log(userId, thumbupId);
+        if (userId === thumbupId) {
+            return;
+        }
+        Toast.loading('', 0);
+
+        const param = {
+            userId,
+            thumbupId: thumbupId
+        };
+        const api = type === 1 ? 'user/like' : 'user/unlike';
+        axios.post(api, param).then(res => res.data).then(data => {
+            if (data.success) {
+                this.setState({
+                    params: {
+                        ...params,
+                        time: time.value,
+                        condition: condition.value,
+                        userId,
+                        key: new Date().getTime()
+                    }
+                });
+                Toast.hide()
+            } else {
+                Toast.fail(data.backMsg, 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     render() {
         const { modalShow, time, condition, tempTime, tempCondition, params, userInfo, firstUser } = this.state;
         const bgFile = firstUser.bgFile;
-
-        console.log(firstUser)
 
         const times = [
             { value: 0, label: '月度排行' },
@@ -222,10 +255,17 @@ class Index extends React.Component {
                 }
                 </div>
                 <div className="sort-item-right">
-                    <div className="item-like-num">
-                        <div>{data.thumbupNum}</div>
-                        <div className="iconfont icondianzan-weixuanzhong"></div>
-                    </div>
+                    {
+                        data.thumbup
+                            ? <div className="item-like-num" onClick={() => this.handleLike(0, data.id)}>
+                                <div>{data.thumbupNum}</div>
+                                <div className="iconfont icondianzan-xuanzhong text-red"> </div>
+                            </div>
+                            : <div className="item-like-num" onClick={() => this.handleLike(1, data.id)}>
+                                <div>{data.thumbupNum}</div>
+                                <div className="iconfont icondianzan-weixuanzhong"></div>
+                            </div>
+                    }
                 </div>
             </div>
         );
