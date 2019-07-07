@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button } from 'antd-mobile';
-import { Layout } from 'zui-mobile';
-import { CardList } from 'Comps';
+import {List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button} from 'antd-mobile';
+import {Layout} from 'zui-mobile';
+import {CardList} from 'Comps';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -18,7 +18,7 @@ class Index extends React.Component {
 
         this.state = {
             userId: sessionStorage.getItem('userId'),
-            userInfo: null,
+            userInfo: {},
             params: {
                 pageNumber: 1,
                 pageSize: 10,
@@ -41,11 +41,11 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
-        const { time, condition } = this.state;
-        this.querySumOne(time.value, condition.value);
+        const {time, condition} = this.state;
+        // this.querySumOne(time.value, condition.value);
     }
 
-    /** 
+    /**
      * 新增订单
      */
     onAddOrder = () => {
@@ -53,7 +53,7 @@ class Index extends React.Component {
     }
 
     showModal = () => {
-        const { time, condition } = this.state;
+        const {time, condition} = this.state;
         this.setState({
             tempTime: time,
             tempCondition: condition,
@@ -62,7 +62,7 @@ class Index extends React.Component {
     }
 
     onClose = () => {
-        const { time, condition } = this.state;
+        const {time, condition} = this.state;
         this.setState({
             modalShow: false
         })
@@ -81,7 +81,7 @@ class Index extends React.Component {
     }
 
     onOk = () => {
-        const { tempTime, tempCondition, params } = this.state;
+        const {tempTime, tempCondition, params} = this.state;
         this.setState({
             time: tempTime,
             condition: tempCondition,
@@ -107,7 +107,7 @@ class Index extends React.Component {
 
     querySumOne = (key1, key2) => {
         Toast.loading('正在加载', 0);
-        const { userId } = this.state;
+        const {userId} = this.state;
         const param = {
             id: userId,
             time: key1,
@@ -131,32 +131,32 @@ class Index extends React.Component {
     }
 
     render() {
-        const { modalShow, time, condition, tempTime, tempCondition, params, userInfo } = this.state;
+        const {modalShow, time, condition, tempTime, tempCondition, params, userInfo} = this.state;
 
         const times = [
-            { value: 0, label: '月度排行' },
-            { value: 1, label: '季度排行' },
-            { value: 2, label: '年度排行' },
+            {value: 0, label: '月度排行'},
+            {value: 1, label: '季度排行'},
+            {value: 2, label: '年度排行'},
         ];
         const conditions = [
-            { value: 0, label: '累计保费' },
-            { value: 1, label: '保单数量' },
+            {value: 0, label: '累计保费'},
+            {value: 1, label: '保单数量'},
         ];
-        const CutModal = ({ className = '', data, ...restProps }) => (
+        const CutModal = ({className = '', data, ...restProps}) => (
             <div className="condition-container">
                 <div className="condition-title">时间段</div>
                 <div className="condition-item">
                     {times.map(i => {
-                        let type = tempTime.value === i.value ? 'primary' : 'default';
-                        return (
-                            <Button
-                                key={i.value}
-                                type={type}
-                                size='small'
-                                onClick={() => this.onChange1(i)}>
-                                {i.label}
-                            </Button>)
-                    }
+                            let type = tempTime.value === i.value ? 'primary' : 'default';
+                            return (
+                                <Button
+                                    key={i.value}
+                                    type={type}
+                                    size='small'
+                                    onClick={() => this.onChange1(i)}>
+                                    {i.label}
+                                </Button>)
+                        }
                     )}
                 </div>
                 <div className="condition-title">显示条件</div>
@@ -174,38 +174,43 @@ class Index extends React.Component {
                     })
                     }
                 </div>
-                <WhiteSpace size="lg" />
-                <div className="condition-btn" onClick={() => { this.onOk() }}>
-                    <Icon type="check" />确认
+                <WhiteSpace size="lg"/>
+                <div className="condition-btn" onClick={() => {
+                    this.onOk()
+                }}>
+                    <Icon type="check"/>确认
                 </div>
-                <div className="condition-other-btn" onClick={() => { this.toOuterUrl() }}>
-                    <Button size="small" className="green-blue-btn" style={{ marginRight: '10px' }}>产品销量榜<Icon type="right" /></Button>
-                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right" /></Button>
+                <div className="condition-other-btn" onClick={() => {
+                    this.toOuterUrl()
+                }}>
+                    <Button size="small" className="green-blue-btn" style={{marginRight: '10px'}}>产品销量榜<Icon
+                        type="right"/></Button>
+                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right"/></Button>
                 </div>
             </div>
         );
 
-        const SortItem = ({ className = '', data, ...restProps }) => (
+        const SortItem = ({className = '', data = {}, ...restProps}) => (
             <div className={`${className} list-item`} {...restProps}>
                 <div className="sort-item-left">
                     <div className="item-sort-num">1</div>
                     <div className="item-src">
-                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" />
+                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"/>
                     </div>
                     <div className="item-info">
-                        <div>{data && data.realname}</div>
-                        <div>{data && data.companyName}</div>
+                        <div>{data.realname}</div>
+                        <div>{data.companyName}</div>
                     </div>
                 </div>
                 <div className="sort-item-center">{
                     condition.value === 0
-                        ? <div className="item-fee-num">{data && data.order.orderSum} 元</div>
-                        : <div className="item-fee-num">{data && data.order.orderNum} 件</div>
+                        ? <div className="item-fee-num">{data.orderSum} 元</div>
+                        : <div className="item-fee-num">{data.orderNum} 件</div>
                 }
                 </div>
                 <div className="sort-item-right">
                     <div className="item-like-num">
-                        <div>{data && data.like.likeNum}</div>
+                        <div>{data.thumbupNum}</div>
                         <div className="iconfont icondianzan-weixuanzhong"></div>
                     </div>
                 </div>
@@ -215,7 +220,7 @@ class Index extends React.Component {
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <SortItem key={rowID}></SortItem>
+                <SortItem key={rowID} className="user-sum-item" data={obj}></SortItem>
             );
         };
 
@@ -227,12 +232,17 @@ class Index extends React.Component {
                             <WingBlank>
                                 <Flex justify="center" className="user-info-detail">
                                     <div className="user-logo">
-                                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt="" />
+                                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt=""/>
                                     </div>
                                     <div className="user-name">王玮获得了第1名</div>
                                     <div className="user-operation">
-                                        <div className="user-btn" onClick={() => { this.onAddOrder() }}>新增订单</div>
-                                        <div className="user-btn" onClick={() => { this.showModal() }}>
+                                        <div className="user-btn" onClick={() => {
+                                            this.onAddOrder()
+                                        }}>新增订单
+                                        </div>
+                                        <div className="user-btn" onClick={() => {
+                                            this.showModal()
+                                        }}>
                                             <div>{time.label}</div>
                                             <div>—</div>
                                             <div>{condition.label}</div>
@@ -241,15 +251,16 @@ class Index extends React.Component {
                                 </Flex>
                             </WingBlank>
                         </div>
-                        <SortItem className="user-sum-item" data={userInfo} onClick={() => { this.toUserCenter() }} />
+                        <SortItem className="user-sum-item" data={userInfo} onClick={() => {
+                            this.toUserCenter()
+                        }}/>
 
-                        <WhiteSpace size="lg" />
+                        <WhiteSpace size="lg"/>
                         <CardList
                             className="user-sum-list"
                             pageUrl={'user/querySumList'}
                             params={params}
                             row={row}
-                            multi
                         />
 
                         <Modal
@@ -258,14 +269,14 @@ class Index extends React.Component {
                             transparent
                             maskClosable={true}
                             onClose={() => this.onClose()}
-                            wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+                            wrapProps={{onTouchStart: this.onWrapTouchStart}}
                         >
-                            <CutModal />
+                            <CutModal/>
                         </Modal>
 
                     </Layout.Content>
                 </Layout>
-            </DocumentTitle >
+            </DocumentTitle>
         );
     }
 }

@@ -215,10 +215,8 @@ class Index extends React.Component {
                 renderRow={row}
                 className="zui-cardlist"
                 style={{
-                    // height: this.state.height,
-                    minHeight: '20px',
+                    height: this.state.height,
                     overflow: 'auto',
-                    paddingBottom: '10px'
                 }}
                 pageSize={4}
                 pullToRefresh={<PullToRefresh
