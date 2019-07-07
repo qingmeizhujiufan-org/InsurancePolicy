@@ -20,7 +20,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <DocumentTitle title='无介商城'>
+            <DocumentTitle title='保联榜'>
                 {this.props.children}
             </DocumentTitle>
         );

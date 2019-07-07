@@ -1,21 +1,36 @@
 .home {
     font-size: .28rem;
 
+    &.mask {
+        filter: blur(6px);
+    }
+
     .user-info-container {
+        height: 2.8rem;
         padding: .4rem 0;
-        background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
+        background: url('../../assets/img/bg.png') no-repeat;
+        background-size: cover;
 
         .user-info-detail {
             align-items: center;
             color: #fff;
 
             .user-logo {
-                // flex: 1;
+                width: .64rem;
+                height: .64rem;
                 margin-right: .2rem;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
             }
 
             .user-name {
                 flex: 4;
+                font-size: .3rem;
+                font-weight: 500;
             }
 
             .user-operation {
@@ -33,28 +48,31 @@
                     width: auto;
                     padding: .12rem .2rem;
                     text-align: center;
-                    border-radius: 10px;
+                    border-radius: .2rem;
                     background-color: #8eb9ff;
-                    opacity: .8; // background-color: rgba(142, ​185, ​255, 0.7);
+                    opacity: .74;
                 }
 
             }
 
-
-
             .am-flexbox-item {
                 text-align: center;
 
-                >div {
+                > div {
                     &:first-child {
                         margin-bottom: .1rem;
                     }
                 }
             }
         }
+
+        & + .user-sum-item .item-fee-num {
+            color: #00C1B1;
+        }
     }
 
     .user-sum-list {
+        margin-top: .3rem;
         padding: 0;
     }
 
@@ -64,7 +82,6 @@
         align-items: center;
         width: 100%;
         height: 1.3rem;
-        padding: .2rem 0 .2rem .3rem;
         background-color: #fff;
 
         &:not(.user-sum-item)::after {
@@ -79,11 +96,7 @@
             left: -11px;
             width: 100%;
             height: 1PX;
-            -webkit-transform-origin: 50% 100%;
-            -ms-transform-origin: 50% 100%;
             transform-origin: 50% 100%;
-            -webkit-transform: scaleY(0.5);
-            -ms-transform: scaleY(0.5);
             transform: scaleY(0.5);
         }
     }
@@ -95,15 +108,15 @@
         margin-left: .2rem;
 
         .item-sort-num {
-            margin-right: .12rem;
-            width: .5rem;
+            width: 1rem;
             font-size: .32rem;
             text-align: center;
+            font-weight: 600;
         }
 
         .item-src {
-            width: 40px;
-            height: 40px;
+            width: .64rem;
+            height: .64rem;
             border-radius: 20px;
             overflow: hidden;
 
@@ -116,13 +129,17 @@
         .item-info {
             margin-left: 5px;
 
-            >div {
+            > div {
+                color: #728095;
+                font-size: .26rem;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
 
                 &:first-child {
                     margin-bottom: .12rem;
+                    color: #222222;
+                    font-size: .3rem;
                 }
             }
         }
@@ -134,12 +151,16 @@
         margin-right: .1rem;
 
         .item-fee-num {
+            font-size: .34rem;
+            color: #2B8BFF;
+            font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: .4rem;
-            color: #2B8BFF;
-            margin-right: .1rem;
+
+            .unit {
+                font-size: .26rem;
+            }
         }
     }
 
@@ -154,23 +175,29 @@
             flex-direction: column;
             justify-content: space-between;
             flex: 1;
+            width: 1.06rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
 
             div {
-                font-size: .28rem;
+                font-size: .24rem;
+
+                &.iconfont {
+                    font-size: .28rem;
+                }
             }
         }
     }
 }
 
 .am-modal-mask {
-    background-color: rgba(0, 0, 0, 0.2)
+    background-color: transparent;
 }
 
 .home-modal {
     width: 80vw;
+    margin-top: -50vh;
 
     .am-modal-content {
         overflow: visible;
@@ -192,10 +219,20 @@
 
             .am-button {
                 flex: 1/ 3;
+                height: .72rem;
+                line-height: .72rem;
                 margin-right: .1rem;
-                padding: .06rem 0;
-                height: auto;
                 font-size: 14px;
+                border: none;
+
+                &:before {
+                    border: none;
+                }
+
+                &:not(.am-button-primary) {
+
+                    background-color: #F4F7FD;
+                }
 
                 &:last-child {
                     margin: 0;
@@ -213,9 +250,10 @@
         .condition-other-btn {
             position: absolute;
             z-index: 999;
-            bottom: -0.8rem;
+            bottom: -1.12rem;
             left: 0;
             width: 100%;
+            height: .72rem;
             display: flex;
             background-color: transparent;
 
@@ -237,4 +275,10 @@
             }
         }
     }
+}
+
+.am-modal-content {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0px 0px 13px 0px rgba(136, 136, 136, 0.5);
+    border-radius: .1rem;
 }

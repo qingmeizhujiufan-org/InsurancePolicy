@@ -6,7 +6,7 @@ import {CardList} from 'Comps';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
-import restUrl from "RestUrl";
+import avatar from 'Img/default.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -195,7 +195,7 @@ class Index extends React.Component {
                 <div className="sort-item-left">
                     <div className="item-sort-num">{data.index}</div>
                     <div className="item-src">
-                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"/>
+                        <img src={avatar}/>
                     </div>
                     <div className="item-info">
                         <div>{data.realname}</div>
@@ -204,8 +204,8 @@ class Index extends React.Component {
                 </div>
                 <div className="sort-item-center">{
                     condition.value === 0
-                        ? <div className="item-fee-num">{data.orderSum || 0} 元</div>
-                        : <div className="item-fee-num">{data.orderNum || 0} 件</div>
+                        ? <div className="item-fee-num">{data.orderSum || 0} <span className='unit'>元</span></div>
+                        : <div className="item-fee-num">{data.orderNum || 0} <span className='unit'>件</span></div>
                 }
                 </div>
                 <div className="sort-item-right">
@@ -228,13 +228,13 @@ class Index extends React.Component {
 
         return (
             <DocumentTitle title='保联榜'>
-                <Layout className="home">
+                <Layout className={`home${modalShow ? ' mask' : ''}`}>
                     <Layout.Content>
                         <div className="user-info-container">
                             <WingBlank>
                                 <Flex justify="center" className="user-info-detail">
                                     <div className="user-logo">
-                                        <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png" alt=""/>
+                                        <img src={avatar} alt=""/>
                                     </div>
                                     <div className="user-name">王玮获得了第1名</div>
                                     <div className="user-operation">
@@ -256,8 +256,6 @@ class Index extends React.Component {
                         <SortItem className="user-sum-item" data={userInfo} onClick={() => {
                             this.toUserCenter()
                         }}/>
-
-                        <WhiteSpace size="lg"/>
                         <CardList
                             className="user-sum-list"
                             pageUrl={'user/querySumList'}

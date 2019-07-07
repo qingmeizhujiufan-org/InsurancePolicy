@@ -201,7 +201,7 @@ class Index extends React.Component {
 
     render() {
         const { dataSource, initLoaded, refreshing, isLoading } = this.state;
-        const { row } = this.props;
+        const { className,row } = this.props;
         return (
             <ListView
                 ref={el => this.lv = el}
@@ -213,7 +213,7 @@ class Index extends React.Component {
                 </div>)}
                 renderBodyComponent={() => <MyBody />}
                 renderRow={row}
-                className="zui-cardlist"
+                className={`zui-cardlist${className ? ' ' + className : ''}`}
                 style={{
                     height: this.state.height,
                     overflow: 'auto',
