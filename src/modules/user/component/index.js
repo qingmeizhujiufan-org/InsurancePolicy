@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {List, Tabs, Toast, Flex, WingBlank, WhiteSpace, Icon, ImagePicker} from 'antd-mobile';
-import {Layout} from 'zui-mobile';
+import { List, Tabs, Toast, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
+import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 import restUrl from "RestUrl";
+import bgImg from 'Img/bg.png';
+import avator from 'Img/hand-loging.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
-const data = [];
 
 const tabs = [
-    {title: '阅读排行', sub: '1'},
-    {title: '季度排行', sub: '2'},
-    {title: '年度排行', sub: '3'},
+    { title: '阅读排行', sub: '1' },
+    { title: '季度排行', sub: '2' },
+    { title: '年度排行', sub: '3' },
 ];
 
 
@@ -24,11 +25,12 @@ class Index extends React.Component {
 
         this.state = {
             userId: null,
-            files: data,
             user: {},
             month: {},
             quarter: {},
-            year: {}
+            year: {},
+            bgId: '',
+            Links: {}
         }
     };
 
@@ -37,7 +39,9 @@ class Index extends React.Component {
             userId: sessionStorage.getItem('userId')
         });
         setTimeout(() => {
-            this.queryUserDetail()
+            this.queryUserDetail();
+            this.queryLinkDetail();
+
         }, 0);
     }
 
@@ -71,6 +75,21 @@ class Index extends React.Component {
         })
     }
 
+    queryLinkDetail = () => {
+        axios.get('link/queryDetail').then(res => res.data).then(data => {
+            if (data.success) {
+                const backData = data.backData;
+                this.setState({
+                    Links: backData
+                });
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     onChange = e => {
         const files = e.target.files;
         console.log('onChange === ', files);
@@ -83,16 +102,31 @@ class Index extends React.Component {
         xhr.addEventListener('load', () => {
             const response = JSON.parse(xhr.responseText);
             console.log('response == ', response);
-            this.setState({
-                user: {
-                    ...this.state.user,
-                    bgId: response.id
-                }
-            });
+
+            this.updateBgImg(response.id);
         });
         xhr.addEventListener('error', () => {
             const error = JSON.parse(xhr.responseText);
         });
+    }
+
+    updateBgImg = (bgId) => {
+        const { userId } = this.state;
+        const param = {
+            id: userId,
+            bgId: bgId
+        };
+        axios.post(`user/update`, param).then(res => res.data).then(data => {
+            if (data.success) {
+                Toast.success('更新成功', 2, () => {
+                    this.queryUserDetail();
+                });
+            } else {
+                Toast.fail('更新失败', 2);
+            }
+        }).catch(() => {
+            Toast.fail('服务异常', 2);
+        })
     }
 
     toEdit = () => {
@@ -109,9 +143,10 @@ class Index extends React.Component {
     }
 
     render() {
-        const {files, user, month, quarter, year} = this.state;
+        const { user, month, quarter, year, Links } = this.state;
+        const bgImg = user.bgId;
 
-        const UserSumItem = ({className = '', data, ...restProps}) => (
+        const UserSumItem = ({ className = '', data, ...restProps }) => (
             <div className={`${className} user-sum-item`} {...restProps}>
                 <div className="sum-item">
                     <div><span className="sum-info">{data.orderSum || 0}</span>元</div>
@@ -130,9 +165,9 @@ class Index extends React.Component {
                     <Layout.Content>
                         <div className="user-img-container">
                             {
-                                user.bgId ? (
-                                    <img className='user-bg' src={restUrl.FILE_ASSET + user.bgId + '.jpg'}/>
-                                ) : <span className='tip'>轻触替换背景</span>
+                                bgImg && bgImg.id ? (
+                                    <img className='user-bg' src={restUrl.FILE_ASSET + bgImg.id + bgImg.fileType} />
+                                ) : <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
                             }
                             <input
                                 type='file'
@@ -142,25 +177,30 @@ class Index extends React.Component {
                             />
                         </div>
                         <div className="user-info-container">
-                            <WhiteSpace size="lg"/>
+                            <WhiteSpace size="lg" />
                             <div className="user-name">
                                 {user.realname}
                                 <i
-                                    className="iconfont iconbianji"
-                                    style={{verticalAlign: 'middle', marginLeft: '10px', fontSize: '14px'}}
+                                    className="iconfont iconbianji blue"
+                                    style={{ verticalAlign: 'middle', marginLeft: '10px', fontSize: '14px' }}
                                     onClick={() => {
                                         this.toEdit()
-                                    }}/>
+                                    }} />
                             </div>
-                            <WhiteSpace size="sm"/>
+                            <WhiteSpace size="sm" />
                             <div
-                                className="user-company">{user.InsuranceCompany && user.InsuranceCompany.companyName}</div>
-                            <WhiteSpace size="lg"/>
+                                className="user-company">{user.companyName}</div>
+                            <WhiteSpace size="lg" />
                             <div className="user-logo">
-                                <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt=""/>
+                                {
+                                    user.headimgurl
+                                        ? <img src={restUrl.FILE_ASSET + user.headimgurl + user.fileType} alt="" />
+                                        : <img src={avator} alt="" />
+                                }
+
                             </div>
                         </div>
-                        <WhiteSpace size="lg"/>
+                        <WhiteSpace size="lg" />
                         <Tabs
                             className="user-tab"
                             tabs={tabs}
@@ -168,71 +208,76 @@ class Index extends React.Component {
                             renderTab={tab => <span>{tab.title}</span>}
                         >
                             <div className="user-tab-item">
-                                <UserSumItem data={month}/>
+                                <UserSumItem data={month} />
                             </div>
                             <div className="user-tab-item">
-                                <UserSumItem data={quarter}/>
+                                <UserSumItem data={quarter} />
                             </div>
                             <div className="user-tab-item">
-                                <UserSumItem data={year}/>
+                                <UserSumItem data={year} />
                             </div>
                         </Tabs>
-                        <WhiteSpace size="lg"/>
+                        <WhiteSpace size="lg" />
 
                         <List className="my-list">
                             <Item
                                 thumb={
-                                    <i className="iconfont iconwodekehu blue"/>
+                                    <i className="iconfont iconwodekehu blue" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                                this.toCustomList()
-                            }}>
+                                    this.toCustomList()
+                                }}>
                                 我的客户
                             </Item>
                             <Item
                                 thumb={
-                                    <i className="iconfont iconwodedingdan blue"/>
+                                    <i className="iconfont iconwodedingdan blue" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                                this.toOrderList()
-                            }}>我的订单
+                                    this.toOrderList()
+                                }}>我的订单
                             </Item>
                             <Item
                                 thumb={
-                                    <i className="iconfont iconjifenshangcheng blue"/>
+                                    <i className="iconfont iconjifenshangcheng blue" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                                this.toMall()
-                            }}>积分商城
+                                    window.location.href = `${Links.pointMallUrl}`
+                                }}>积分商城
                             </Item>
                         </List>
 
-                        <WhiteSpace size="lg"/>
+                        <WhiteSpace size="lg" />
 
                         <List className="my-list">
                             <Item
                                 thumb={
-                                    <i className="iconfont iconkefuzixun orange"/>
+                                    <i className="iconfont iconkefuzixun orange" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                            }}>客户咨询
+                                    window.location.href = `${Links.customerConsultUrl}`
+
+                                }}>客户咨询
                             </Item>
                             <Item
                                 thumb={
-                                    <i className="iconfont iconyijianfankui orange"/>
+                                    <i className="iconfont iconyijianfankui orange" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                            }}>意见反馈
+                                    window.location.href = `${Links.feedbackUrl}`
+
+                                }}>意见反馈
                             </Item>
                             <Item
                                 thumb={
-                                    <i className="iconfont iconguanyu orange"/>
+                                    <i className="iconfont iconguanyu orange" />
                                 }
                                 arrow="horizontal" onClick={() => {
-                            }}>关于保联汇
+                                    window.location.href = `${Links.aboutUrl}`
+                                }}>关于保联汇
                             </Item>
                         </List>
-                        <WhiteSpace size="lg"/>
+                        <WhiteSpace size="lg" />
 
                     </Layout.Content>
                 </Layout>

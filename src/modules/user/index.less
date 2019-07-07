@@ -16,7 +16,7 @@
     .user-img-container {
         position: relative;
         height: 2.8rem;
-        background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
+        background-image: url('../../assets/img/bg.png');
 
         .upload-user-bg {
             position: absolute;
@@ -43,80 +43,19 @@
             z-index: 100;
             transform: translate3d(-50%, -50%, 0);
         }
-
-        .am-image-picker {
-            width: 100%;
-            height: 20vh;
-
-            .am-image-picker-list {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-
-                .am-flexbox.am-flexbox-align-center {
-                    margin: 0;
-                    width: 100%;
-                    height: 100%;
-
-                    &:last-child {
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        width: 50vw;
-                        height: .6rem;
-                        transform: translate(-50%, -50%);
-                        background-color: transparent;
-
-                        .am-image-picker-upload-btn {
-                            background-color: transparent;
-                            border: none;
-
-                            &:after {
-                                width: auto;
-                                height: auto;
-                                content: "点击替换背景";
-                                background-color: transparent;
-                                color: #fff;
-                            }
-
-                            &:before {
-                                width: auto;
-                                height: 0;
-                                // content: "\e703";
-                                color: #fff;
-                            }
-                        }
-                    }
-
-                    .am-flexbox-item {
-                        width: 100%;
-                        height: 100%;
-                        margin: 0;
-
-                        img {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     .user-info-container {
         position: relative;
-        padding-top: .5rem;
         text-align: center;
         background-color: #fff;
-        overflow: visible;
 
         .user-logo {
             position: absolute;
-            top: -50%;
+            top: 0;
             left: 50%;
-            transform: translate(-50%, 50%);
+            z-index: 101;
+            transform: translate(-50%, -50%);
             width: 1rem;
             height: 1rem;
             border-radius: .5rem;
@@ -129,6 +68,7 @@
         }
 
         .user-name {
+            margin-top: .3rem;
         }
 
         .user-company {
@@ -178,18 +118,27 @@
         background: transparent;
     }
 
-    .am-image-picker-list {
-        display: flex;
-        margin-bottom: 0;
-        padding: 0;
+    .item-img-container {
+        position: relative;
+        width: .8rem;
+        height: .8rem;
+        margin-left: calc(~'100% - .8rem');
+        border-radius: .4rem;
+        overflow: hidden;
 
-        .am-flexbox {
-            width: 1rem;
-            height: 1rem;
+        .user-bg {
+            width: 100%;
+            height: 100%;
         }
 
-        .am-image-picker-item .am-image-picker-item-content {
-            border-radius: 50%;
+        .upload-user-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 101;
         }
     }
 

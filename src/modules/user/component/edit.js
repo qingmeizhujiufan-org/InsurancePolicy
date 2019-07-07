@@ -7,23 +7,24 @@ import { assign, find } from 'lodash';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
+import restUrl from "RestUrl";
+
+import avator from 'Img/hand-loging.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
-const data = [{
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-}];
 
 class Index extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            files: data,
+            files: [],
             multiple: false,
             user: {},
-            companyList: []
+            companyList: [],
+            headimgurl: '',
+            fileType: ''
         }
     };
 
@@ -55,7 +56,7 @@ class Index extends React.Component {
                         label: item.companyName
                     }
                 })
-                console.log(companyList)
+
                 this.setState({
                     companyList: companyList,
                 });
@@ -63,6 +64,30 @@ class Index extends React.Component {
         }).catch(err => {
             Toast.fail('服务异常', 2);
         })
+    }
+
+    onChange = e => {
+        const files = e.target.files;
+        console.log('onChange === ', files);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', restUrl.FILE_UPLOAD_HOST + 'file/upload');
+        const data = new FormData();
+
+        data.append('file', files[0]);
+
+        xhr.send(data);
+
+        xhr.addEventListener('load', () => {
+            const response = JSON.parse(xhr.responseText);
+            console.log('response == ', response);
+            this.setState({
+                headimgurl: response.id,
+                fileType: response.fileType
+            });
+        });
+        xhr.addEventListener('error', () => {
+            const error = JSON.parse(xhr.responseText);
+        });
     }
 
     queryOneUser = () => {
@@ -79,6 +104,8 @@ class Index extends React.Component {
                 const backData = data.backData;
                 this.setState({
                     user: backData || {},
+                    fileType: backData.fileType,
+                    headimgurl: backData.headimgurl
                 });
                 Toast.hide()
             } else {
@@ -89,21 +116,15 @@ class Index extends React.Component {
         })
     }
 
-    // findCompanyName = (val) => {
-    //     const { companyList } = this.state;
-    //     return find(companyList, function (item) {
-    //         return item.id === val;
-    //     })
-    // }
-
     onSubmit = () => {
+
         this.props.form.validateFields({ force: true }, (error) => {
             if (!error) {
-                const { userId } = this.state;
+                const { headimgurl, userId } = this.state;
                 Toast.loading('正在提交', 0);
                 const values = this.props.form.getFieldsValue();
                 values.company = values.company[0];
-                const param = assign({}, { id: userId }, values);
+                const param = assign({}, { id: userId, headimgurl: headimgurl }, values);
 
                 axios.post(`user/update`, param).then(res => res.data).then(data => {
                     if (data.success) {
@@ -133,7 +154,7 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { files, user, companyList } = this.state;
+        const { user, companyList, headimgurl, fileType } = this.state;
 
         return (
             <DocumentTitle title='个人信息修改'>
@@ -144,15 +165,21 @@ class Index extends React.Component {
                                 <WhiteSpace size="lg" />
                                 <Item
                                     extra={
-                                        <ImagePicker
-                                            length="1"
-                                            files={files}
-                                            onChange={this.onChange}
-                                            onImageClick={(index, fs) => console.log(index, fs)}
-                                            multiple={this.state.multiple}
-                                            disableDelete="true"
-                                        />
+                                        <div className="item-img-container">
+                                            {
+                                                headimgurl
+                                                    ? <img className="user-bg" src={restUrl.FILE_ASSET + headimgurl + fileType} alt="" />
+                                                    : <img className="user-bg" src={avator} alt="" />
+                                            }
+                                            <input
+                                                type='file'
+                                                accept='image/jpeg'
+                                                className='upload-user-bg'
+                                                onChange={this.onChange}
+                                            />
+                                        </div>
                                     }
+                                    arrow="horizontal"
                                     onClick={() => this.selectAvtaor}>头像</Item>
                                 <WhiteSpace size="lg" />
                                 <InputItem
@@ -183,21 +210,6 @@ class Index extends React.Component {
                                     <Item arrow="horizontal">所属公司</Item>
                                 </Picker>
 
-                                {/* <InputItem
-                                    {...getFieldProps('company', {
-                                        initialValue: user.company,
-                                        rules: [
-                                            { required: true, message: '请输入所属公司' },
-                                            { validator: this.validatePhone },
-                                        ],
-                                    })}
-                                    clear
-                                    error={!!getFieldError('password')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password').join('、'));
-                                    }}
-                                    placeholder="请输入"
-                                >所属公司</InputItem> */}
                                 <WhiteSpace size="lg" />
 
                                 <Item arrow="horizontal" onClick={() => { this.onChangePSD() }}>修改密码</Item>
