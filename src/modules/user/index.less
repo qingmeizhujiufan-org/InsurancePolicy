@@ -15,7 +15,34 @@
 
     .user-img-container {
         position: relative;
+        height: 2.8rem;
         background: linear-gradient(to bottom right, #2f3ef8, #8eb9ff);
+
+        .upload-user-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 101;
+        }
+
+        .user-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: #ffffff;
+            font-size: .3rem;
+            z-index: 100;
+            transform: translate3d(-50%, -50%, 0);
+        }
 
         .am-image-picker {
             width: 100%;
@@ -101,7 +128,8 @@
             }
         }
 
-        .user-name {}
+        .user-name {
+        }
 
         .user-company {
             color: #888;
@@ -112,7 +140,6 @@
         height: auto;
 
         .am-tabs-tab-bar-wrap {
-            padding: 0 .3rem;
             background-color: #fff;
         }
 
