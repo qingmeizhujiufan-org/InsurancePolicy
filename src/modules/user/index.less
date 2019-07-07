@@ -68,7 +68,24 @@
         }
 
         .user-name {
+            position: relative;
+            display: inline-block;
             margin-top: .3rem;
+            color: #222222;
+            font-size: .3rem;
+            font-weight: 500;
+
+            &:after {
+                content: "\E70E";
+                position: absolute;
+                top: 25%;
+                right: -45%;
+                display: inline-block;
+                font-family: "iconfont" !important;
+                font-size: .2rem;
+                font-style: normal;
+                color: #2B8CFF;
+            }
         }
 
         .user-company {
@@ -108,6 +125,46 @@
                         color: #888;
                     }
                 }
+            }
+        }
+    }
+
+    .my-list {
+
+        .am-list-body {
+            &:before {
+                display: none;
+            }
+
+            .am-list-line {
+                &:after {
+                    display: none !important;
+                }
+            }
+        }
+
+        .am-list-item {
+            height: 1rem;
+
+            &:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 1px;
+                background-color: #dddddd;
+                transform: scaleY(.5);
+                transform-origin: 0 100%;
+            }
+
+            .iconfont {
+                font-size: .3rem;
+            }
+
+            .am-list-content {
+                font-size: .3rem;
+                color: #222222;
             }
         }
     }
