@@ -51,6 +51,7 @@ class Index extends React.Component {
                 userId,
             }
         });
+
         this.querySumOne(time.value, condition.value);
     }
 
@@ -140,6 +141,13 @@ class Index extends React.Component {
     handleLike = (type, thumbupId) => {
         const { time, condition, params, userId } = this.state;
         console.log(userId, thumbupId);
+
+        if (!userId) {
+            Toast.fail('请先登录 ', 2, () => {
+                this.context.router.push(`/public/login`);
+            });
+            return;
+        }
         if (userId === thumbupId) {
             return;
         }
@@ -171,7 +179,7 @@ class Index extends React.Component {
     }
 
     render() {
-        const { modalShow, time, condition, tempTime, tempCondition, params, userInfo, firstUser } = this.state;
+        const { userId, modalShow, time, condition, tempTime, tempCondition, params, userInfo, firstUser } = this.state;
         const bgFile = firstUser.bgFile;
 
         const times = [
@@ -245,7 +253,7 @@ class Index extends React.Component {
                     </div>
                     <div className="item-info">
                         <div>{data.realname}</div>
-                        <div>{data.companyName}</div>
+                        <div>{data.companyName || '未知'}</div>
                     </div>
                 </div>
                 <div className="sort-item-center">{
@@ -272,14 +280,7 @@ class Index extends React.Component {
 
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
-
             obj.index = parseInt(rowID) + 1;
-            // if (rowID == 0) {
-            //     this.setState({
-            //         firstUser: obj
-            //     })
-            // }
-
             return (
                 <SortItem key={rowID} className="user-sum-item" data={obj}></SortItem>
             );
@@ -322,9 +323,16 @@ class Index extends React.Component {
                                 </div>
                             </Flex>
                         </div>
-                        <SortItem className="user-sum-item" data={userInfo} onClick={() => {
-                            this.toUserCenter()
-                        }} />
+                        {
+                            userId
+                                ? <SortItem className="user-sum-item" data={userInfo} onClick={() => {
+                                    this.toUserCenter()
+                                }} />
+                                : <List>
+                                    <Item extra="登录" arrow="horizontal">登录解锁更多功能</Item>
+                                </List>
+                        }
+
                         <CardList
                             className="user-sum-list"
                             pageUrl={'user/querySumList'}
