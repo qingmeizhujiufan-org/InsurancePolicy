@@ -42,7 +42,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         const {time, condition} = this.state;
-        // this.querySumOne(time.value, condition.value);
+        this.querySumOne(time.value, condition.value);
     }
 
     /**
@@ -109,7 +109,7 @@ class Index extends React.Component {
         Toast.loading('正在加载', 0);
         const {userId} = this.state;
         const param = {
-            id: userId,
+            id: '30b13970-0052-11e9-8735-190581b1698c',
             time: key1,
             condition: key2
         };
@@ -193,7 +193,7 @@ class Index extends React.Component {
         const SortItem = ({className = '', data = {}, ...restProps}) => (
             <div className={`${className} list-item`} {...restProps}>
                 <div className="sort-item-left">
-                    <div className="item-sort-num">1</div>
+                    <div className="item-sort-num">{data.index}</div>
                     <div className="item-src">
                         <img src="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"/>
                     </div>
@@ -204,8 +204,8 @@ class Index extends React.Component {
                 </div>
                 <div className="sort-item-center">{
                     condition.value === 0
-                        ? <div className="item-fee-num">{data.orderSum} 元</div>
-                        : <div className="item-fee-num">{data.orderNum} 件</div>
+                        ? <div className="item-fee-num">{data.orderSum || 0} 元</div>
+                        : <div className="item-fee-num">{data.orderNum || 0} 件</div>
                 }
                 </div>
                 <div className="sort-item-right">
@@ -219,6 +219,8 @@ class Index extends React.Component {
 
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
+            obj.index = parseInt(rowID) + 1;
+
             return (
                 <SortItem key={rowID} className="user-sum-item" data={obj}></SortItem>
             );
