@@ -15,8 +15,13 @@
 
     .user-img-container {
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 2.8rem;
         background-image: url('../../assets/img/bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
 
         .upload-user-bg {
             position: absolute;
@@ -35,13 +40,9 @@
         }
 
         .tip {
-            position: absolute;
-            top: 50%;
-            left: 50%;
             color: #ffffff;
             font-size: .3rem;
             z-index: 100;
-            transform: translate3d(-50%, -50%, 0);
         }
     }
 
@@ -79,7 +80,7 @@
                 content: "\E70E";
                 position: absolute;
                 top: 25%;
-                right: -45%;
+                right: -.3rem;
                 display: inline-block;
                 font-family: "iconfont" !important;
                 font-size: .2rem;

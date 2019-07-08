@@ -41,6 +41,7 @@ class Index extends React.Component {
                 axios.post('user/login', param).then(res => res.data).then(data => {
                     if (data.success) {
                         Toast.success('登录成功', 1, () => {
+                            sessionStorage.userId = data.backData.id;
                             this.context.router.push(`/index`);
                         });
                     } else {
