@@ -1,8 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import {List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button} from 'antd-mobile';
-import {Layout} from 'zui-mobile';
-import {CardList} from 'Comps';
+import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button, PullToRefresh } from 'antd-mobile';
+import { Layout } from 'zui-mobile';
+import { CardList } from 'Comps';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -11,8 +12,6 @@ import bgImg from 'Img/bg.png';
 import avatar from 'Img/hand-loging.png';
 
 const Item = List.Item;
-const Brief = Item.Brief;
-const RadioItem = Radio.RadioItem;
 
 class Index extends React.Component {
     constructor(props) {
@@ -22,10 +21,12 @@ class Index extends React.Component {
             userId: sessionStorage.getItem('userId'),
             userInfo: {},
             firstUser: {},
-            params: {
-                pageNumber: 1,
-                pageSize: 10
-            },
+            refreshing: false,
+            hasMore: true,
+            pageIndex: 1,
+            pageSize: 10,
+            height: document.documentElement.clientHeight,
+            dataSource: [],
             firstName: null,
             modalShow: false,
             time: {
@@ -42,17 +43,20 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
-        const {time, condition, params, userId} = this.state;
-        this.setState({
-            params: {
-                ...params,
-                time: time.value,
-                condition: condition.value,
-                userId,
-            }
-        });
-
+        const { time, condition } = this.state;
         this.querySumOne(time.value, condition.value);
+        this.querySumList();
+
+    }
+
+    componentDidMount() {
+        const { height } = this.state;
+        const hei = height - ReactDOM.findDOMNode(this.ptr).offsetTop;
+        setTimeout(() => {
+            this.setState({
+                height: hei
+            });
+        }, 0);
     }
 
     /**
@@ -63,7 +67,7 @@ class Index extends React.Component {
     }
 
     showModal = () => {
-        const {time, condition} = this.state;
+        const { time, condition } = this.state;
         this.setState({
             tempTime: time,
             tempCondition: condition,
@@ -72,7 +76,6 @@ class Index extends React.Component {
     }
 
     onClose = () => {
-        const {time, condition} = this.state;
         this.setState({
             modalShow: false
         })
@@ -91,21 +94,16 @@ class Index extends React.Component {
     }
 
     onOk = () => {
-        const {tempTime, tempCondition, params, userId} = this.state;
+        const { tempTime, tempCondition } = this.state;
         this.setState({
             time: tempTime,
             condition: tempCondition,
             modalShow: false,
-            params: {
-                ...params,
-                time: tempTime.value,
-                condition: tempCondition.value,
-                userId,
-            }
+            pageIndex: 1
         })
-        setTimeout(() => {
-            this.querySumOne(tempTime.value, tempCondition.value);
-        }, 0);
+
+        this.querySumOne(tempTime.value, tempCondition.value);
+
     }
 
     toUserCenter = () => {
@@ -114,7 +112,7 @@ class Index extends React.Component {
 
     querySumOne = (key1, key2) => {
         Toast.loading('正在加载', 0);
-        const {userId} = this.state;
+        const { userId } = this.state;
         const param = {
             id: userId,
             time: key1,
@@ -139,9 +137,7 @@ class Index extends React.Component {
     }
 
     handleLike = (type, thumbupId) => {
-        const {time, condition, params, userId} = this.state;
-        console.log(userId, thumbupId);
-
+        const { userId } = this.state;
         if (!userId) {
             Toast.fail('请先登录 ', 2, () => {
                 this.context.router.push(`/public/login`);
@@ -151,8 +147,6 @@ class Index extends React.Component {
         if (userId === thumbupId) {
             return;
         }
-        Toast.loading('', 0);
-
         const param = {
             userId,
             thumbupId: thumbupId
@@ -160,16 +154,7 @@ class Index extends React.Component {
         const api = type === 1 ? 'user/like' : 'user/unlike';
         axios.post(api, param).then(res => res.data).then(data => {
             if (data.success) {
-                this.setState({
-                    params: {
-                        ...params,
-                        time: time.value,
-                        condition: condition.value,
-                        userId,
-                        key: new Date().getTime()
-                    }
-                });
-                Toast.hide()
+                this.querySumList()
             } else {
                 Toast.fail(data.backMsg, 2);
             }
@@ -178,34 +163,89 @@ class Index extends React.Component {
         })
     }
 
+    isLike = () => {
+
+    }
+
+    onRefresh = () => {
+
+        const { hasMore } = this.state;
+        let newPageIndex = this.state.pageIndex + 1;
+        if (!hasMore) {
+            return;
+        }
+
+        this.setState({
+            refreshing: true,
+            pageIndex: newPageIndex
+        }, () => {
+            this.querySumList();
+        });
+    }
+
+    querySumList = () => {
+        const { pageIndex, userId, pageSize, time, condition, dataSource } = this.state;
+        const newSize = pageSize * pageIndex;
+        const params = {
+            pageNumber: 1,
+            pageSize: newSize,
+            userId,
+            time: time.value,
+            condition: condition.value
+        }
+
+        axios.get('user/querySumList', {
+            params: params
+        }).then(res => res.data).then(data => {
+            if (data.success) {
+                const totalPages = data.backData.totalPages;
+                this.setState({
+                    dataSource: data.backData.content,
+                    hasMore: pageIndex < totalPages
+                }, () => {
+                });
+            } else {
+                Toast.fail(data.backMsg, 2);
+            }
+            this.setState({
+                refreshing: false
+            });
+        }).catch(err => {
+            this.setState({
+                refreshing: false
+            });
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     render() {
-        const {userId, modalShow, time, condition, tempTime, tempCondition, params, userInfo, firstUser} = this.state;
+        const { userId, modalShow, time, condition, tempTime, tempCondition, dataSource, userInfo, firstUser, refreshing, height, hasMore } = this.state;
         const bgFile = firstUser.bgFile;
 
         const times = [
-            {value: 0, label: '月度排行'},
-            {value: 1, label: '季度排行'},
-            {value: 2, label: '年度排行'},
+            { value: 0, label: '月度排行' },
+            { value: 1, label: '季度排行' },
+            { value: 2, label: '年度排行' },
         ];
         const conditions = [
-            {value: 0, label: '累计保费'},
-            {value: 1, label: '保单数量'},
+            { value: 0, label: '累计保费' },
+            { value: 1, label: '保单数量' },
         ];
-        const CutModal = ({className = '', data, ...restProps}) => (
+        const CutModal = ({ className = '', data, ...restProps }) => (
             <div className="condition-container">
                 <div className="condition-title">时间段</div>
                 <div className="condition-item">
                     {times.map(i => {
-                            let type = tempTime.value === i.value ? 'primary' : 'default';
-                            return (
-                                <Button
-                                    key={i.value}
-                                    type={type}
-                                    size='small'
-                                    onClick={() => this.onChange1(i)}>
-                                    {i.label}
-                                </Button>)
-                        }
+                        let type = tempTime.value === i.value ? 'primary' : 'default';
+                        return (
+                            <Button
+                                key={i.value}
+                                type={type}
+                                size='small'
+                                onClick={() => this.onChange1(i)}>
+                                {i.label}
+                            </Button>)
+                    }
                     )}
                 </div>
                 <div className="condition-title">显示条件</div>
@@ -223,31 +263,31 @@ class Index extends React.Component {
                     })
                     }
                 </div>
-                <WhiteSpace size="lg"/>
+                <WhiteSpace size="lg" />
                 <div className="condition-btn" onClick={() => {
                     this.onOk()
                 }}>
-                    <Icon type="check"/>确认
+                    <Icon type="check" />确认
                 </div>
                 <div className="condition-other-btn" onClick={() => {
                     this.toOuterUrl()
                 }}>
-                    <Button size="small" className="green-blue-btn" style={{marginRight: '10px'}}>产品销量榜<Icon
-                        type="right"/></Button>
-                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right"/></Button>
+                    <Button size="small" className="green-blue-btn" style={{ marginRight: '10px' }}>产品销量榜<Icon
+                        type="right" /></Button>
+                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right" /></Button>
                 </div>
             </div>
         );
 
-        const SortItem = ({className = '', data = {}, ...restProps}) => (
+        const SortItem = ({ className = '', data = {}, ...restProps }) => (
             <div className={`${className} list-item`} {...restProps}>
                 <div className="sort-item-left">
                     <div className="item-sort-num">{data.index}</div>
                     <div className="item-src">
                         {
                             data.headimgurl
-                                ? <img src={restUrl.FILE_ASSET + data.headimgurl + data.fileType}/>
-                                : <img src={avatar}/>
+                                ? <img src={restUrl.FILE_ASSET + data.headimgurl + data.fileType} />
+                                : <img src={avatar} />
                         }
 
                     </div>
@@ -278,14 +318,6 @@ class Index extends React.Component {
             </div>
         );
 
-        const row = (rowData, sectionID, rowID) => {
-            const obj = rowData;
-            obj.index = parseInt(rowID) + 1;
-            return (
-                <SortItem key={rowID} className="user-sum-item" data={obj}></SortItem>
-            );
-        };
-
         return (
             <DocumentTitle title='保联榜'>
                 <Layout className={`home${modalShow ? ' mask' : ''}`}>
@@ -296,8 +328,8 @@ class Index extends React.Component {
                                     bgFile && bgFile.id
                                         ?
                                         <img className='user-bg' src={restUrl.FILE_ASSET + bgFile.id + bgFile.fileType}
-                                             alt=""/>
-                                        : <img className='user-bg' src={bgImg} alt=""/>
+                                            alt="" />
+                                        : <img className='user-bg' src={bgImg} alt="" />
                                 }
 
                             </div>
@@ -306,9 +338,9 @@ class Index extends React.Component {
                                     {
                                         firstUser && firstUser.headimgurl
                                             ? <img className='user-bg'
-                                                   src={restUrl.FILE_ASSET + firstUser.headimgurl + firstUser.fileType}
-                                                   alt=""/>
-                                            : <img className='user-bg' src={avatar} alt=""/>
+                                                src={restUrl.FILE_ASSET + firstUser.headimgurl + firstUser.fileType}
+                                                alt="" />
+                                            : <img className='user-bg' src={avatar} alt="" />
                                     }
                                 </div>
                                 <div className="user-name">{firstUser.realname} &nbsp;获得了第1名</div>
@@ -331,18 +363,77 @@ class Index extends React.Component {
                             userId
                                 ? <SortItem className="user-sum-item" data={userInfo} onClick={() => {
                                     this.toUserCenter()
-                                }}/>
+                                }} />
                                 : <List>
                                     <Item extra="登录" arrow="horizontal" onClick={() => this.context.router.push('/public/login')}>登录解锁更多功能</Item>
                                 </List>
                         }
+                        <WhiteSpace size="lg" />
 
-                        <CardList
-                            className="user-sum-list"
-                            pageUrl={'user/querySumList'}
-                            params={params}
-                            row={row}
-                        />
+                        <PullToRefresh
+                            className="sum-list"
+                            damping={100}
+                            ref={el => this.ptr = el}
+                            style={{
+                                height: height,
+                                overflow: 'auto',
+                            }}
+                            indicator={{
+
+                                activate: (
+                                    <div className='loader'>
+                                        <div className="loader-inner">
+                                            <Icon type="down" /> <span>释放加载</span>
+                                        </div>
+                                    </div>
+                                ),
+
+                                deactivate: (
+                                    <div className='loader'>
+                                        <div className="loader-inner">
+                                            <Icon type="up" /><span>上拉加载</span>
+
+                                        </div>
+                                    </div>
+                                ),
+
+                                release: (
+                                    <div className='loader'>
+                                        <div className="loader-inner">
+                                            <Icon type="loading" /><span>正在加载</span>
+                                        </div>
+                                    </div>
+                                ),
+
+                                finish: (
+                                    <div className='loader'>
+                                        {
+                                            hasMore
+                                                ? <div className="loader-inner">
+                                                    <Icon type="up" /> <span>上拉加载</span>
+                                                </div>
+                                                : <div className="loader-inner">
+                                                    <span>没有了！</span>
+                                                </div>
+                                        }
+                                    </div>
+                                )
+
+                            }}
+                            direction={'up'}
+                            refreshing={refreshing}
+                            onRefresh={() => { this.onRefresh() }}
+                        >
+                            {dataSource.map((item, index) => (
+                                <SortItem key={index}
+                                    className="user-sum-item"
+                                    data={{
+                                        ...item,
+                                        index: index + 1
+                                    }}>
+                                </SortItem>
+                            ))}
+                        </PullToRefresh>
 
                         <Modal
                             className="home-modal"
@@ -350,9 +441,9 @@ class Index extends React.Component {
                             transparent
                             maskClosable={true}
                             onClose={() => this.onClose()}
-                            wrapProps={{onTouchStart: this.onWrapTouchStart}}
+                            wrapProps={{ onTouchStart: this.onWrapTouchStart }}
                         >
-                            <CutModal/>
+                            <CutModal />
                         </Modal>
 
                     </Layout.Content>

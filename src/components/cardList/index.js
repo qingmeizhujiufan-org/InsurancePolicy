@@ -201,7 +201,7 @@ class Index extends React.Component {
 
     render() {
         const { dataSource, initLoaded, refreshing, isLoading } = this.state;
-        const { className,row } = this.props;
+        const { className, row } = this.props;
         return (
             <ListView
                 ref={el => this.lv = el}
@@ -219,35 +219,35 @@ class Index extends React.Component {
                     overflow: 'auto',
                 }}
                 pageSize={4}
-                pullToRefresh={<PullToRefresh
-                    distanceToRefresh={30}
-                    refreshing={refreshing}
-                    onRefresh={this.onRefresh}
-                    indicator={{
-                        activate: <div className='loader'>
-                            <div className='loader-inner ball-beat'>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>,
-                        deactivate: <div className='loader'>
-                            <div className='loader-inner ball-beat'>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>,
-                        release: <div className='loader'>
-                            <div className='loader-inner ball-beat'>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>,
-                        finish: <span>刷新完成</span>
-                    }}
-                />}
+                // pullToRefresh={<PullToRefresh
+                //     distanceToRefresh={30}
+                //     refreshing={refreshing}
+                //     onRefresh={this.onRefresh}
+                //     indicator={{
+                //         activate: <div className='loader'>
+                //             <div className='loader-inner ball-beat'>
+                //                 <div></div>
+                //                 <div></div>
+                //                 <div></div>
+                //             </div>
+                //         </div>,
+                //         deactivate: <div className='loader'>
+                //             <div className='loader-inner ball-beat'>
+                //                 <div></div>
+                //                 <div></div>
+                //                 <div></div>
+                //             </div>
+                //         </div>,
+                //         release: <div className='loader'>
+                //             <div className='loader-inner ball-beat'>
+                //                 <div></div>
+                //                 <div></div>
+                //                 <div></div>
+                //             </div>
+                //         </div>,
+                //         finish: <span>刷新完成</span>
+                //     }}
+                // />}
                 scrollRenderAheadDistance={500}
                 onEndReached={this.onEndReached}
                 onEndReachedThreshold={500}
