@@ -93,9 +93,7 @@ class Index extends React.Component {
                     key={rowID}
                     onClick={() => this.queryDetail(obj.id)}>
                     <div className="list-item-left">{obj.customName}</div>
-                    <div className="list-item-right">
-                        <span> {obj.customTel}</span><Icon type="right" />
-                    </div>
+                    <div className="list-item-right">{obj.customTel}</div>
                 </div>
             );
         };
@@ -117,11 +115,7 @@ class Index extends React.Component {
                         />
                     </Layout.Content>
                     <Layout.Footer>
-                        <WingBlank>
-                            <WhiteSpace size="sm" />
-                            <Button type="primary" onClick={this.onAdd}>新增客户</Button>
-                            <WhiteSpace />
-                        </WingBlank>
+                        <Button type="primary" onClick={this.onAdd}>新增客户</Button>
                     </Layout.Footer>
                 </Layout>
             </DocumentTitle>

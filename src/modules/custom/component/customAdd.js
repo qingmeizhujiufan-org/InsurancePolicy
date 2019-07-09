@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, Picker, List, Button, InputItem, Toast, WingBlank, WhiteSpace } from 'antd-mobile';
+import { DatePicker, Picker, List, Button, InputItem, Toast, WingBlank, WhiteSpace, Icon } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import { assign } from 'lodash';
@@ -203,13 +203,9 @@ class Index extends React.Component {
                                     <Item arrow="horizontal">客户性别</Item>
                                 </Picker>
                             </List>
-                            <WhiteSpace size="lg" />
+                            <div className="add-tip"><i className="iconfont iconguanyu" />&nbsp;点击内容即可编辑修改</div>
+                            <Button type="primary" onClick={this.onSubmit}>提交</Button>
 
-                            <WhiteSpace size="sm" />
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                            </WingBlank>
-                            <WhiteSpace size="sm" />
 
                         </form>
                     </Layout.Content>

@@ -7,15 +7,7 @@ import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 
-import classify_1 from 'Img/hand-loging.png';
-
 const Item = List.Item;
-const Brief = Item.Brief;
-const data = [{
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-}];
-
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -127,7 +119,6 @@ class Index extends React.Component {
                 <Layout className="public">
                     <Layout.Content>
                         <WhiteSpace size="lg" />
-
                         <form>
                             <List>
                                 <InputItem
@@ -236,12 +227,8 @@ class Index extends React.Component {
                                     placeholder="请输入注册密码"
                                 >所属公司</InputItem> */}
                             </List>
-                            <WhiteSpace size="lg" />
-                            <WhiteSpace size="lg" />
 
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>注册</Button>
-                            </WingBlank>
+                            <Button type="primary" onClick={this.onSubmit} style={{ marginTop: '1rem' }}>注册</Button>
                         </form>
                     </Layout.Content>
 

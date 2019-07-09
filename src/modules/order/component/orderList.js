@@ -118,7 +118,7 @@ class Index extends React.Component {
                             <div className="order-detail-item">被保人：{obj.insuredName}</div>
                             <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
                             <div className="order-detail-item">保费：{obj.insurance} 元</div>
-                            <div className="order-detail-item">订单渠道：{obj.orderChannel}</div>
+                            <div className="order-detail-item">订单渠道：{obj.channelName}</div>
                         </div>
                     </Card.Body>
                     <Card.Footer content={
@@ -134,7 +134,7 @@ class Index extends React.Component {
                 <Layout className="order">
                     <Layout.Content>
                         <SearchBar
-                            placeholder="请输入要搜索的商品"
+                            placeholder="请输入关键字"
                             maxLength={16}
                             onSubmit={this.onSearch}
                             onClear={this.onClear}
@@ -161,15 +161,9 @@ class Index extends React.Component {
                             row={row}
                             multi
                         />
-                        <WhiteSpace size="lg" />
-
                     </Layout.Content>
                     <Layout.Footer>
-                        <WingBlank>
-                            <WhiteSpace size="sm" />
-                            <Button type="primary" onClick={this.onAddOrder}>新增订单</Button>
-                            <WhiteSpace size="sm" />
-                        </WingBlank>
+                        <Button type="primary" onClick={this.onAddOrder}>新增订单</Button>
                     </Layout.Footer>
                     <Calendar
                         visible={show}

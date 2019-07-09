@@ -149,10 +149,12 @@ class Index extends React.Component {
             <DocumentTitle title='找回密码'>
                 <Layout className="public">
                     <Layout.Content>
+                        <WhiteSpace size="lg" />
+
                         {!check ? (
                             <form>
                                 <List>
-                                    <WhiteSpace size="lg" />
+
                                     <InputItem
                                         {...getFieldProps('telephone', {
                                             rules: [
@@ -185,9 +187,6 @@ class Index extends React.Component {
                                         }
                                     >验证码</InputItem>
                                 </List>
-                                <WhiteSpace size="lg" />
-                                <WhiteSpace size="lg" />
-
                                 <WingBlank>
                                     <Button type="primary" onClick={this.onNext}>下一步</Button>
                                 </WingBlank>
@@ -195,8 +194,6 @@ class Index extends React.Component {
                         ) : (
                                 <form>
                                     <List>
-                                        <WhiteSpace size="lg" />
-
                                         <InputItem
                                             {...getFieldProps('password', {
                                                 rules: [
@@ -229,12 +226,7 @@ class Index extends React.Component {
                                             extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(2)}></i>}
                                         >确认密码</InputItem>
                                     </List>
-                                    <WhiteSpace size="lg" />
-                                    <WhiteSpace size="lg" />
-
-                                    <WingBlank>
-                                        <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                                    </WingBlank>
+                                    <Button type="primary" onClick={this.onSubmit}>提交</Button>
                                 </form>
                             )
                         }

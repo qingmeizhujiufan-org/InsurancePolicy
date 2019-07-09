@@ -37,7 +37,7 @@ body {
 }
 
 .am-search+.zui-cardlist {
-    height: calc(~'100% - 44px');
+    height: calc(~'100% - 44px') !important;
 }
 
 .am-tabs-default-bar-tab-active {
@@ -48,18 +48,6 @@ body {
     position: relative;
 }
 
-.am-list-item {
-    .am-list-content {}
-
-    .am-input-control {
-        input {
-            font-size: 16px;
-            color: #888;
-            text-align: right;
-        }
-    }
-}
-
 .sub-title {
     padding: 13px 0 0 23px;
     font-size: 14px;
@@ -67,6 +55,7 @@ body {
     color: #0C0C0C;
     background-color: #ffffff;
 }
+
 
 .zui-sub-content {
     overflow-y: scroll;
@@ -183,7 +172,7 @@ body {
         margin-right: 15px;
         padding: 7px 0;
         font-size: 12px;
-        color: #888888;
+        color: #888;
         letter-spacing: 0.86px;
         background: #E9E9E9;
         border-radius: 100px;
@@ -203,6 +192,27 @@ body {
     img {
         width: 100%;
     }
+}
+
+.am-button {
+    margin: 0 .3rem;
+    height: .8rem;
+    color: #95A4B8;
+    border-color: #95A4B8;
+
+    span {
+        font-size: .36rem;
+    }
+
+    &.am-button-primary {
+        color: #fff;
+        background: #2B8CFF;
+    }
+
+    &+.am-button {
+        margin-top: .4rem;
+    }
+
 }
 
 .am-tabs-default-bar-tab {
@@ -293,7 +303,64 @@ body {
     }
 }
 
-.am-list-item .am-list-line .am-list-extra {
-    text-overflow: initial !important;
-    white-space: initial !important;
+.am-list {
+    .am-list-body {}
+
+    .am-list-item {
+
+        .am-list-line {
+            justify-content: space-between;
+
+            .am-input-label {
+                width: 1.9rem !important;
+                margin-right: .1rem;
+                color: #333;
+            }
+
+            .am-list-content {
+                flex: none;
+                width: 1.9rem !important;
+                margin-right: .1rem;
+
+
+                &+.am-list-extra {
+                    flex: 1;
+                    text-align: left;
+                    color: #B8C1CD;
+                }
+            }
+
+            .am-list-extra {
+                text-overflow: initial !important;
+                white-space: initial !important;
+
+                i {
+                    width: 32rem;
+                }
+            }
+
+            .am-input-control {
+                input {
+                    font-size: 16px;
+                    color: #B8C1CD;
+
+                    &::placeholder {
+                        color: #B8C1CD;
+
+                    }
+                }
+
+                .fake-input-placeholder {
+                    color: #B8C1CD;
+                }
+            }
+        }
+    }
+}
+
+.zui-layout-footer {
+
+    .am-button {
+        margin: .14rem .2rem;
+    }
 }

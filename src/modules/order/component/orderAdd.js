@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, Picker, List, Button, InputItem, TextareaItem, Toast, WingBlank, WhiteSpace } from 'antd-mobile';
+import { DatePicker, Picker, List, Button, InputItem, TextareaItem, Modal, Toast, WingBlank, WhiteSpace } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import { assign } from 'lodash';
@@ -45,7 +45,9 @@ class Index extends React.Component {
       type: 'add',
       Channel: [],
       Client: [],
-      companyList: []
+      companyList: [],
+      canAdd: true,
+      errMsg: ''
     }
   };
 
@@ -94,6 +96,26 @@ class Index extends React.Component {
     })
   }
 
+  showAlert = ({ info, url }) => {
+    Modal.alert('警告', `${info}，是否添加相关客户？`, [
+      {
+        text: '取消', onPress: () => {
+          this.setState({
+            canAdd: false,
+            errMsg: info
+          })
+        }, style: 'default'
+      },
+      {
+        text: '确认', onPress: () => {
+          this.context.router.push({
+            pathname: url
+          })
+        }
+      },
+    ]);
+  }
+
   queryClientList = () => {
     const param = {
       pageSize: 1000,
@@ -105,6 +127,12 @@ class Index extends React.Component {
     }).then(res => res.data).then(data => {
       if (data.success) {
         let backData = data.backData.content || [];
+        if (backData.length === 0) {
+          this.showAlert({
+            info: '暂无客户信息',
+            url: '/custom/add'
+          })
+        }
         let list = backData.map(item => {
           return {
             value: item.id,
@@ -130,6 +158,12 @@ class Index extends React.Component {
     }).then(res => res.data).then(data => {
       if (data.success) {
         let backData = data.backData.content || [];
+        if (backData.length === 0) {
+          this.setState({
+            canAdd: false,
+            errMsg: '缺少保险公司信息，无法创建订单'
+          });
+        }
         let companyList = backData.map(item => {
           return {
             value: item.id,
@@ -180,12 +214,18 @@ class Index extends React.Component {
 
 
   onSubmit = () => {
+    const { canAdd, errMsg } = this.state;
+    if (!canAdd) {
+      Toast.fail(errMsg, 2);
+      return;
+    }
     this.props.form.validateFields({ force: true }, (error) => {
       if (!error) {
         const { orderId, userId, type } = this.state;
         Toast.loading('正在提交', 0);
         const values = this.props.form.getFieldsValue();
         const param = assign({}, { userId }, values);
+        param.insuranceCompany = param.insuranceCompany[0];
         param.policyholderSex = param.policyholderSex[0];
         param.insuredSex = param.insuredSex[0];
         param.paymentDuration = param.paymentDuration[0];
@@ -301,6 +341,7 @@ class Index extends React.Component {
                     ]
                   })}
                   type="money"
+                  moneyKeyboardAlign="left"
                   clear
                   error={!!getFieldError('insuredSum')}
                   onErrorClick={() => {
@@ -316,6 +357,8 @@ class Index extends React.Component {
                     ]
                   })}
                   type="money"
+                  moneyKeyboardAlign="left"
+
                   clear
                   error={!!getFieldError('insurance')}
                   onErrorClick={() => {
@@ -493,12 +536,7 @@ class Index extends React.Component {
                   placeholder="请输入"
                 >姓名</InputItem>
               </List>
-              <WhiteSpace size="lg" />
-              <WingBlank>
-                <WhiteSpace size="sm" />
-                <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                <WhiteSpace size="sm" />
-              </WingBlank>
+              <Button type="primary" onClick={this.onSubmit} style={{ margin: '1rem 0 .4rem' }}>提交</Button>
             </form>
           </Layout.Content>
         </Layout>

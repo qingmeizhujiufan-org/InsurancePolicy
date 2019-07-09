@@ -198,9 +198,10 @@ class Index extends React.Component {
             params: params
         }).then(res => res.data).then(data => {
             if (data.success) {
-                const totalPages = data.backData.totalPages;
+                const backData = data.backData;
+                const totalPages = Math.ceil(backData.totalElements / pageSize);
                 this.setState({
-                    dataSource: data.backData.content,
+                    dataSource: backData.content,
                     hasMore: pageIndex < totalPages
                 }, () => {
                 });
@@ -267,7 +268,7 @@ class Index extends React.Component {
                 <div className="condition-btn" onClick={() => {
                     this.onOk()
                 }}>
-                    <Icon type="check" />确认
+                    <i className="iconfont iconqueding" /> &nbsp;确认
                 </div>
                 <div className="condition-other-btn" onClick={() => {
                     this.toOuterUrl()

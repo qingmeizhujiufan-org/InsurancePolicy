@@ -1,15 +1,19 @@
 .order {
 
     .order-card {
-        margin-bottom: .2rem;
+        &:not(:first-child) {
+            margin-top: .3rem;
+        }
 
         .am-card-header {
-            font-size: .32rem;
+            padding: .32rem .3rem .2rem;
+            font-size: .30rem;
+            color: #222222;
 
             .order-company {
-                margin-top: .2rem;
-                font-size: .3rem;
-                color: #888;
+                margin-top: .22rem;
+                font-size: .28rem;
+                color: #728095;
             }
         }
 
@@ -28,37 +32,44 @@
 
                 >div {
                     flex: 50%;
-                    padding: .1rem 0;
-                    color: #888;
+                    margin-bottom: .22rem;
+                    font-size: .28rem;
+                    color: #728095;
                 }
             }
         }
 
-        .order-footer {
-            padding: .2rem 0;
-        }
+        .am-card-footer {
+            padding: .24rem .3rem;
 
+            .order-footer {
+                height: .4rem;
+                font-size: .28rem;
+                color: #728095;
+            }
+        }
     }
 
     .am-calendar {
         font-size: .32rem;
+
     }
 
     .range-date {
-        height: 1rem;
+        padding: .1rem 0 .25rem;
         font-size: .28rem;
-        color: #6F6F6F;
+        color: #728095;
         background-color: #efeff4;
 
         &-between {
             flex-basis: 100%;
-            padding: 0 .3rem;
+            padding: 0 .2rem;
 
             .wrap-date {
                 flex-basis: 45%;
-                height: .68rem;
-                padding-left: .43rem;
-                border-radius: .68rem;
+                height: .8rem;
+                padding-left: .45rem;
+                border-radius: .45rem;
                 background-color: #ffffff;
 
                 .iconfont {
@@ -79,55 +90,22 @@
         }
     }
 
+    .am-search+.range-date+.zui-cardlist {
+        height: calc(~'100% - 2.03rem') !important;
+    }
+
     .bottom-foot {
         position: fixed;
         bottom: 0;
         height: 1rem;
     }
 
-    .order-list {
-
-        .am-list-body {
-
-            &::before,
-            &::after {
-                height: 0;
-            }
-
-            .am-list-item {
-                padding: 0 0 .3rem;
-
-                >div {
-                    padding: 0
-                }
-            }
-        }
-
-        .am-list-brief {
-            font-size: .3rem;
-        }
-
-        .am-list-content {
-            font-size: .3rem;
-            color: #888;
-        }
-
-        .am-list-extra {
-            .order-extra {
-                >.am-list-brief {
-                    &:first-child {
-                        margin-top: 0;
-                    }
-                }
-            }
-        }
-    }
-
     .order-add-list {
         .am-list-header {
             position: relative;
-            padding: 10px;
-            font-size: .32rem;
+            padding: .2rem .3rem;
+            font-size: .34rem;
+            color: #222222;
 
             &::before {
                 position: absolute;
@@ -141,5 +119,39 @@
                 content: '',
             }
         }
+
+        .am-list-body {
+            &::after {
+                content: '';
+                position: absolute;
+                background-color: #ddd;
+                display: block;
+                z-index: 1;
+                top: auto;
+                right: 0;
+                bottom: 0;
+                left: .3rem;
+                height: 1px;
+                width: auto !important;
+                -webkit-transform-origin: 50% 100%;
+                -ms-transform-origin: 50% 100%;
+                transform-origin: 50% 100%;
+                -webkit-transform: scaleY(0.5);
+                -ms-transform: scaleY(0.5);
+                transform: scaleY(0.5);
+            }
+
+            .am-list-item {
+                height: .9rem;
+                padding-left: .3rem;
+
+                &.am-textarea-item {
+                    textarea {
+                        height: 2.4rem;
+                    }
+                }
+            }
+        }
+
     }
 }

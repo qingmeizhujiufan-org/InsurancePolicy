@@ -82,55 +82,52 @@ class Index extends React.Component {
         return (
             <DocumentTitle title='登录'>
                 <Layout className="login">
-                    <WingBlank>
-                        <Layout.Content>
-                            <div className="login-logo">
-                                <div className="login-logo-container">
-                                    <img src={classify_1} alt="" />
-                                </div>
-                            </div>
-                            <form>
-                                <List>
-                                    <InputItem
-                                        {...getFieldProps('telphone', {
-                                            // initialValue: '15527188176',
-                                            rules: [
-                                                { required: true, message: '请输入用户手机号' },
-                                                { validator: this.validatePhone },
-                                            ]
-                                        })}
-                                        clear
-                                        error={!!getFieldError('telphone')}
-                                        onErrorClick={() => {
-                                            Toast.info(getFieldError('telphone').join('、'));
-                                        }}
-                                        placeholder="请输入注册手机号"
-                                    ><i className="iconfont iconyonghu" /></InputItem>
-                                    <InputItem
-                                        {...getFieldProps('password', {
-                                            // initialValue: '15527188176',
-                                            rules: [
-                                                { required: true, message: '请输入用户密码' },
-                                            ],
-                                        })}
-                                        type={type}
-                                        clear
-                                        error={!!getFieldError('password')}
-                                        onErrorClick={() => {
-                                            Toast.info(getFieldError('password').join('、'));
-                                        }}
-                                        placeholder="请输入密码"
-                                        extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword()}></i>}
-                                    ><i className="iconfont iconmima" /></InputItem>
-                                </List>
-                            </form>
-                            <WhiteSpace size="lg" />
-                            <div className="tip-btn text-right" onClick={() => this.onRetrieve()}>找回密码？</div><WhiteSpace size="lg" />
-                            <Button type="primary" onClick={() => this.onSubmit()}>登录</Button><WhiteSpace size="lg" />
-                            <Button onClick={() => this.onRegister()}>注册</Button>
-                        </Layout.Content>
 
-                    </WingBlank>
+                    <Layout.Content>
+                        <div className="login-logo">
+                            <div className="login-logo-container">
+                                <img src={classify_1} alt="" />
+                            </div>
+                        </div>
+                        <form>
+                            <List>
+                                <InputItem
+                                    {...getFieldProps('telphone', {
+                                        // initialValue: '15527188176',
+                                        rules: [
+                                            { required: true, message: '请输入用户手机号' },
+                                            { validator: this.validatePhone },
+                                        ]
+                                    })}
+                                    clear
+                                    error={!!getFieldError('telphone')}
+                                    onErrorClick={() => {
+                                        Toast.info(getFieldError('telphone').join('、'));
+                                    }}
+                                    placeholder="请输入注册手机号"
+                                ><i className="iconfont iconyonghu" /></InputItem>
+                                <InputItem
+                                    {...getFieldProps('password', {
+                                        // initialValue: '15527188176',
+                                        rules: [
+                                            { required: true, message: '请输入用户密码' },
+                                        ],
+                                    })}
+                                    type={type}
+                                    clear
+                                    error={!!getFieldError('password')}
+                                    onErrorClick={() => {
+                                        Toast.info(getFieldError('password').join('、'));
+                                    }}
+                                    placeholder="请输入密码"
+                                    extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword()}></i>}
+                                ><i className="iconfont iconmima" /></InputItem>
+                            </List>
+                        </form>
+                        <div className="tip text-right" onClick={() => this.onRetrieve()}>找回密码？</div>
+                        <Button type="primary" onClick={() => this.onSubmit()}>登录</Button>
+                        <Button onClick={() => this.onRegister()}>注册</Button>
+                    </Layout.Content>
                 </Layout>
             </DocumentTitle >
         );
