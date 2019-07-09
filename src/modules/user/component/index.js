@@ -13,7 +13,7 @@ const Item = List.Item;
 const Brief = Item.Brief;
 
 const tabs = [
-    { title: '阅读排行', sub: '1' },
+    { title: '月度排行', sub: '1' },
     { title: '季度排行', sub: '2' },
     { title: '年度排行', sub: '3' },
 ];
