@@ -319,6 +319,22 @@ class Index extends React.Component {
             </div>
         );
 
+        const UnLogin = ({ className = '', data = {}, ...restProps }) => (
+            <div className="login-area">
+                <div className="login-area-left">
+                    <div className="item-sort-num">0</div>
+                    <div className="item-src">
+                        <img src={avatar} />
+                    </div>
+                    <div className="item-info">未登录</div>
+                </div>
+                <div className="login-area-right" onClick={() => { this.context.router.push('/public/login') }}>
+                    <span>去登录</span>
+                    <i className="iconfont icongengduo"></i>
+                </div>
+            </div>
+        )
+
         return (
             <DocumentTitle title='保联榜'>
                 <Layout className={`home${modalShow ? ' mask' : ''}`}>
@@ -365,9 +381,8 @@ class Index extends React.Component {
                                 ? <SortItem className="user-sum-item" data={userInfo} onClick={() => {
                                     this.toUserCenter()
                                 }} />
-                                : <List>
-                                    <Item extra="登录" arrow="horizontal" onClick={() => this.context.router.push('/public/login')}>登录解锁更多功能</Item>
-                                </List>
+                                : <UnLogin />
+
                         }
                         <WhiteSpace size="lg" />
 
@@ -393,7 +408,6 @@ class Index extends React.Component {
                                     <div className='loader'>
                                         <div className="loader-inner">
                                             <Icon type="up" /><span>上拉加载</span>
-
                                         </div>
                                     </div>
                                 ),

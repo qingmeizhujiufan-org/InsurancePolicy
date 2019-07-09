@@ -28,17 +28,35 @@
                 height: 0;
             }
 
-            &::after {
-                // left: .3rem !important;
-            }
-
             .am-list-item {
                 height: 1.08rem;
-                padding-left: 0;
+                padding: .53rem 0 .13rem 0;
                 background-color: transparent;
 
-                input {
-                    height: .43rem;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    background-color: #ddd;
+                    display: block;
+                    z-index: 1;
+                    top: auto;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    height: 1px;
+                    width: auto !important;
+                    -webkit-transform-origin: 50% 100%;
+                    -ms-transform-origin: 50% 100%;
+                    transform-origin: 50% 100%;
+                    -webkit-transform: scaleY(0.5);
+                    -ms-transform: scaleY(0.5);
+                    transform: scaleY(0.5);
+                }
+
+                .am-list-line {
+                    &::after {
+                        height: 0
+                    }
                 }
 
                 .am-input-label {
