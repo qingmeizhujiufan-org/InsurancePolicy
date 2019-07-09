@@ -160,9 +160,9 @@ class Index extends React.Component {
             <DocumentTitle title='个人信息修改'>
                 <Layout className="user">
                     <Layout.Content>
+                        <WhiteSpace size="lg" />
                         <form>
                             <List>
-                                <WhiteSpace size="lg" />
                                 <Item
                                     extra={
                                         <div className="item-img-container">
@@ -214,12 +214,7 @@ class Index extends React.Component {
 
                                 <Item arrow="horizontal" onClick={() => { this.onChangePSD() }}>修改密码</Item>
                             </List>
-                            <WhiteSpace size="lg" />
-                            <WhiteSpace size="lg" />
-
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                            </WingBlank>
+                            <Button type="primary" onClick={this.onSubmit} style={{ marginTop: '1rem' }}>提交</Button>
                         </form>
                     </Layout.Content>
                 </Layout>

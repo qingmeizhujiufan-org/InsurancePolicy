@@ -87,9 +87,10 @@ class Index extends React.Component {
             <DocumentTitle title='密码修改'>
                 <Layout className="user">
                     <Layout.Content>
+                        <WhiteSpace size="lg" />
+
                         <form>
                             <List>
-                                <WhiteSpace size="lg" />
                                 <InputItem
                                     {...getFieldProps('oldPassword', {
                                         rules: [
@@ -141,12 +142,9 @@ class Index extends React.Component {
 
                                 >确认密码</InputItem>
                             </List>
-                            <WhiteSpace size="lg" />
-                            <WhiteSpace size="lg" />
 
-                            <WingBlank>
-                                <Button type="primary" onClick={this.onSubmit}>提交</Button>
-                            </WingBlank>
+                            <Button type="primary" onClick={this.onSubmit} style={{ marginTop: '1rem' }}>提交</Button>
+
                         </form>
                     </Layout.Content>
                 </Layout>
