@@ -85,15 +85,6 @@ class Index extends React.Component {
         });
     }
 
-    onDetail = id => {
-        this.context.router.push({
-            pathname: '/order/add',
-            query: {
-                orderId: id
-            },
-        });
-    }
-
     render() {
         const { beginDate, endDate, show, params, userId } = this.state;
         params.userId = userId;
@@ -102,7 +93,7 @@ class Index extends React.Component {
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <Card full className="order-card" onClick={() => { this.onDetail(obj.id) }}>
+                <Card full className="order-card" >
                     <Card.Header
                         title={
                             <div className="order-title">
