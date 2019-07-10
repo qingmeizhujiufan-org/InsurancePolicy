@@ -100,9 +100,7 @@ class Index extends React.Component {
         xhr.addEventListener('load', () => {
             const response = JSON.parse(xhr.responseText);
             // console.log('response == ', response);
-            setTimeout(() => {
-                this.updateBgImg(response.id);
-            }, 0);
+            this.updateBgImg(response.id);
         });
         xhr.addEventListener('error', () => {
             const error = JSON.parse(xhr.responseText);
@@ -166,7 +164,7 @@ class Index extends React.Component {
                             {
                                 bgImg && bgImg.id
                                     ? <img className='user-bg' src={restUrl.FILE_ASSET + bgImg.id + bgImg.fileType} />
-                                    : <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
+                                    : null
                             }
                             <input
                                 type='file'
@@ -174,6 +172,7 @@ class Index extends React.Component {
                                 className='upload-user-bg'
                                 onChange={this.onChange}
                             />
+                            <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
                         </div>
                         <div className="user-info-container">
                             <WhiteSpace size="lg" />
