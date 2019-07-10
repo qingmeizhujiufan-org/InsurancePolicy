@@ -175,14 +175,14 @@ class Index extends React.Component {
                             <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
                         </div>
                         <div className="user-info-container">
-                            <WhiteSpace size="lg" />
+
                             <div
                                 className="user-name"
                                 onClick={() => {
                                     this.toEdit()
                                 }}
                             ><span>{user.realname}</span></div>
-                            <WhiteSpace size="sm" />
+                            <WhiteSpace size="md" />
                             <div
                                 className="user-company">{user.companyName}</div>
                             <WhiteSpace size="lg" />
