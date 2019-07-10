@@ -6,11 +6,9 @@ import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 import restUrl from "RestUrl";
-import bgImg from 'Img/bg.png';
 import avator from 'Img/hand-loging.png';
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 const tabs = [
     { title: '月度排行', sub: '1' },
@@ -101,9 +99,10 @@ class Index extends React.Component {
 
         xhr.addEventListener('load', () => {
             const response = JSON.parse(xhr.responseText);
-            console.log('response == ', response);
-
-            this.updateBgImg(response.id);
+            // console.log('response == ', response);
+            setTimeout(() => {
+                this.updateBgImg(response.id);
+            }, 0);
         });
         xhr.addEventListener('error', () => {
             const error = JSON.parse(xhr.responseText);
@@ -165,9 +164,9 @@ class Index extends React.Component {
                     <Layout.Content>
                         <div className="user-img-container">
                             {
-                                bgImg && bgImg.id ? (
-                                    <img className='user-bg' src={restUrl.FILE_ASSET + bgImg.id + bgImg.fileType} />
-                                ) : <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
+                                bgImg && bgImg.id
+                                    ? <img className='user-bg' src={restUrl.FILE_ASSET + bgImg.id + bgImg.fileType} />
+                                    : <i className='iconfont iconpaizhao tip'>&nbsp;轻触替换背景</i>
                             }
                             <input
                                 type='file'

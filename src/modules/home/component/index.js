@@ -100,10 +100,10 @@ class Index extends React.Component {
             condition: tempCondition,
             modalShow: false,
             pageIndex: 1
+        }, () => {
+            this.querySumOne(tempTime.value, tempCondition.value);
+            this.querySumList();
         })
-
-        this.querySumOne(tempTime.value, tempCondition.value);
-
     }
 
     toUserCenter = () => {
