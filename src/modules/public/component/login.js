@@ -37,7 +37,7 @@ class Index extends React.Component {
         this.props.form.validateFields({ force: true }, (error) => {
             if (!error) {
                 Toast.loading('正在登录', 0);
-                const values = this.props.form.getFieldsValue(['oldPassword', 'password']);
+                const values = this.props.form.getFieldsValue(['telephone', 'password']);
                 const param = Object.assign({}, values);
                 axios.post('user/login', param).then(res => res.data).then(data => {
                     if (data.success) {
@@ -93,7 +93,7 @@ class Index extends React.Component {
                         <form>
                             <List>
                                 <InputItem
-                                    {...getFieldProps('telphone', {
+                                    {...getFieldProps('telephone', {
 
                                         rules: [
                                             { required: true, message: '请输入用户手机号' },
