@@ -169,10 +169,7 @@ class Index extends React.Component {
                                             ]
                                         })}
                                         clear
-                                        error={!!getFieldError('telephone')}
-                                        onErrorClick={() => {
-                                            Toast.info(getFieldError('telephone').join('、'));
-                                        }}
+
                                         placeholder="请输入注册手机号"
                                     >手机号</InputItem>
                                     <InputItem
@@ -183,10 +180,7 @@ class Index extends React.Component {
                                             ],
                                         })}
                                         clear
-                                        error={!!getFieldError('code')}
-                                        onErrorClick={() => {
-                                            Toast.info(getFieldError('code').join('、'));
-                                        }}
+
                                         placeholder="请输入手机验证码"
                                         extra={
                                             isStart
@@ -210,10 +204,7 @@ class Index extends React.Component {
                                             })}
                                             type={inputType1}
                                             clear
-                                            error={!!getFieldError('password')}
-                                            onErrorClick={() => {
-                                                Toast.info(getFieldError('password').join('、'));
-                                            }}
+
                                             placeholder="请输入新密码"
                                             extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(1)}></i>}
                                         >新密码</InputItem>
@@ -226,10 +217,7 @@ class Index extends React.Component {
                                             })}
                                             type={inputType2}
                                             clear
-                                            error={!!getFieldError('password2')}
-                                            onErrorClick={() => {
-                                                Toast.info(getFieldError('password2').join('、'));
-                                            }}
+
                                             placeholder="请再次输入新密码"
                                             extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(2)}></i>}
                                         >确认密码</InputItem>
