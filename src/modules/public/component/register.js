@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, InputItem, Toast, Button, ImagePicker, WingBlank, WhiteSpace } from 'antd-mobile';
-import { Layout } from 'zui-mobile';
+import { List, InputItem, Toast, Button, WhiteSpace } from 'antd-mobile';
+import { Layout, TimeShow } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -15,7 +15,8 @@ class Index extends React.Component {
         this.state = {
             inputType1: 'password',
             inputType2: 'password',
-            code: ''
+            code: '',
+            isStart: false
         }
     };
 
@@ -45,17 +46,22 @@ class Index extends React.Component {
         Toast.loading('正在获取', 0);
 
         const param = {
-            telephone
+            telephone,
+            type: '4'
         }
         axios.get('user/getCode', {
             params: param
         }).then(res => res.data).then(data => {
             if (data.success && data.backData) {
-                const backData = data.backData;
                 this.setState({
-                    code: backData.code
-                });
+                    isStart: true
+                })
                 Toast.success(data.backMsg, 1);
+                setTimeout(() => {
+                    this.setState({
+                        isStart: false
+                    })
+                }, 60000)
             } else {
                 Toast.fail(data.backMsg, 2);
             }
@@ -112,7 +118,7 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { inputType1, inputType2, code } = this.state;
+        const { inputType1, inputType2, code, isStart } = this.state;
 
         return (
             <DocumentTitle title='用户注册'>
@@ -123,33 +129,29 @@ class Index extends React.Component {
                             <List>
                                 <InputItem
                                     {...getFieldProps('telephone', {
+
                                         rules: [
                                             { required: true, message: '请输入用户手机号' },
                                             { validator: this.validatePhone },
                                         ]
                                     })}
                                     clear
-                                    error={!!getFieldError('telephone')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('telephone').join('、'));
-                                    }}
                                     placeholder="请输入注册手机号"
                                 >手机号</InputItem>
                                 <InputItem
                                     {...getFieldProps('code', {
+
                                         initialValue: code,
                                         rules: [
                                             { required: true, message: '请输入验证码' },
                                         ],
                                     })}
                                     clear
-                                    error={!!getFieldError('code')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('code').join('、'));
-                                    }}
                                     placeholder="请输入手机验证码"
                                     extra={
-                                        <span className="tip-btn blue" onClick={() => this.getCode()}>获取验证码</span>
+                                        isStart
+                                            ? <TimeShow time={60} />
+                                            : <span className="tip-btn blue" onClick={() => this.getCode()}>获取</span>
                                     }
                                 >验证码</InputItem>
 
@@ -162,10 +164,6 @@ class Index extends React.Component {
                                     })}
                                     type={inputType1}
                                     clear
-                                    error={!!getFieldError('password')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password').join('、'));
-                                    }}
                                     placeholder="请输入新密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(1)}></i>}
                                 >密码</InputItem>
@@ -178,10 +176,6 @@ class Index extends React.Component {
                                     })}
                                     type={inputType2}
                                     clear
-                                    error={!!getFieldError('password2')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password2').join('、'));
-                                    }}
                                     placeholder="请再次输入新密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(2)}></i>}
                                 >确认密码</InputItem>

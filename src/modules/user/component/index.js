@@ -34,7 +34,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: sessionStorage.getItem('userId')
+            userId: localStorage.getItem('userId')
         });
         setTimeout(() => {
             this.queryUserDetail();

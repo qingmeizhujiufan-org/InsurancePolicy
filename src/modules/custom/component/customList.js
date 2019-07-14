@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { List, InputItem, Toast, Icon, Button, SearchBar, WingBlank, WhiteSpace } from 'antd-mobile';
-import { Layout } from 'zui-mobile';
+import { SwipeAction, List, PullToRefresh, Toast, Icon, Button, SearchBar } from 'antd-mobile';
+import { Layout, Empty } from 'zui-mobile';
 import { CardList } from 'Comps';
 import { assign } from 'lodash';
 
@@ -15,43 +16,91 @@ class Index extends React.Component {
 
         this.state = {
             userId: null,
-            params: {
-                pageNumber: 1,
-                pageSize: 10,
-            }
+            refreshing: false,
+            hasMore: true,
+            pageIndex: 1,
+            pageSize: 10,
+            height: document.documentElement.clientHeight,
+            dataSource: [],
+            pageNumber: 1,
+            pageSize: 10,
+            empty: false
+
         }
     };
 
     componentWillMount() {
-
         this.setState({
-            userId: sessionStorage.getItem('userId')
+            userId: localStorage.getItem('userId')
+        }, () => {
+            this.queryCustomList()
         });
     }
 
     componentDidMount() {
+        const { height, empty } = this.state;
+        if (empty) {
+            return
+        }
+        const hei = height - ReactDOM.findDOMNode(this.ptr).offsetTop;
+        setTimeout(() => {
+            this.setState({
+                height: hei
+            });
+        }, 0);
     }
 
-    // queryCustomList = () => {
-    //     const { id, params } = this.state;
-    //     const param = {
-    //         userId: id,
-    //         ...params
-    //     }
-    //     Toast.loading('', 1);
+    queryCustomList = () => {
+        const { userId, pageSize, pageNumber, pageIndex, keyWords } = this.state;
+        const newSize = pageSize * pageIndex;
+        const param = {
+            userId,
+            pageSize: newSize,
+            pageNumber,
+            keyWords
+        }
+        Toast.loading('', 0);
 
-    //     axios.get('custom/queryList', {
-    //         params: param
-    //     }).then(res => res.data).then(data => {
-    //         if (data.backData) {
-    //             const backData = data.backData;
-    //         } else {
-    //             Toast.fail('查询失败', 2);
-    //         }
-    //     }).catch(err => {
-    //         Toast.fail('服务异常', 2);
-    //     })
-    // }
+        axios.get('custom/queryList', {
+            params: param
+        }).then(res => res.data).then(data => {
+            if (data.success) {
+                const backData = data.backData;
+                const totalPages = Math.ceil(backData.totalElements / pageSize);
+                this.setState({
+                    dataSource: backData.content,
+                    empty: backData.totalElements === 0,
+                    hasMore: pageIndex < totalPages
+                });
+                Toast.hide()
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+            this.setState({
+                refreshing: false
+            });
+        }).catch(err => {
+            this.setState({
+                refreshing: false
+            });
+            Toast.fail('服务异常', 2);
+        })
+    }
+
+    onRefresh = () => {
+        const { hasMore, pageIndex } = this.state;
+        let newPageIndex = pageIndex + 1;
+        if (!hasMore) {
+            return;
+        }
+
+        this.setState({
+            refreshing: true,
+            pageIndex: newPageIndex
+        }, () => {
+            this.queryCustomList();
+        });
+    }
 
     queryDetail = id => {
         this.context.router.push({
@@ -63,15 +112,30 @@ class Index extends React.Component {
     }
 
     onSearch = keyWords => {
-        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+        this.setState({
+            keyWords,
+            pageIndex: 1
+        }, () => {
+            this.queryCustomList();
+        });
     }
 
-    onCancel = (keyWords) => {
-        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    onCancel = () => {
+        this.setState({
+            keyWords: '',
+            pageIndex: 1
+        }, () => {
+            this.queryCustomList();
+        });
     }
 
-    onClear = (keyWords) => {
-        this.setState({ params: assign({}, this.state.params, { keyWords }) });
+    onClear = () => {
+        this.setState({
+            keyWords: '',
+            pageIndex: 1
+        }, () => {
+            this.queryCustomList();
+        });
     }
 
     onAdd = () => {
@@ -82,21 +146,14 @@ class Index extends React.Component {
     }
 
     render() {
-        const { userId, params } = this.state;
-        params.userId = userId;
+        const {
+            dataSource,
+            refreshing,
+            height,
+            hasMore,
+            empty
+        } = this.state;
 
-        const row = (rowData, sectionID, rowID) => {
-            const obj = rowData;
-            return (
-                <div
-                    className="list-item"
-                    key={rowID}
-                    onClick={() => this.queryDetail(obj.id)}>
-                    <div className="list-item-left">{obj.customName}</div>
-                    <div className="list-item-right">{obj.customTel}</div>
-                </div>
-            );
-        };
         return (
             <DocumentTitle title='我的客户'>
                 <Layout className="custom">
@@ -106,13 +163,99 @@ class Index extends React.Component {
                             maxLength={16}
                             onSubmit={this.onSearch}
                             onClear={this.onClear}
-                            onCancel={this.onCancel} />
-                        <CardList
-                            pageUrl={'custom/queryList'}
-                            params={params}
-                            row={row}
-                            multi
+                            onCancel={this.onCancel}
                         />
+
+                        {
+                            empty
+                                ? <Empty />
+                                :
+                                <PullToRefresh
+                                    className="custom-list"
+                                    damping={100}
+                                    ref={el => this.ptr = el}
+                                    style={{
+                                        height: height,
+                                        overflow: 'auto',
+                                    }}
+                                    indicator={{
+
+                                        activate: (
+                                            <div className='loader'>
+                                                <div className="loader-inner">
+                                                    <Icon type="down" /> <span>释放加载</span>
+                                                </div>
+                                            </div>
+                                        ),
+
+                                        deactivate: (
+                                            <div className='loader'>
+                                                {
+                                                    hasMore
+                                                        ? <div className="loader-inner">
+                                                            <Icon type="up" /> <span>上拉加载</span>
+                                                        </div>
+                                                        : <div className="loader-inner">
+                                                            <span>没有了！</span>
+                                                        </div>
+                                                }
+                                            </div>
+                                        ),
+
+                                        release: (
+                                            <div className='loader'>
+                                                <div className="loader-inner">
+                                                    <Icon type="loading" /><span>正在加载</span>
+                                                </div>
+                                            </div>
+                                        ),
+
+                                        finish: (
+                                            <div className='loader'>
+                                                {
+                                                    hasMore
+                                                        ? <div className="loader-inner">
+                                                            <Icon type="up" /> <span>上拉加载</span>
+                                                        </div>
+                                                        : <div className="loader-inner">
+                                                            <span>没有了！</span>
+                                                        </div>
+                                                }
+                                            </div>
+                                        )
+
+                                    }}
+                                    direction={'up'}
+                                    refreshing={refreshing}
+                                    onRefresh={() => { this.onRefresh() }}
+                                >
+                                    {dataSource.map((item, index) => (
+                                        // <SwipeAction
+                                        //     key={index}
+                                        //     style={{ backgroundColor: 'gray' }}
+                                        //     autoClose
+                                        //     right={[
+                                        //         {
+                                        //             text: '删除',
+                                        //             onPress: () => this.onDelete(obj.id),
+                                        //             style: { backgroundColor: '#F4333C', color: 'white' },
+                                        //         }
+                                        //     ]}
+                                        // >
+                                        <div
+                                            className="list-item"
+                                            key={index}
+                                            onClick={() => this.queryDetail(item.id)}>
+                                            <div className="list-item-left">{item.customName}</div>
+                                            <div className="list-item-right">{item.customTel}</div>
+                                        </div>
+
+                                        //</SwipeAction>
+                                    ))}
+
+                                </PullToRefresh>
+                        }
+
                     </Layout.Content>
                     <Layout.Footer>
                         <Button type="primary" onClick={this.onAdd}>新增客户</Button>

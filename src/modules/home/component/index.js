@@ -18,9 +18,10 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            userId: sessionStorage.getItem('userId'),
+            userId: localStorage.getItem('userId'),
             userInfo: {},
             firstUser: {},
+            outerLink: {},
             refreshing: false,
             hasMore: true,
             pageIndex: 1,
@@ -44,6 +45,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         const { time, condition } = this.state;
+        this.queryLinkDetail();
         this.querySumOne(time.value, condition.value);
         this.querySumList();
 
@@ -110,6 +112,21 @@ class Index extends React.Component {
         this.context.router.push(`/user/personal`);
     }
 
+    queryLinkDetail = () => {
+        axios.get('link/queryDetail').then(res => res.data).then(data => {
+            if (data.success) {
+                const backData = data.backData;
+                this.setState({
+                    outerLink: backData
+                });
+            } else {
+                Toast.fail('查询失败', 2);
+            }
+        }).catch(err => {
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     querySumOne = (key1, key2) => {
         Toast.loading('正在加载', 0);
         const { userId } = this.state;
@@ -136,12 +153,33 @@ class Index extends React.Component {
         })
     }
 
+    showAlert = ({ info, url }) => {
+        Modal.alert('警告', `${info}，是否确定？`, [
+            {
+                text: '取消', onPress: () => {
+                    this.setState({
+                        canAdd: false,
+                        errMsg: info
+                    })
+                }, style: 'default'
+            },
+            {
+                text: '确认', onPress: () => {
+                    this.context.router.push({
+                        pathname: url
+                    })
+                }
+            },
+        ]);
+    }
+
     handleLike = (type, thumbupId) => {
         const { userId } = this.state;
         if (!userId) {
-            Toast.fail('请先登录 ', 2, () => {
-                this.context.router.push(`/public/login`);
-            });
+            this.showAlert({
+                info: '请先登录',
+                url: '/public/login'
+            })
             return;
         }
         if (userId === thumbupId) {
@@ -161,10 +199,6 @@ class Index extends React.Component {
         }).catch(err => {
             Toast.fail('服务异常', 2);
         })
-    }
-
-    isLike = () => {
-
     }
 
     onRefresh = () => {
@@ -220,7 +254,21 @@ class Index extends React.Component {
     }
 
     render() {
-        const { userId, modalShow, time, condition, tempTime, tempCondition, dataSource, userInfo, firstUser, refreshing, height, hasMore } = this.state;
+        const {
+            userId,
+            modalShow,
+            time,
+            condition,
+            tempTime,
+            tempCondition,
+            dataSource,
+            userInfo,
+            firstUser,
+            refreshing,
+            height,
+            hasMore,
+            outerLink
+        } = this.state;
         const bgFile = firstUser.bgFile;
 
         const times = [
@@ -273,9 +321,22 @@ class Index extends React.Component {
                 <div className="condition-other-btn" onClick={() => {
                     this.toOuterUrl()
                 }}>
-                    <Button size="small" className="green-blue-btn" style={{ marginRight: '10px' }}>产品销量榜<Icon
-                        type="right" /></Button>
-                    <Button size="small" className="green-ghost-btn">公司偿付榜<Icon type="right" /></Button>
+                    <Button
+                        size="small"
+                        className="green-blue-btn"
+                        style={{ marginRight: '10px' }}
+                        onClick={() => {
+                            window.location.href = `${outerLink.productSellingUrl}`
+                        }}>产品销量榜
+                        <Icon
+                            type="right"
+                        /></Button>
+                    <Button
+                        size="small"
+                        className="green-ghost-btn"
+                        onClick={() => {
+                            window.location.href = `${outerLink.companyPayUrl}`
+                        }}>公司偿付榜<Icon type="right" /></Button>
                 </div>
             </div>
         );
@@ -293,8 +354,13 @@ class Index extends React.Component {
 
                     </div>
                     <div className="item-info">
-                        <div>{data.realname}</div>
-                        <div>{data.companyName || '未知'}</div>
+                        {
+                            ['realname', 'companyName'].map(item => {
+                                return data[item]
+                                    ? <div key={item}>{data[item]}</div>
+                                    : <div key={item}>未知</div>
+                            })
+                        }
                     </div>
                 </div>
                 <div className="sort-item-center">{

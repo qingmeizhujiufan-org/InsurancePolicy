@@ -1,6 +1,30 @@
 .order {
 
+    .am-search+.range-date+.order-list {
+        height: calc(~'100% - 2.03rem') !important;
+    }
+
+    .order-list {
+
+        .loader {
+            padding: .2rem 0;
+
+            .loader-inner {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .am-icon {
+                    margin-right: .2rem;
+                }
+            }
+
+        }
+    }
+
     .order-card {
+        padding-bottom: 0;
+
         &:not(:first-child) {
             margin-top: .3rem;
         }
@@ -90,9 +114,6 @@
         }
     }
 
-    .am-search+.range-date+.zui-cardlist {
-        height: calc(~'100% - 2.03rem') !important;
-    }
 
     .bottom-foot {
         position: fixed;
@@ -147,7 +168,17 @@
             }
 
             .am-textarea-item {
-                height: 2.4rem;
+                height: auto;
+
+                .am-textarea-control {
+                    textarea {
+                        color: #888;
+
+                        &::placeholder {
+                            color: #888;
+                        }
+                    }
+                }
             }
         }
 

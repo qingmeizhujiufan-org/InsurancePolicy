@@ -11,9 +11,9 @@ const query = getRequest();
 const { code, state } = query;
 
 /* 开发环境测试用户 */
-// sessionStorage.userId = '30b13970-0052-11e9-8735-190581b1698d';
+// localStorage.userId = '30b13970-0052-11e9-8735-190581b1698d';
 /* 正式环境测试用户 */
-// sessionStorage.userId = 'bdce2c80-6e77-11e9-b23f-cd2cb6481b7f';
+// localStorage.userId = 'bdce2c80-6e77-11e9-b23f-cd2cb6481b7f';
 
 ReactDOM.render(
     <Router history={hashHistory} routes={routes} />

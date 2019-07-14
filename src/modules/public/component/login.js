@@ -41,7 +41,7 @@ class Index extends React.Component {
                 axios.post('user/login', param).then(res => res.data).then(data => {
                     if (data.success) {
                         Toast.success('登录成功', 1, () => {
-                            sessionStorage.userId = data.backData.id;
+                            localStorage.userId = data.backData.id;
                             this.context.router.push(`/index`);
                         });
                     } else {
@@ -93,32 +93,25 @@ class Index extends React.Component {
                             <List>
                                 <InputItem
                                     {...getFieldProps('telphone', {
-                                        // initialValue: '15527188176',
+
                                         rules: [
                                             { required: true, message: '请输入用户手机号' },
                                             { validator: this.validatePhone },
                                         ]
                                     })}
                                     clear
-                                    error={!!getFieldError('telphone')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('telphone').join('、'));
-                                    }}
+
                                     placeholder="请输入注册手机号"
                                 ><i className="iconfont iconyonghu" /></InputItem>
                                 <InputItem
                                     {...getFieldProps('password', {
-                                        // initialValue: '15527188176',
+
                                         rules: [
                                             { required: true, message: '请输入用户密码' },
                                         ],
                                     })}
                                     type={type}
                                     clear
-                                    error={!!getFieldError('password')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password').join('、'));
-                                    }}
                                     placeholder="请输入密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword()}></i>}
                                 ><i className="iconfont iconmima" /></InputItem>

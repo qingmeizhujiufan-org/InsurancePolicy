@@ -13,6 +13,7 @@ import DistPicker from './distpicker';
 import Stepper from './stepper';
 import SearchBar from './search-bar';
 import Empty from './empty';
+import TimeShow from './time-show';
 
 module.exports = {
     List,
@@ -30,4 +31,5 @@ module.exports = {
     Stepper,
     SearchBar,
     Empty,
+    TimeShow
 }

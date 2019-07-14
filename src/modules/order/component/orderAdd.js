@@ -8,10 +8,7 @@ import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 
-import classify_1 from 'Img/hand-loging.png';
-
 const Item = List.Item;
-
 const now = new Date();
 const sexs = [{
   label: '男',
@@ -39,7 +36,7 @@ class Index extends React.Component {
     super(props);
 
     this.state = {
-      userId: sessionStorage.getItem('userId'),
+      userId: localStorage.getItem('userId'),
       orderId: null,
       order: {},
       type: 'add',
@@ -97,7 +94,7 @@ class Index extends React.Component {
   }
 
   showAlert = ({ info, url }) => {
-    Modal.alert('警告', `${info}，是否添加相关客户？`, [
+    Modal.alert('警告', `${info}`, [
       {
         text: '取消', onPress: () => {
           this.setState({
@@ -129,9 +126,10 @@ class Index extends React.Component {
         let backData = data.backData.content || [];
         if (backData.length === 0) {
           this.showAlert({
-            info: '暂无客户信息',
+            info: '暂无客户信息，是否添加相关客户？',
             url: '/custom/add'
           })
+          return;
         }
         let list = backData.map(item => {
           return {
@@ -259,10 +257,10 @@ class Index extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const { order, Channel, Client, companyList } = this.state;
+    const { order, Channel, Client, companyList, type } = this.state;
 
     return (
-      <DocumentTitle title='新增订单'>
+      <DocumentTitle title={type === 'add' ? '添加订单' : '修改订单'}>
         <Layout className="order">
           <Layout.Content>
             <form>
@@ -276,10 +274,7 @@ class Index extends React.Component {
                     ]
                   })}
                   clear
-                  error={!!getFieldError('insurancePolicyNo')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insurancePolicyNo').join('、'));
-                  }}
+
                   placeholder="请输入"
                 >保单号</InputItem>
                 <InputItem
@@ -290,10 +285,6 @@ class Index extends React.Component {
                     ]
                   })}
                   clear
-                  error={!!getFieldError('insuranceName')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insuranceName').join('、'));
-                  }}
                   placeholder="请输入"
                 >产品名称</InputItem>
                 <Picker
@@ -343,10 +334,6 @@ class Index extends React.Component {
                   type="money"
                   moneyKeyboardAlign="left"
                   clear
-                  error={!!getFieldError('insuredSum')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insuredSum').join('、'));
-                  }}
                   placeholder="请输入"
                 >保额</InputItem>
                 <InputItem
@@ -358,12 +345,7 @@ class Index extends React.Component {
                   })}
                   type="money"
                   moneyKeyboardAlign="left"
-
                   clear
-                  error={!!getFieldError('insurance')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insurance').join('、'));
-                  }}
                   placeholder="请输入"
                 >保费</InputItem>
                 <TextareaItem
@@ -418,10 +400,6 @@ class Index extends React.Component {
                     ]
                   })}
                   clear
-                  error={!!getFieldError('policyholderName')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('policyholderName').join('、'));
-                  }}
                   placeholder="请输入"
                 >姓名</InputItem>
                 <DatePicker
@@ -445,10 +423,6 @@ class Index extends React.Component {
                     ],
                   })}
                   clear
-                  error={!!getFieldError('policyholderTelephone')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('policyholderTelephone').join('、'));
-                  }}
                   placeholder="请输入"
                 >电话后四位</InputItem>
                 <Picker
@@ -471,10 +445,6 @@ class Index extends React.Component {
                     ]
                   })}
                   clear
-                  error={!!getFieldError('insuredName')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insuredName').join('、'));
-                  }}
                   placeholder="请输入"
                 >姓名</InputItem>
                 <DatePicker
@@ -499,10 +469,6 @@ class Index extends React.Component {
                     ],
                   })}
                   clear
-                  error={!!getFieldError('insuredTelephone')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('insuredTelephone').join('、'));
-                  }}
                   placeholder="请输入"
                 >电话后四位</InputItem>
                 <Picker
@@ -529,10 +495,6 @@ class Index extends React.Component {
                     ]
                   })}
                   clear
-                  error={!!getFieldError('beneficiaryName')}
-                  onErrorClick={() => {
-                    Toast.info(getFieldError('beneficiaryName').join('、'));
-                  }}
                   placeholder="请输入"
                 >姓名</InputItem>
               </List>

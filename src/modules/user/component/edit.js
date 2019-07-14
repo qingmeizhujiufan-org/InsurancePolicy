@@ -32,7 +32,7 @@ class Index extends React.Component {
         this.queryCompanyList();
 
         this.setState({
-            userId: sessionStorage.getItem('userId')
+            userId: localStorage.getItem('userId')
         });
     }
 

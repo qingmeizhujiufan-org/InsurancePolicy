@@ -4,6 +4,8 @@ import { PullToRefresh, ListView, Toast } from 'antd-mobile';
 import assign from 'lodash/assign';
 import isEqual from 'lodash/isEqual';
 import axios from 'axios';
+import { Empty } from 'zui-mobile';
+
 import './index.less';
 
 function MyBody(props) {
@@ -193,6 +195,7 @@ class Index extends React.Component {
         let { params, pageIndex } = this.state;
         params = assign(params, { pageNumber: ++pageIndex });
         axios.get(this.props.pageUrl, { params }).then(res => res.data).then(data => {
+
             if (typeof callback === 'function')
                 callback(data);
         }
@@ -200,9 +203,14 @@ class Index extends React.Component {
     }
 
     render() {
-        const { dataSource, initLoaded, refreshing, isLoading } = this.state;
+        const { dataSource, initLoaded, refreshing, isLoading, listData } = this.state;
         const { className, row } = this.props;
+
         return (
+
+            // listData.length === 0
+            //     ? <Empty />
+            //     :
             <ListView
                 ref={el => this.lv = el}
                 dataSource={dataSource}

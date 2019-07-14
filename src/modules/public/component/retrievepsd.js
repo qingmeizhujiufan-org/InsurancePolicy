@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, InputItem, Toast, Button, ImagePicker, WingBlank, WhiteSpace } from 'antd-mobile';
-import { Layout } from 'zui-mobile';
+import { Layout, TimeShow } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -16,7 +16,8 @@ class Index extends React.Component {
             inputType1: 'password',
             inputType2: 'password',
             code: '',
-            telephone: ''
+            telephone: '',
+            isStart: false
         }
     };
 
@@ -46,17 +47,22 @@ class Index extends React.Component {
         Toast.loading('正在获取', 0);
 
         const param = {
-            telephone
+            telephone,
+            type: '6'
         }
         axios.get('user/getCode', {
             params: param
         }).then(res => res.data).then(data => {
             if (data.success && data.backData) {
-                const backData = data.backData;
                 this.setState({
-                    code: backData.code
-                });
+                    isStart: true
+                })
                 Toast.success(data.backMsg, 1);
+                setTimeout(() => {
+                    this.setState({
+                        isStart: false
+                    })
+                }, 60000)
             } else {
                 Toast.fail(data.backMsg, 2);
             }
@@ -143,7 +149,7 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { check, code, inputType1, inputType2 } = this.state;
+        const { check, code, inputType1, inputType2, isStart } = this.state;
 
         return (
             <DocumentTitle title='找回密码'>
@@ -183,7 +189,9 @@ class Index extends React.Component {
                                         }}
                                         placeholder="请输入手机验证码"
                                         extra={
-                                            <span className="tip-btn blue" onClick={() => this.getCode()}>获取验证码</span>
+                                            isStart
+                                                ? <TimeShow time={60} />
+                                                : <span className="tip-btn blue" onClick={() => this.getCode()}>获取</span>
                                         }
                                     >验证码</InputItem>
                                 </List>

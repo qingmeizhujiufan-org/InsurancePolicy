@@ -1,18 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, Picker, List, Button, InputItem, Toast, WingBlank, WhiteSpace, Icon } from 'antd-mobile';
+import { DatePicker, Picker, List, Button, InputItem, Toast, TextareaItem, WhiteSpace, Icon } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import { assign } from 'lodash';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
-import moment from 'moment';
-
-import classify_1 from 'Img/hand-loging.png'
 
 const Item = List.Item;
-const Brief = Item.Brief;
+
 const sexs = [{
     label: '男',
     value: 1,
@@ -38,20 +35,19 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: sessionStorage.getItem('userId')
+            userId: localStorage.getItem('userId')
         });
     }
 
     componentDidMount() {
-        let data = this.props.location.query;
-        if (data.custId) {
+        let query = this.props.location.query;
+        if (query.custId) {
             this.setState({
-                custId: data.custId,
+                custId: query.custId,
                 type: 'update'
             });
             setTimeout(() => {
                 this.queryCustDetail()
-
             }, 0);
         }
     }
@@ -132,10 +128,10 @@ class Index extends React.Component {
 
     render() {
         const { getFieldProps, getFieldError } = this.props.form;
-        const { custom } = this.state;
+        const { custom, type } = this.state;
 
         return (
-            <DocumentTitle title='新增客户'>
+            <DocumentTitle title={type === 'add' ? '新增客户' : '修改客户'}>
                 <Layout className="custom">
                     <Layout.Content>
                         <WhiteSpace size="lg" />
@@ -149,10 +145,7 @@ class Index extends React.Component {
                                         ]
                                     })}
                                     clear
-                                    error={!!getFieldError('customName')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('customName').join('、'));
-                                    }}
+
                                     placeholder="请输入客户姓名"
                                 >客户姓名</InputItem>
                                 <DatePicker
@@ -164,10 +157,7 @@ class Index extends React.Component {
                                         ],
                                     })}
                                     mode="date"
-                                    error={!!getFieldError('customBirth')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('customBirth').join('、'));
-                                    }}
+
                                 >
                                     <Item arrow="horizontal">客户生日</Item>
                                 </DatePicker>
@@ -180,10 +170,7 @@ class Index extends React.Component {
                                         ],
                                     })}
                                     clear
-                                    error={!!getFieldError('customTel')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('customTel').join('、'));
-                                    }}
+
                                     placeholder="请输入电话后四位"
                                 >电话后四位</InputItem>
                                 <Picker
@@ -195,13 +182,18 @@ class Index extends React.Component {
                                             { required: true, message: '请选择客户性别' }
                                         ],
                                     })}
-                                    error={!!getFieldError('customSex')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('customSex').join('、'));
-                                    }}
+
                                 >
                                     <Item arrow="horizontal">客户性别</Item>
                                 </Picker>
+                                <TextareaItem
+                                    {...getFieldProps('mark', {
+                                        initialValue: custom.mark,
+                                    })}
+                                    placeholder="备注消息"
+                                    rows={5}
+                                    count={100}
+                                />
                             </List>
                             <div className="add-tip"><i className="iconfont iconguanyu" />&nbsp;点击内容即可编辑修改</div>
                             <Button type="primary" onClick={this.onSubmit}>提交</Button>
