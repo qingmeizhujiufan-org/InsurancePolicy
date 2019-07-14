@@ -5,7 +5,8 @@ import routes from 'routes/index';
 import './index.less';//全局样式
 import './assets/css/iconfont.css';
 import { getRequest } from "Utils/util";
-import axios from "Utils/axios";
+import localStorage from 'Utils/localStorage'
+
 
 const query = getRequest();
 const { code, state } = query;

@@ -5,6 +5,7 @@ import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
+import localStorage from 'Utils/localStorage'
 import restUrl from "RestUrl";
 import avator from 'Img/hand-loging.png';
 
@@ -34,7 +35,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: localStorage.getItem('userId')
+            userId: localStorage.get('userId')
         });
         setTimeout(() => {
             this.queryUserDetail();

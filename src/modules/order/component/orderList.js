@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Icon, Toast, Button, SearchBar, PullToRefresh, Flex, Calendar, Card } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
+import localStorage from 'Utils/localStorage'
 import moment from 'moment';
 import { assign } from 'lodash';
 import '../index.less';
@@ -34,7 +35,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: localStorage.getItem('userId')
+            userId: localStorage.get('userId')
         }, () => {
             this.queryOrderList()
         });

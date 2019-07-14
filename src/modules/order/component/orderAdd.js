@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { DatePicker, Picker, List, Button, InputItem, TextareaItem, Modal, Toast, WingBlank, WhiteSpace } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import { createForm } from 'rc-form';
+import localStorage from 'Utils/localStorage'
 import { assign } from 'lodash';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -36,7 +37,7 @@ class Index extends React.Component {
     super(props);
 
     this.state = {
-      userId: localStorage.getItem('userId'),
+      userId: localStorage.get('userId'),
       orderId: null,
       order: {},
       type: 'add',

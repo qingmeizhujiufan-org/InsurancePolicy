@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button, PullToRefresh } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
-import { CardList } from 'Comps';
+import localStorage from 'Utils/localStorage'
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -18,7 +18,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            userId: localStorage.getItem('userId'),
+            userId: localStorage.get('userId'),
             userInfo: {},
             firstUser: {},
             outerLink: {},

@@ -6,6 +6,7 @@ import { createForm } from 'rc-form';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
+import localStorage from 'Utils/localStorage'
 import classify_1 from 'Img/hand-loging.png';
 
 class Index extends React.Component {
@@ -41,7 +42,7 @@ class Index extends React.Component {
                 axios.post('user/login', param).then(res => res.data).then(data => {
                     if (data.success) {
                         Toast.success('登录成功', 1, () => {
-                            localStorage.userId = data.backData.id;
+                            localStorage.setAge(7 * 60 * 60 * 1000).set('userId', data.backData.id)
                             this.context.router.push(`/index`);
                         });
                     } else {

@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { SwipeAction, List, PullToRefresh, Toast, Icon, Button, SearchBar } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
-import { CardList } from 'Comps';
-import { assign } from 'lodash';
+import localStorage from 'Utils/localStorage'
 
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -31,7 +30,7 @@ class Index extends React.Component {
 
     componentWillMount() {
         this.setState({
-            userId: localStorage.getItem('userId')
+            userId: localStorage.get('userId')
         }, () => {
             this.queryCustomList()
         });
