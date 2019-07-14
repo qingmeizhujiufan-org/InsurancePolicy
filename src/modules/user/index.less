@@ -144,13 +144,20 @@
             }
 
             .am-list-item {
-                height: .9rem;
+                width: auto !important;
+                height: 1rem;
                 padding-left: .3rem;
 
                 .am-list-thumb+.am-list-line {
                     &::after {
                         height: 0;
                     }
+                }
+
+                .am-list-content {
+                    font-size: .3rem;
+                    color: #222222;
+
                 }
 
                 &::after {
@@ -173,9 +180,10 @@
                     transform: scaleY(0.5);
                 }
 
+
                 &.am-textarea-item {
                     textarea {
-                        height: 2.4rem;
+                        height: auto;
                     }
                 }
             }
