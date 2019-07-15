@@ -12,7 +12,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            check: true,
+            check: false,
             inputType1: 'password',
             inputType2: 'password',
             code: '',
@@ -190,7 +190,7 @@ class Index extends React.Component {
                                     >验证码</InputItem>
                                 </List>
                                 <WingBlank>
-                                    <Button type="primary" onClick={this.onNext}>下一步</Button>
+                                    <Button className="inline-button" type="primary" onClick={this.onNext}>下一步</Button>
                                 </WingBlank>
                             </form>
                         ) : (
@@ -223,8 +223,7 @@ class Index extends React.Component {
                                         >确认密码</InputItem>
                                     </List>
                                     <WingBlank>
-                                        <Button type="primary" onClick={this.onSubmit}>提交</Button>
-
+                                        <Button className="inline-button" type="primary" onClick={this.onSubmit}>提交</Button>
                                     </WingBlank>
                                 </form>
                             )
