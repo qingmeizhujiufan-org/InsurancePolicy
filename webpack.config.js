@@ -19,6 +19,7 @@ const postcssOpts = {
 
 module.exports = {
     entry: {
+
         "index": path.resolve(__dirname, "src/index"),
         //添加要打包在vendor.js里面的库
         vendor: ['react', 'react-dom', 'react-router']
@@ -51,7 +52,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
@@ -85,8 +86,8 @@ module.exports = {
                     fallback: 'style-loader',
                     use: [
                         'css-loader',
-                        {loader: 'postcss-loader', options: postcssOpts},
-                        {loader: 'less-loader', options: {modifyVars: theme}}
+                        { loader: 'postcss-loader', options: postcssOpts },
+                        { loader: 'less-loader', options: { modifyVars: theme } }
                     ]
                 })
             },
@@ -95,7 +96,7 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        'css-loader', {loader: 'postcss-loader', options: postcssOpts}
+                        'css-loader', { loader: 'postcss-loader', options: postcssOpts }
                     ]
                 })
             }, {

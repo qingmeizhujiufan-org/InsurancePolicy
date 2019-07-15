@@ -412,6 +412,8 @@ class Index extends React.Component {
                     ],
                   })}
                   mode="date"
+                  minDate={new Date(1950, 1, 1, 0, 0, 0)}
+                  maxDate={new Date()}
                 >
                   <Item arrow="horizontal">生日</Item>
                 </DatePicker>
@@ -458,6 +460,8 @@ class Index extends React.Component {
                     ],
                   })}
                   mode="date"
+                  minDate={new Date(1950, 1, 1, 0, 0, 0)}
+                  maxDate={new Date()}
                 >
                   <Item arrow="horizontal">生日</Item>
                 </DatePicker>

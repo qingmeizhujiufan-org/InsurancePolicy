@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Icon, Toast, Button, SearchBar, PullToRefresh, Flex, Calendar, Card } from 'antd-mobile';
+import { Modal, List, Icon, Toast, Button, SearchBar, PullToRefresh, Flex, Calendar, Card } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
 import localStorage from 'Utils/localStorage'
 import moment from 'moment';
-import { assign } from 'lodash';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 const now = new Date();
 class Index extends React.Component {
@@ -165,6 +163,38 @@ class Index extends React.Component {
         });
     }
 
+    onDeleteComfirm = (e, id) => {
+        e.preventDefault();
+        Modal.alert('提示', '是否确定删除?', [
+            {
+                text: '取消',
+                onPress: () => console.log('cancel'), style: 'default'
+            },
+            {
+                text: '确定',
+                onPress: () => this.onDelete(id)
+            },
+        ]);
+    }
+
+    onDelete = id => {
+        Toast.loading('正在删除', 0);
+
+        axios.post('order/delete', { id }).then(res => res.data).then(data => {
+            if (data.success) {
+                Toast.success('提交成功', 1, () => {
+                    this.onClear();
+                });
+                Toast.success('删除成功', 2);
+
+            } else {
+                Toast.fail('删除失败', 2);
+            }
+        }).catch(() => {
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     render() {
         const {
             beginDate,
@@ -267,28 +297,19 @@ class Index extends React.Component {
                                     onRefresh={() => { this.onRefresh() }}
                                 >
                                     {dataSource.map((obj, index) => (
-                                        // <SwipeAction
-                                        //     key={index}
-                                        //     style={{ backgroundColor: 'gray' }}
-                                        //     autoClose
-                                        //     right={[
-                                        //         {
-                                        //             text: '删除',
-                                        //             onPress: () => this.onDelete(obj.id),
-                                        //             style: { backgroundColor: '#F4333C', color: 'white' },
-                                        //         }
-                                        //     ]}
-                                        // >
+
                                         <Card full className="order-card" key={index} onClick={() => { this.onDetail(obj.id) }}>
                                             <Card.Header
                                                 title={
                                                     <div className="order-title">
                                                         <div className="order-id">保单号：{obj.insurancePolicyNo}</div>
-                                                        <div className="order-company">产品名称：{obj.insuranceName}</div>
                                                     </div>
                                                 }
+                                                extra={<span style={{ color: '#f61a1a', fontSize: '.28rem' }} onClick={(e) => this.onDeleteComfirm(e, obj.id)}>删除</span>}
                                             />
                                             <Card.Body>
+                                                <div className="order-company">产品名称：{obj.insuranceName}</div>
+
                                                 <div className="order-detail">
                                                     <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
                                                     <div className="order-detail-item"> 投保日期：{obj.insuredTime}</div>
@@ -305,7 +326,6 @@ class Index extends React.Component {
                                             } />
                                         </Card>
 
-                                        //</SwipeAction>
                                     ))}
 
                                 </PullToRefresh>

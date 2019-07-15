@@ -12,7 +12,7 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            check: false,
+            check: true,
             inputType1: 'password',
             inputType2: 'password',
             code: '',
@@ -222,7 +222,10 @@ class Index extends React.Component {
                                             extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(2)}></i>}
                                         >确认密码</InputItem>
                                     </List>
-                                    <Button type="primary" onClick={this.onSubmit}>提交</Button>
+                                    <WingBlank>
+                                        <Button type="primary" onClick={this.onSubmit}>提交</Button>
+
+                                    </WingBlank>
                                 </form>
                             )
                         }

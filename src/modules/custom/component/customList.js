@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { SwipeAction, List, PullToRefresh, Toast, Icon, Button, SearchBar } from 'antd-mobile';
+import { SwipeAction, List, PullToRefresh, Toast, Modal, Icon, Button, SearchBar } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
 import localStorage from 'Utils/localStorage'
 
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
+
+const Item = List.Item
 
 class Index extends React.Component {
     constructor(props) {
@@ -144,6 +146,37 @@ class Index extends React.Component {
         });
     }
 
+    onDeleteComfirm = id => {
+        const confirm = Modal.alert('提示', '是否确定删除?', [
+            {
+                text: '取消',
+                onPress: () => console.log('cancel'), style: 'default'
+            },
+            {
+                text: '确定',
+                onPress: () => this.onDelete(id)
+            },
+        ]);
+    }
+
+    onDelete = id => {
+        Toast.loading('正在删除', 0);
+
+        axios.post('custom/delete', { id }).then(res => res.data).then(data => {
+            if (data.success) {
+                Toast.success('提交成功', 1, () => {
+                    this.onClear();
+                });
+                Toast.success('删除成功', 2);
+
+            } else {
+                Toast.fail('删除失败', 2);
+            }
+        }).catch(() => {
+            Toast.fail('服务异常', 2);
+        })
+    }
+
     render() {
         const {
             dataSource,
@@ -164,7 +197,6 @@ class Index extends React.Component {
                             onClear={this.onClear}
                             onCancel={this.onCancel}
                         />
-
                         {
                             empty
                                 ? <Empty />
@@ -229,27 +261,27 @@ class Index extends React.Component {
                                     onRefresh={() => { this.onRefresh() }}
                                 >
                                     {dataSource.map((item, index) => (
-                                        // <SwipeAction
-                                        //     key={index}
-                                        //     style={{ backgroundColor: 'gray' }}
-                                        //     autoClose
-                                        //     right={[
-                                        //         {
-                                        //             text: '删除',
-                                        //             onPress: () => this.onDelete(obj.id),
-                                        //             style: { backgroundColor: '#F4333C', color: 'white' },
-                                        //         }
-                                        //     ]}
-                                        // >
-                                        <div
-                                            className="list-item"
+                                        <SwipeAction
                                             key={index}
-                                            onClick={() => this.queryDetail(item.id)}>
-                                            <div className="list-item-left">{item.customName}</div>
-                                            <div className="list-item-right">{item.customTel}</div>
-                                        </div>
+                                            style={{ backgroundColor: 'gray' }}
+                                            autoClose
+                                            right={[
+                                                {
+                                                    text: '删除',
+                                                    onPress: () => this.onDeleteComfirm(item.id),
+                                                    style: { backgroundColor: '#F4333C', color: 'white', width: '1.2rem' },
+                                                }
+                                            ]}
+                                        >
+                                            <div
+                                                className="list-item"
+                                                key={index}
+                                                onClick={() => this.queryDetail(item.id)}>
+                                                <div className="list-item-left">{item.customName}</div>
+                                                <div className="list-item-right">{item.customTel}</div>
+                                            </div>
 
-                                        //</SwipeAction>
+                                        </SwipeAction>
                                     ))}
 
                                 </PullToRefresh>
