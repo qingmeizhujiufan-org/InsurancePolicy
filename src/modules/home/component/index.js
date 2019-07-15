@@ -22,14 +22,10 @@ class Index extends React.Component {
             userId: localStorage.get('userId'),
             userInfo: {},
             firstUser: {},
-            outerLink: {},
-            refreshing: false,
-            hasMore: true,
-            pageIndex: 1,
-            pageSize: 10,
-            height: document.documentElement.clientHeight,
-            dataSource: [],
-            firstName: null,
+            params: {
+                pageNumber: 1,
+                pageSize: 10
+            },
             modalShow: false,
             time: {
                 value: 0,
@@ -45,7 +41,15 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
-        const { time, condition } = this.state;
+        const { time, condition, params, userId } = this.state;
+        this.setState({
+            params: {
+                ...params,
+                time: time.value,
+                condition: condition.value,
+                userId
+            }
+        })
         this.queryLinkDetail();
         this.querySumOne(time.value, condition.value);
     }
@@ -88,12 +92,17 @@ class Index extends React.Component {
     }
 
     onOk = () => {
-        const { tempTime, tempCondition } = this.state;
+        const { tempTime, tempCondition, params, userId } = this.state;
         this.setState({
             time: tempTime,
             condition: tempCondition,
             modalShow: false,
-            pageNumber: 1
+            params: {
+                ...params,
+                time: tempTime.value,
+                condition: tempCondition.value,
+                userId
+            }
         }, () => {
             this.querySumOne(tempTime.value, tempCondition.value);
         })
@@ -165,7 +174,7 @@ class Index extends React.Component {
     }
 
     handleLike = (type, thumbupId) => {
-        const { userId } = this.state;
+        const { userId, time } = this.state;
         if (!userId) {
             this.showAlert({
                 info: '请先登录',
@@ -183,7 +192,9 @@ class Index extends React.Component {
         const api = type === 1 ? 'user/like' : 'user/unlike';
         axios.post(api, param).then(res => res.data).then(data => {
             if (data.success) {
-                this.querySumList()
+                this.setState({
+                    params: Object.assign({}, this.state.params, { flag: new Date().getTime() })
+                })
             } else {
                 Toast.fail(data.backMsg, 2);
             }
@@ -236,20 +247,11 @@ class Index extends React.Component {
             condition,
             tempTime,
             tempCondition,
-
             userInfo,
             firstUser,
             outerLink,
-            pageSize,
-            pageNumber
+            params
         } = this.state;
-        const bgFile = firstUser.bgFile;
-
-        const params = {
-            pageSize,
-            pageNumber,
-            userId
-        }
 
         const times = [
             { value: 0, label: '月度排行' },
@@ -397,7 +399,7 @@ class Index extends React.Component {
                         <div className="user-info-container">
                             <div className="user-bg">
                                 {
-                                    bgFile && bgFile.id
+                                    firstUser.bgFile && firstUser.bgFile.id
                                         ?
                                         <img className='user-bg' src={restUrl.FILE_ASSET + bgFile.id + bgFile.fileType}
                                             alt="" />
