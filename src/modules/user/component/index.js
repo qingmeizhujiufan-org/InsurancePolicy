@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Tabs, Toast, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
+import { List, Tabs, Toast, Button, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -140,6 +140,11 @@ class Index extends React.Component {
         this.context.router.push(`/custom/list`);
     }
 
+    logout = () => {
+        localStorage.remove('userId');
+        this.context.router.push(`/public/login`);
+    }
+
     render() {
         const { user, month, quarter, year, Links } = this.state;
         const bgImg = user.bgId;
@@ -276,6 +281,9 @@ class Index extends React.Component {
                         <WhiteSpace size="lg" />
 
                     </Layout.Content>
+                    <Layout.Footer>
+                        <Button type="warning" onClick={this.logout}>退出登录</Button>
+                    </Layout.Footer>
                 </Layout>
             </DocumentTitle>
         );

@@ -8,64 +8,50 @@
         height: calc(~'100% - .88rem') !important;
     }
 
-    .custom-list {
-        .loader {
-            padding: .2rem 0;
 
-            .loader-inner {
-                display: flex;
-                justify-content: center;
-                align-items: center;
 
-                .am-icon {
-                    margin-right: .2rem;
-                }
-            }
+    .list-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: .9rem;
+        padding: .22rem .4rem .22rem .3rem;
+        font-size: 16px;
+        background-color: #fff;
+
+        .list-item-left {
+            flex: 1;
+            height: .5rem;
+            color: #000;
+            text-align: left;
         }
 
-        .list-item {
-            position: relative;
+        .list-item-right {
             display: flex;
+            justify-content: flex-end;
             align-items: center;
-            height: .9rem;
-            padding: .22rem .4rem .22rem .3rem;
-            font-size: 16px;
-            background-color: #fff;
+            flex: 1;
+            height: .5rem;
+            color: #888;
+        }
 
-            .list-item-left {
-                flex: 1;
-                height: .5rem;
-                color: #000;
-                text-align: left;
-            }
-
-            .list-item-right {
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                flex: 1;
-                height: .5rem;
-                color: #888;
-            }
-
-            &::after {
-                content: '';
-                position: absolute;
-                background-color: #ddd;
-                display: block;
-                z-index: 1;
-                top: auto;
-                right: 0;
-                bottom: 0;
-                left: .3rem;
-                height: 1px;
-                -webkit-transform-origin: 50% 100%;
-                -ms-transform-origin: 50% 100%;
-                transform-origin: 50% 100%;
-                -webkit-transform: scaleY(0.5);
-                -ms-transform: scaleY(0.5);
-                transform: scaleY(0.5);
-            }
+        &::after {
+            content: '';
+            position: absolute;
+            background-color: #ddd;
+            display: block;
+            z-index: 1;
+            top: auto;
+            right: 0;
+            bottom: 0;
+            left: .3rem;
+            height: 1px;
+            -webkit-transform-origin: 50% 100%;
+            -ms-transform-origin: 50% 100%;
+            transform-origin: 50% 100%;
+            -webkit-transform: scaleY(0.5);
+            -ms-transform: scaleY(0.5);
+            transform: scaleY(0.5);
         }
     }
 

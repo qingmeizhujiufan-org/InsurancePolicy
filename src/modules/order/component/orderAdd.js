@@ -309,6 +309,7 @@ class Index extends React.Component {
                     ],
                   })}
                   mode="date"
+                  minDate={new Date(1950, 1, 1, 0, 0, 0)}
                 >
                   <Item arrow="horizontal">生效时间</Item>
                 </DatePicker>
@@ -503,7 +504,9 @@ class Index extends React.Component {
                   placeholder="请输入"
                 >姓名</InputItem>
               </List>
-              <Button type="primary" onClick={this.onSubmit} style={{ margin: '1rem 0 .4rem' }}>提交</Button>
+              <WingBlank>
+                <Button type="primary" onClick={this.onSubmit} style={{ margin: '1rem 0 .4rem' }}>提交</Button>
+              </WingBlank>
             </form>
           </Layout.Content>
         </Layout>

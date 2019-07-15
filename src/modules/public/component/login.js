@@ -120,7 +120,10 @@ class Index extends React.Component {
                         </form>
                         <div className="tip text-right" onClick={() => this.onRetrieve()}>找回密码？</div>
                         <Button type="primary" onClick={() => this.onSubmit()}>登录</Button>
-                        <Button onClick={() => this.onRegister()}>注册</Button>
+                        <Button onClick={() => this.onRegister()} style={{
+                            color: '#95A4B8',
+                            borderColor: '#95A4B8'
+                        }}>注册</Button>
                     </Layout.Content>
                 </Layout>
             </DocumentTitle >

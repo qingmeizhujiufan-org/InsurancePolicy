@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, List, Icon, Toast, Button, SearchBar, PullToRefresh, Flex, Calendar, Card } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
+import { CardList } from 'Comps';
 import localStorage from 'Utils/localStorage'
 import moment from 'moment';
+import { assign } from 'lodash'
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -18,14 +20,12 @@ class Index extends React.Component {
         this.state = {
             userId: null,
             show: false,
+            params: {
+                pageNumber: 1,
+                pageSize: 10
+            },
             beginDate: moment().subtract(1, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
-            refreshing: false,
-            hasMore: true,
-            pageIndex: 1,
-            pageSize: 10,
-            height: document.documentElement.clientHeight,
-            dataSource: [],
             empty: false
 
         }
@@ -34,68 +34,43 @@ class Index extends React.Component {
     componentWillMount() {
         this.setState({
             userId: localStorage.get('userId')
-        }, () => {
-            this.queryOrderList()
         });
     }
 
     componentDidMount() {
     }
 
-    queryOrderList = () => {
-        const { userId, pageSize, pageNumber, pageIndex, keyWords, beginDate, endDate } = this.state;
-        const newSize = pageSize * pageIndex;
-        const param = {
-            userId,
-            pageSize: newSize,
-            pageNumber,
-            keyWords,
-            beginDate,
-            endDate
-        }
-        Toast.loading('', 0);
+    // queryOrderList = () => {
+    //     const { userId, params, beginDate, endDate } = this.state;
 
-        axios.get('order/queryList', {
-            params: param
-        }).then(res => res.data).then(data => {
-            if (data.success) {
-                const backData = data.backData;
-                const totalPages = Math.ceil(backData.totalElements / pageSize);
-                this.setState({
-                    dataSource: backData.content,
-                    empty: backData.totalElements === 0,
-                    hasMore: pageIndex < totalPages
-                });
-                Toast.hide()
-            } else {
-                Toast.fail('查询失败', 2);
-            }
-            this.setState({
-                refreshing: false
-            });
-        }).catch(err => {
-            this.setState({
-                refreshing: false
-            });
-            Toast.fail('服务异常', 2);
-        })
-    }
+    //     const param = {
+    //         userId,
+    //         beginDate,
+    //         endDate,
+    //         ...params
+    //     }
+    //     Toast.loading('', 0);
 
-    onRefresh = () => {
-        const { hasMore, pageIndex } = this.state;
-        let newPageIndex = pageIndex + 1;
-        if (!hasMore) {
-            return;
-        }
+    //     axios.get('order/queryList', {
+    //         params: param
+    //     }).then(res => res.data).then(data => {
+    //         if (data.success) {
+    //             const backData = data.backData;
 
-        this.setState({
-            refreshing: true,
-            pageIndex: newPageIndex
-        }, () => {
-            this.queryOrderList();
-        });
-    }
+    //             this.setState({
+    //                 empty: backData.totalElements === 0
 
+    //             });
+    //             Toast.hide()
+    //         } else {
+    //             Toast.fail('查询失败', 2);
+    //         }
+
+    //     }).catch(err => {
+
+    //         Toast.fail('服务异常', 2);
+    //     })
+    // }
 
     onShowCalendar = () => {
         this.setState({ show: true });
@@ -111,39 +86,31 @@ class Index extends React.Component {
         const beginDate = moment(startDateTime).format('YYYY-MM-DD');
         const endDate = moment(endDateTime).format('YYYY-MM-DD');
         this.setState({
-            pageIndex: 1,
+            params: assign({}, this.state.params, {
+                beginDate,
+                endDate,
+            }),
             show: false,
             beginDate,
             endDate
-        }, () => {
-            this.queryOrderList()
         });
     }
 
     onSearch = keyWords => {
         this.setState({
-            keyWords,
-            pageIndex: 1
-        }, () => {
-            this.queryOrderList();
+            params: assign({}, this.state.params, { keyWords })
         });
     }
 
     onCancel = () => {
         this.setState({
-            keyWords: '',
-            pageIndex: 1
-        }, () => {
-            this.queryOrderList();
+            params: assign({}, this.state.params, { keyWords: '' })
         });
     }
 
     onClear = () => {
         this.setState({
-            keyWords: '',
-            pageIndex: 1
-        }, () => {
-            this.queryOrderList();
+            params: assign({}, this.state.params, { keyWords: '' })
         });
     }
 
@@ -164,6 +131,7 @@ class Index extends React.Component {
     }
 
     onDeleteComfirm = (e, id) => {
+        console.log(e)
         e.preventDefault();
         Modal.alert('提示', '是否确定删除?', [
             {
@@ -182,10 +150,12 @@ class Index extends React.Component {
 
         axios.post('order/delete', { id }).then(res => res.data).then(data => {
             if (data.success) {
-                Toast.success('提交成功', 1, () => {
-                    this.onClear();
+
+                Toast.success('删除成功', 2, () => {
+                    this.setState({
+                        params: assign({}, this.state.params, { flag: new Date().getTime() })
+                    })
                 });
-                Toast.success('删除成功', 2);
 
             } else {
                 Toast.fail('删除失败', 2);
@@ -196,16 +166,42 @@ class Index extends React.Component {
     }
 
     render() {
-        const {
-            beginDate,
-            endDate,
-            show,
-            dataSource,
-            refreshing,
-            height,
-            hasMore,
-            empty
-        } = this.state;
+        const { beginDate, endDate, show, params, userId } = this.state;
+        params.userId = userId;
+        params.beginDate = beginDate;
+        params.endDate = endDate;
+        const row = (rowData, sectionID, rowID) => {
+            const obj = rowData;
+            return (
+                <Card full className="order-card" key={rowID}>
+                    <Card.Header
+                        title={
+                            <div className="order-title">
+                                <div className="order-id">保单号：{obj.insurancePolicyNo}</div>
+                            </div>
+                        }
+                        extra={<span style={{ color: '#f61a1a', fontSize: '.28rem' }} onClick={(e) => this.onDeleteComfirm(e, obj.id)}>删除</span>}
+                    />
+                    <Card.Body onClick={() => { this.onDetail(obj.id) }}>
+                        <div className="order-company">产品名称：{obj.insuranceName}</div>
+                        <div className="order-detail">
+                            <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
+                            <div className="order-detail-item"> 投保日期：{obj.insuredTime}</div>
+                            <div className="order-detail-item">被保人：{obj.insuredName}</div>
+                            <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
+                            <div className="order-detail-item">保费：{obj.insurance} 元</div>
+                            <div className="order-detail-item">订单渠道：{obj.channelName}</div>
+                        </div>
+                    </Card.Body>
+                    <Card.Footer content={
+                        <div className="order-footer">
+                            备注：<span>{obj.mark}</span>
+                        </div>
+                    } />
+                </Card>
+            );
+        };
+
 
         return (
             <DocumentTitle title='我的订单'>
@@ -232,104 +228,12 @@ class Index extends React.Component {
                                 </Flex>
                             </div>
                         </Flex>
-
-                        {
-                            empty
-                                ? <Empty />
-                                :
-                                <PullToRefresh
-                                    className="order-list"
-                                    damping={100}
-                                    ref={el => this.ptr = el}
-                                    style={{
-                                        height: height,
-                                        overflow: 'auto',
-                                    }}
-                                    indicator={{
-
-                                        activate: (
-                                            <div className='loader'>
-                                                <div className="loader-inner">
-                                                    <Icon type="down" /> <span>释放加载</span>
-                                                </div>
-                                            </div>
-                                        ),
-
-                                        deactivate: (
-                                            <div className='loader'>
-                                                {
-                                                    hasMore
-                                                        ? <div className="loader-inner">
-                                                            <Icon type="up" /> <span>上拉加载</span>
-                                                        </div>
-                                                        : <div className="loader-inner">
-                                                            <span>没有了！</span>
-                                                        </div>
-                                                }
-                                            </div>
-                                        ),
-
-                                        release: (
-                                            <div className='loader'>
-                                                <div className="loader-inner">
-                                                    <Icon type="loading" /><span>正在加载</span>
-                                                </div>
-                                            </div>
-                                        ),
-
-                                        finish: (
-                                            <div className='loader'>
-                                                {
-                                                    hasMore
-                                                        ? <div className="loader-inner">
-                                                            <Icon type="up" /> <span>上拉加载</span>
-                                                        </div>
-                                                        : <div className="loader-inner">
-                                                            <span>没有了！</span>
-                                                        </div>
-                                                }
-                                            </div>
-                                        )
-
-                                    }}
-                                    direction={'up'}
-                                    refreshing={refreshing}
-                                    onRefresh={() => { this.onRefresh() }}
-                                >
-                                    {dataSource.map((obj, index) => (
-
-                                        <Card full className="order-card" key={index} onClick={() => { this.onDetail(obj.id) }}>
-                                            <Card.Header
-                                                title={
-                                                    <div className="order-title">
-                                                        <div className="order-id">保单号：{obj.insurancePolicyNo}</div>
-                                                    </div>
-                                                }
-                                                extra={<span style={{ color: '#f61a1a', fontSize: '.28rem' }} onClick={(e) => this.onDeleteComfirm(e, obj.id)}>删除</span>}
-                                            />
-                                            <Card.Body>
-                                                <div className="order-company">产品名称：{obj.insuranceName}</div>
-
-                                                <div className="order-detail">
-                                                    <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
-                                                    <div className="order-detail-item"> 投保日期：{obj.insuredTime}</div>
-                                                    <div className="order-detail-item">被保人：{obj.insuredName}</div>
-                                                    <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
-                                                    <div className="order-detail-item">保费：{obj.insurance} 元</div>
-                                                    <div className="order-detail-item">订单渠道：{obj.channelName}</div>
-                                                </div>
-                                            </Card.Body>
-                                            <Card.Footer content={
-                                                <div className="order-footer">
-                                                    备注：<span>{obj.mark}</span>
-                                                </div>
-                                            } />
-                                        </Card>
-
-                                    ))}
-
-                                </PullToRefresh>
-                        }
+                        <CardList
+                            pageUrl={'order/queryList'}
+                            params={params}
+                            row={row}
+                            multi
+                        />
                     </Layout.Content>
                     <Layout.Footer>
                         <Button type="primary" onClick={this.onAddOrder}>新增订单</Button>

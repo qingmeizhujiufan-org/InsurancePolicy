@@ -125,6 +125,7 @@ class Index extends React.Component {
     }
 
     settingHeight = () => {
+
         const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
         const _domNode = ReactDOM.findDOMNode(this.lv);
         const clientRect = _domNode.getBoundingClientRect();
@@ -206,17 +207,20 @@ class Index extends React.Component {
         const { dataSource, initLoaded, refreshing, isLoading, listData } = this.state;
         const { className, row } = this.props;
 
+        const empty = listData.length === 0;
+
         return (
 
-            // listData.length === 0
-            //     ? <Empty />
-            //     :
             <ListView
                 ref={el => this.lv = el}
                 dataSource={dataSource}
                 renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
                     {
-                        initLoaded && !refreshing ? (isLoading ? '正在加载...' : '没有了啦~') : null
+                        empty
+                            ?
+                            <Empty />
+                            :
+                            initLoaded && !refreshing ? (isLoading ? '正在加载...' : '没有了啦~') : null
                     }
                 </div>)}
                 renderBodyComponent={() => <MyBody />}

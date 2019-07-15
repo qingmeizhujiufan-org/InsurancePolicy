@@ -72,5 +72,9 @@ module.exports = {
             }
         }
         return value;
+    },
+
+    remove: function (key) {
+        localStorage.removeItem(key);
     }
 };

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button, PullToRefresh } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
+import { CardList } from 'Comps';
 import localStorage from 'Utils/localStorage'
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -47,18 +48,9 @@ class Index extends React.Component {
         const { time, condition } = this.state;
         this.queryLinkDetail();
         this.querySumOne(time.value, condition.value);
-        this.querySumList();
-
     }
 
     componentDidMount() {
-        const { height } = this.state;
-        const hei = height - ReactDOM.findDOMNode(this.ptr).offsetTop;
-        setTimeout(() => {
-            this.setState({
-                height: hei
-            });
-        }, 0);
     }
 
     /**
@@ -101,10 +93,9 @@ class Index extends React.Component {
             time: tempTime,
             condition: tempCondition,
             modalShow: false,
-            pageIndex: 1
+            pageNumber: 1
         }, () => {
             this.querySumOne(tempTime.value, tempCondition.value);
-            this.querySumList();
         })
     }
 
@@ -201,57 +192,41 @@ class Index extends React.Component {
         })
     }
 
-    onRefresh = () => {
+    // querySumList = () => {
+    //     const { pageIndex, userId, pageSize, time, condition, dataSource } = this.state;
+    //     const newSize = pageSize * pageIndex;
+    //     const params = {
+    //         pageNumber: 1,
+    //         pageSize: newSize,
+    //         userId,
+    //         time: time.value,
+    //         condition: condition.value
+    //     }
 
-        const { hasMore } = this.state;
-        let newPageIndex = this.state.pageIndex + 1;
-        if (!hasMore) {
-            return;
-        }
-
-        this.setState({
-            refreshing: true,
-            pageIndex: newPageIndex
-        }, () => {
-            this.querySumList();
-        });
-    }
-
-    querySumList = () => {
-        const { pageIndex, userId, pageSize, time, condition, dataSource } = this.state;
-        const newSize = pageSize * pageIndex;
-        const params = {
-            pageNumber: 1,
-            pageSize: newSize,
-            userId,
-            time: time.value,
-            condition: condition.value
-        }
-
-        axios.get('user/querySumList', {
-            params: params
-        }).then(res => res.data).then(data => {
-            if (data.success) {
-                const backData = data.backData;
-                const totalPages = Math.ceil(backData.totalElements / pageSize);
-                this.setState({
-                    dataSource: backData.content,
-                    hasMore: pageIndex < totalPages
-                }, () => {
-                });
-            } else {
-                Toast.fail(data.backMsg, 2);
-            }
-            this.setState({
-                refreshing: false
-            });
-        }).catch(err => {
-            this.setState({
-                refreshing: false
-            });
-            Toast.fail('服务异常', 2);
-        })
-    }
+    //     axios.get('user/querySumList', {
+    //         params: params
+    //     }).then(res => res.data).then(data => {
+    //         if (data.success) {
+    //             const backData = data.backData;
+    //             const totalPages = Math.ceil(backData.totalElements / pageSize);
+    //             this.setState({
+    //                 dataSource: backData.content,
+    //                 hasMore: pageIndex < totalPages
+    //             }, () => {
+    //             });
+    //         } else {
+    //             Toast.fail(data.backMsg, 2);
+    //         }
+    //         this.setState({
+    //             refreshing: false
+    //         });
+    //     }).catch(err => {
+    //         this.setState({
+    //             refreshing: false
+    //         });
+    //         Toast.fail('服务异常', 2);
+    //     })
+    // }
 
     render() {
         const {
@@ -261,15 +236,20 @@ class Index extends React.Component {
             condition,
             tempTime,
             tempCondition,
-            dataSource,
+
             userInfo,
             firstUser,
-            refreshing,
-            height,
-            hasMore,
-            outerLink
+            outerLink,
+            pageSize,
+            pageNumber
         } = this.state;
         const bgFile = firstUser.bgFile;
+
+        const params = {
+            pageSize,
+            pageNumber,
+            userId
+        }
 
         const times = [
             { value: 0, label: '月度排行' },
@@ -385,6 +365,15 @@ class Index extends React.Component {
             </div>
         );
 
+        const row = (rowData, sectionID, rowID) => {
+            const obj = rowData;
+            obj.index = parseInt(rowID) + 1;
+            return (
+                <SortItem key={rowID} className="user-sum-item" data={obj}></SortItem>
+            );
+        };
+
+
         const UnLogin = ({ className = '', data = {}, ...restProps }) => (
             <div className="login-area">
                 <div className="login-area-left">
@@ -450,15 +439,22 @@ class Index extends React.Component {
                                 : <UnLogin />
 
                         }
-                        <WhiteSpace size="lg" />
 
+                        <CardList
+                            className="user-sum-list"
+                            pageUrl={'user/querySumList'}
+                            params={params}
+                            row={row}
+                        />
+
+                        {/* 
                         <PullToRefresh
                             className="sum-list"
                             damping={100}
                             ref={el => this.ptr = el}
                             style={{
                                 height: height,
-                                overflow: 'auto',
+                                overflow: 'scroll',
                             }}
                             indicator={{
 
@@ -514,7 +510,7 @@ class Index extends React.Component {
                                     }}>
                                 </SortItem>
                             ))}
-                        </PullToRefresh>
+                        </PullToRefresh> */}
 
                         <Modal
                             className="home-modal"
