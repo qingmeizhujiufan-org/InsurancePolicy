@@ -277,13 +277,12 @@ class Index extends React.Component {
                                     window.location.href = `${Links.aboutUrl}`
                                 }}>关于保联汇
                             </Item>
+
                         </List>
-                        <WhiteSpace size="lg" />
+
+                        <Button type="warning" style={{ marginTop: '1rem', marginBottom: '.2rem' }} onClick={this.logout}>退出登录</Button>
 
                     </Layout.Content>
-                    <Layout.Footer>
-                        <Button type="warning" onClick={this.logout}>退出登录</Button>
-                    </Layout.Footer>
                 </Layout>
             </DocumentTitle>
         );
