@@ -1,7 +1,12 @@
 .order {
 
+    .am-search {
+        height: .88rem;
+        ;
+    }
+
     .am-search+.range-date+.order-list {
-        // height: calc(~'100% - 2.03rem') !important;
+        height: calc(~'100% - 2.06rem') !important;
     }
 
     .order-card {
@@ -63,24 +68,42 @@
 
     .range-date {
         padding: .1rem 0 .25rem;
+        height: 1.18rem;
         font-size: .28rem;
         color: #728095;
         background-color: #efeff4;
 
         &-between {
-            flex-basis: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex: 1;
             padding: 0 .2rem;
 
-            .wrap-date {
+            >div:not(.separate) {
                 flex-basis: 45%;
+            }
+
+            .wrap-date {
                 height: .8rem;
+                min-height: .8rem;
                 padding-left: .45rem;
                 border-radius: .45rem;
                 background-color: #ffffff;
 
-                .iconfont {
-                    margin-right: .18rem;
-                    font-size: .24rem;
+                .am-list-content {
+                    padding: 0;
+                    width: auto;
+                    flex: none;
+                    font-size: .3rem;
+                    color: #728095
+                }
+
+                .am-list-extra {
+                    padding: 0;
+                    flex: 1;
+                    font-size: .3rem;
+                    color: #728095;
+                    text-align: left;
                 }
             }
 

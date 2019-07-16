@@ -253,6 +253,8 @@ class Index extends React.Component {
             params
         } = this.state;
 
+        const bgFile = firstUser.bgFile;
+
         const times = [
             { value: 0, label: '月度排行' },
             { value: 1, label: '季度排行' },
@@ -399,7 +401,7 @@ class Index extends React.Component {
                         <div className="user-info-container">
                             <div className="user-bg">
                                 {
-                                    firstUser.bgFile && firstUser.bgFile.id
+                                    bgFile && bgFile.id
                                         ?
                                         <img className='user-bg' src={restUrl.FILE_ASSET + bgFile.id + bgFile.fileType}
                                             alt="" />

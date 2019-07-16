@@ -258,7 +258,7 @@ class Index extends React.Component {
                                 arrow="horizontal" onClick={() => {
                                     window.location.href = `${Links.customerConsultUrl}`
 
-                                }}>客户咨询
+                                }}>客服咨询
                             </Item>
                             <Item
                                 thumb={

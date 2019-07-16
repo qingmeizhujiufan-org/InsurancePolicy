@@ -20,17 +20,18 @@ const sexs = [{
   value: 0,
 }];
 
-const Duration = [{
-  label: '1年',
-  value: 1,
-},
-{
-  label: '2年',
-  value: 2,
-}, {
-  label: '3年',
-  value: 3,
-}]
+function getDuration(max = 30) {
+  const duration = [];
+  for (let i = 1; i <= max; i++) {
+    let item = {
+      label: i + '年',
+      value: i
+    }
+    duration.push(item)
+  }
+
+  return duration
+}
 
 class Index extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Index extends React.Component {
 
   componentWillMount() {
     this.queryCompanyList();
-    this.queryClientList();
+    // this.queryClientList();
     this.queryChannelList();
   }
 
@@ -114,38 +115,38 @@ class Index extends React.Component {
     ]);
   }
 
-  queryClientList = () => {
-    const param = {
-      pageSize: 1000,
-      pageNumber: 1,
-      userId: this.state.userId
-    };
-    axios.get('custom/queryList', {
-      params: param
-    }).then(res => res.data).then(data => {
-      if (data.success) {
-        let backData = data.backData.content || [];
-        if (backData.length === 0) {
-          this.showAlert({
-            info: '暂无客户信息，是否添加相关客户？',
-            url: '/custom/add'
-          })
-          return;
-        }
-        let list = backData.map(item => {
-          return {
-            value: item.id,
-            label: item.customName
-          }
-        })
-        this.setState({
-          Client: list,
-        });
-      }
-    }).catch(err => {
-      Toast.fail('服务异常', 2);
-    })
-  }
+  // queryClientList = () => {
+  //   const param = {
+  //     pageSize: 1000,
+  //     pageNumber: 1,
+  //     userId: this.state.userId
+  //   };
+  //   axios.get('custom/queryList', {
+  //     params: param
+  //   }).then(res => res.data).then(data => {
+  //     if (data.success) {
+  //       let backData = data.backData.content || [];
+  //       if (backData.length === 0) {
+  //         this.showAlert({
+  //           info: '暂无客户信息，是否添加相关客户？',
+  //           url: '/custom/add'
+  //         })
+  //         return;
+  //       }
+  //       let list = backData.map(item => {
+  //         return {
+  //           value: item.id,
+  //           label: item.customName
+  //         }
+  //       })
+  //       this.setState({
+  //         Client: list,
+  //       });
+  //     }
+  //   }).catch(err => {
+  //     Toast.fail('服务异常', 2);
+  //   })
+  // }
 
   queryCompanyList = () => {
     const param = {
@@ -229,7 +230,7 @@ class Index extends React.Component {
         param.insuredSex = param.insuredSex[0];
         param.paymentDuration = param.paymentDuration[0];
         param.orderChannel = param.orderChannel[0];
-        param.clientId = param.clientId[0];
+        // param.clientId = param.clientId[0];
 
         if (orderId) {
           param.id = orderId;
@@ -258,7 +259,7 @@ class Index extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const { order, Channel, Client, companyList, type } = this.state;
+    const { order, Channel, companyList, type } = this.state;
 
     return (
       <DocumentTitle title={type === 'add' ? '添加订单' : '修改订单'}>
@@ -314,7 +315,7 @@ class Index extends React.Component {
                   <Item arrow="horizontal">生效时间</Item>
                 </DatePicker>
                 <Picker
-                  data={Duration}
+                  data={getDuration(30)}
                   cols={1}
                   {...getFieldProps('paymentDuration', {
                     initialValue: order.paymentDuration ? [order.paymentDuration] : '',
@@ -376,7 +377,7 @@ class Index extends React.Component {
                 </Picker>
               </List>
 
-              <List renderHeader={() => '关联客户'} className="order-add-list">
+              {/* <List renderHeader={() => '关联客户'} className="order-add-list">
                 <Picker
                   data={Client}
                   cols={1}
@@ -391,7 +392,7 @@ class Index extends React.Component {
                   <Item arrow="horizontal">客户</Item>
                 </Picker>
 
-              </List>
+              </List> */}
 
               <List renderHeader={() => '投保人信息'} className="order-add-list">
                 <InputItem

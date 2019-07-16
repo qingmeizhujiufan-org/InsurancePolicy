@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, List, Icon, Toast, Button, SearchBar, PullToRefresh, Flex, Calendar, Card } from 'antd-mobile';
+import { Modal, List, Icon, Toast, Button, SearchBar, DatePicker, Flex, Calendar, Card } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
 import { CardList } from 'Comps';
 import localStorage from 'Utils/localStorage'
@@ -24,8 +24,9 @@ class Index extends React.Component {
                 pageNumber: 1,
                 pageSize: 10
             },
-            beginDate: moment().subtract(1, 'd').format('YYYY-MM-DD'),
-            endDate: moment().format('YYYY-MM-DD'),
+            // beginDate: moment().subtract(1, 'd').format('YYYY-MM-DD'),
+            // endDate: moment().format('YYYY-MM-DD'),
+            keyWords: '',
             empty: false
 
         }
@@ -72,44 +73,81 @@ class Index extends React.Component {
     //     })
     // }
 
-    onShowCalendar = () => {
-        this.setState({ show: true });
+    // onShowCalendar = () => {
+    //     this.setState({ show: true });
+    // }
+
+    // onCloseCalendar = () => {
+    //     this.setState({ show: false });
+    // }
+
+    // onConfirm = (startDateTime, endDateTime) => {
+    //     console.log('startDateTime == ', startDateTime);
+    //     console.log('endDateTime == ', endDateTime);
+    //     const beginDate = moment(startDateTime).format('YYYY-MM-DD');
+    //     const endDate = moment(endDateTime).format('YYYY-MM-DD');
+    //     this.setState({
+    //         params: assign({}, this.state.params, {
+    //             beginDate,
+    //             endDate,
+    //         }),
+    //         show: false,
+    //         beginDate,
+    //         endDate
+    //     });
+    // }
+
+    setBeginDate = date => {
+        console.log(date)
+        this.setState({
+            beginDate: moment(date).format('YYYY-MM-DD')
+        }, () => {
+            this.checkDate()
+        })
     }
 
-    onCloseCalendar = () => {
-        this.setState({ show: false });
+    setEndDate = date => {
+        this.setState({
+            endDate: moment(date).format('YYYY-MM-DD')
+        }, () => {
+            this.checkDate()
+        })
     }
 
-    onConfirm = (startDateTime, endDateTime) => {
-        console.log('startDateTime == ', startDateTime);
-        console.log('endDateTime == ', endDateTime);
-        const beginDate = moment(startDateTime).format('YYYY-MM-DD');
-        const endDate = moment(endDateTime).format('YYYY-MM-DD');
+    checkDate = () => {
+        const { beginDate, endDate } = this.state;
+        const begin = new Date(beginDate).getTime()
+        const end = new Date(endDate).getTime()
+        if (begin > end) {
+            Toast.fail('起始时间不能大于终止时间！', 2)
+            return
+        }
+
         this.setState({
             params: assign({}, this.state.params, {
                 beginDate,
-                endDate,
-            }),
-            show: false,
-            beginDate,
-            endDate
-        });
+                endDate
+            })
+        })
     }
 
     onSearch = keyWords => {
         this.setState({
+            keyWords: keyWords,
             params: assign({}, this.state.params, { keyWords })
         });
     }
 
     onCancel = () => {
         this.setState({
+            keyWords: '',
             params: assign({}, this.state.params, { keyWords: '' })
         });
     }
 
     onClear = () => {
         this.setState({
+            keyWords: '',
             params: assign({}, this.state.params, { keyWords: '' })
         });
     }
@@ -168,8 +206,6 @@ class Index extends React.Component {
     render() {
         const { beginDate, endDate, show, params, userId } = this.state;
         params.userId = userId;
-        params.beginDate = beginDate;
-        params.endDate = endDate;
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
@@ -186,7 +222,7 @@ class Index extends React.Component {
                         <div className="order-company">产品名称：{obj.insuranceName}</div>
                         <div className="order-detail">
                             <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
-                            <div className="order-detail-item"> 投保日期：{obj.insuredTime}</div>
+                            <div className="order-detail-item"> 生效时间：{obj.insuredTime}</div>
                             <div className="order-detail-item">被保人：{obj.insuredName}</div>
                             <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
                             <div className="order-detail-item">保费：{obj.insurance} 元</div>
@@ -208,27 +244,37 @@ class Index extends React.Component {
                 <Layout className="order">
                     <Layout.Content>
                         <SearchBar
-                            placeholder="请输入关键字"
+                            placeholder="请输入保单号或保单相关姓名"
                             maxLength={16}
                             onSubmit={this.onSearch}
                             onClear={this.onClear}
                             onCancel={this.onCancel} />
-                        <Flex justify='between' className='range-date' onClick={this.onShowCalendar}>
+                        <Flex justify='between' className='range-date'>
                             <div className='range-date-between'>
-                                <Flex>
-                                    <Flex className='wrap-date'>
-                                        <span className='iconfont icon-kaishishijian'></span>
-                                        <span>始：{beginDate}</span>
-                                    </Flex>
-                                    <div className='separate'>-</div>
-                                    <Flex className='wrap-date'>
-                                        <span className='iconfont icon-kaishishijian'></span>
-                                        <span>终：{endDate}</span>
-                                    </Flex>
-                                </Flex>
+
+                                <DatePicker
+                                    mode="date"
+                                    extra="请选择"
+                                    format="YYYY-MM-DD"
+                                    value={beginDate ? new Date(beginDate) : null}
+                                    onOk={date => this.setBeginDate(date)}
+                                >
+                                    <List.Item className='wrap-date' extra={beginDate}>始：</List.Item>
+                                </DatePicker>
+                                <div className='separate'>-</div>
+                                <DatePicker
+                                    mode="date"
+                                    extra="请选择"
+                                    format="YYYY-MM-DD"
+                                    value={endDate ? new Date(endDate) : null}
+                                    onOk={date => this.setEndDate(date)}
+                                >
+                                    <List.Item className='wrap-date' extra={endDate}>终：</List.Item>
+                                </DatePicker>
                             </div>
                         </Flex>
                         <CardList
+                            className="order-list"
                             pageUrl={'order/queryList'}
                             params={params}
                             row={row}
@@ -238,16 +284,16 @@ class Index extends React.Component {
                     <Layout.Footer>
                         <Button type="primary" onClick={this.onAddOrder}>新增订单</Button>
                     </Layout.Footer>
-                    <Calendar
+                    {/* <Calendar
                         visible={show}
                         onCancel={this.onCloseCalendar}
                         onConfirm={this.onConfirm}
                         defaultDate={now}
                         showShortcut={true}
                         defaultValue={[new Date(beginDate), new Date(endDate)]}
-                        // minDate={new Date(+now)}
+                        minDate={new Date(+now)}
                         maxDate={new Date(+now)}
-                    />
+                    /> */}
                 </Layout>
             </DocumentTitle>
         );
