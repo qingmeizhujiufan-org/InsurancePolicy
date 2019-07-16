@@ -174,7 +174,7 @@ class Index extends React.Component {
                             }
                             <input
                                 type='file'
-                                accept='image/jpeg'
+                                accept='image/*'
                                 className='upload-user-bg'
                                 onChange={this.onChange}
                             />
