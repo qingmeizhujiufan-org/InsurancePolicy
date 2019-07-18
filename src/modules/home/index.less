@@ -1,3 +1,153 @@
+@import "../../pub/style/index.less";
+
+@cardlist-prefix-cls: ~"@{zui-prefix}-cardlist";
+
+.@{cardlist-prefix-cls} {
+    font-size: .24rem;
+
+    /* 下拉loading */
+    .ball-beat>div {
+        background-color: @theme_color;
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        margin: 2px;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        display: inline-block;
+        -webkit-animation: ball-beat 0.7s 0s infinite linear;
+        animation: ball-beat 0.7s 0s infinite linear;
+    }
+
+    .ball-beat>div:nth-child(2n-1) {
+        -webkit-animation-delay: 0.35s !important;
+        animation-delay: 0.35s !important;
+    }
+
+    .am-pull-to-refresh-indicator {}
+
+    @keyframes ball-beat {
+        50% {
+            opacity: 0.2;
+            -webkit-transform: scale(0.75);
+            transform: scale(0.75);
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
+    }
+
+    &-body {
+        // padding: 10px;
+
+        .list-view-section-body:before,
+        .list-view-section-body:after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+    }
+
+    &-table-cell {
+        width: calc(~'100vw - 20px');
+        margin-bottom: 10px;
+        padding: 0;
+        background-color: #fff;
+        border-radius: 7px;
+        box-shadow: 4px 4px 6px 0 rgba(214, 203, 203, 0.4);
+        overflow: hidden;
+
+        &-body {
+            position: relative;
+            padding: 10px 10px 0;
+
+            .body-title {
+                position: relative;
+                width: 100%;
+                height: 25px;
+                font-size: 14px;
+                color: #333;
+                line-height: 25px;
+                overflow: hidden;
+            }
+
+            .body-content {
+                font-size: 12px;
+                color: #465261;
+                line-height: 30px;
+            }
+        }
+
+        &-footer {
+            position: relative;
+            height: 40px;
+            background-color: #F9F9F9;
+
+            .body-post {
+                padding: 10px;
+                font-size: 12px;
+                color: #465261;
+                letter-spacing: 0;
+
+                .status {
+                    display: inline-block;
+                    height: 20px;
+                    margin-right: 5px;
+                    padding: 0 7px;
+                    border-radius: 10px;
+                    border: transparent;
+                    color: #999;
+                    line-height: 20px;
+                    text-align: center;
+                    background-color: fade(#999, 20%);
+
+                    &.blue {
+                        color: @blue;
+                        border-color: transparent;
+                        background-color: fade(@blue, 20%);
+                    }
+
+                    &.red {
+                        color: @red;
+                        border-color: transparent;
+                        background-color: fade(@red, 20%);
+                    }
+
+                    &.green {
+                        color: @green;
+                        border-color: transparent;
+                        background-color: fade(@green, 20%);
+                    }
+
+                    &.yellow {
+                        color: @yellow;
+                        border-color: transparent;
+                        background-color: fade(@yellow, 20%);
+                    }
+                }
+            }
+
+            .body-date {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                font-size: 12px;
+                color: #465261;
+                line-height: 14px;
+                transform: translateY(-50%);
+
+                .text-red {
+                    font-size: 16px;
+                    font-style: italic;
+                }
+            }
+        }
+    }
+}
+
 .home {
     font-size: .28rem;
     overflow: hidden;

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { List, Flex, WingBlank, WhiteSpace, Icon, Toast, Modal, Radio, Button, PullToRefresh } from 'antd-mobile';
-import { Layout } from 'zui-mobile';
-import { CardList } from 'Comps';
+import { Flex, WhiteSpace, Icon, Toast, Modal, Button, ListView } from 'antd-mobile';
+import { Layout, Empty } from 'zui-mobile';
+import { assign, isEqual } from 'lodash';
 import localStorage from 'Utils/localStorage'
 import '../index.less';
 import DocumentTitle from "react-document-title";
@@ -12,11 +12,21 @@ import restUrl from "RestUrl";
 import bgImg from 'Img/bg.png';
 import avatar from 'Img/hand-loging.png';
 
-const Item = List.Item;
+function MyBody(props) {
+    return (
+        <div className='zui-cardlist-body'>
+            {props.children}
+        </div>
+    );
+}
 
 class Index extends React.Component {
     constructor(props) {
         super(props);
+
+        let dataSource = new ListView.DataSource({
+            rowHasChanged: (row1, row2) => row1 !== row2,
+        });
 
         this.state = {
             userId: localStorage.get('userId'),
@@ -37,6 +47,13 @@ class Index extends React.Component {
             },
             tempTime: {},
             tempCondition: {},
+            dataSource,
+            initLoaded: false,
+            refreshing: false,
+            isLoading: false,
+            listData: [],
+            pageIndex: 0,
+            height: 0
         }
     };
 
@@ -52,9 +69,152 @@ class Index extends React.Component {
         })
         this.queryLinkDetail();
         this.querySumOne(time.value, condition.value);
+        window.addEventListener('resize', this.settingHeight);
     }
 
     componentDidMount() {
+        this.getSumList();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { dataSource } = this.state;
+        if (('pageUrl' in nextProps && isEqual(this.props.pageUrl, nextProps.pageUrl) === false)
+            || ('params' in nextProps && isEqual(this.props.params, nextProps.params) === false)) {
+            this.setState({
+                dataSource: dataSource.cloneWithRows({}),
+                listData: [],
+                refreshing: true,
+                isLoading: true,
+                pageIndex: 0,
+                params: nextProps.params
+            },
+                () => {
+                    ReactDOM.findDOMNode(this.lv).scrollTop = 0;
+                    this.getListData(
+                        (data) => {
+                            if (data.success && data.backData) {
+                                const content = data.backData.content ? data.backData.content : [];
+                                this.rData = this.genData(content);
+                                this.setState({
+                                    dataSource: dataSource.cloneWithRows(this.rData),
+                                    listData: content,
+                                    totalPages: data.backData.totalPages,
+                                    hasMore: this.state.pageIndex < data.backData.totalPages - 1
+                                });
+                            } else {
+                                Toast.info(data.backMsg);
+                                this.rData = {};
+                                this.setState({
+                                    dataSource: dataSource.cloneWithRows(this.rData),
+                                    listData: [],
+                                    totalPages: 0,
+                                    hasMore: false
+                                });
+                            }
+                            this.setState({
+                                refreshing: false,
+                                isLoading: false,
+                            });
+                        }
+                    );
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.settingHeight);
+    }
+
+    settingHeight = () => {
+
+        const clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        const _domNode = ReactDOM.findDOMNode(this.lv);
+        const clientRect = _domNode.getBoundingClientRect();
+        const height = clientHeight - clientRect.top;
+
+        this.setState({ height });
+    }
+
+    genData(data) {
+        let dataBlob = {};
+        for (let i = 0; i < data.length; i++) {
+            dataBlob[`${i}`] = data[i];
+        }
+        return dataBlob;
+    }
+
+    onEndReached = event => {
+        const { hasMore } = this.state;
+        if (!hasMore) {
+            return;
+        }
+        this.setState(
+            {
+                isLoading: true,
+                pageIndex: ++this.state.pageIndex
+            }, () => {
+                this.getListData(data => {
+                    const { listData, pageIndex, totalPages } = this.state;
+                    const content = listData.concat(data.backData.content ? data.backData.content : []);
+                    this.rData = this.genData(content);
+                    let dataSource = this.state.dataSource.cloneWithRows(this.rData);
+                    this.setState({
+                        dataSource: dataSource,
+                        isLoading: false,
+                        listData: content,
+                        hasMore: pageIndex < totalPages - 1
+                    });
+                });
+            }
+        );
+    }
+
+    getListData = (callback) => {
+        let { params, pageIndex } = this.state;
+        params = assign(params, { pageNumber: ++pageIndex });
+        axios.get('user/querySumList', { params }).then(res => res.data).then(data => {
+
+            if (typeof callback === 'function')
+                callback(data);
+        }
+        );
+    }
+
+    getSumList = () => {
+        const { dataSource } = this.state;
+        this.settingHeight();
+        setTimeout(() => {
+            this.setState({
+                refreshing: true,
+                pageIndex: 0,
+                initLoaded: false,
+                isLoading: false,
+                listData: [],
+                dataSource: dataSource.cloneWithRows({}),
+            }, () => {
+                this.getListData(
+                    (data) => {
+                        if (data.success && data.backData) {
+                            const content = data.backData.content ? data.backData.content : [];
+                            let listData = this.genData(content);
+                            this.setState({
+                                dataSource: dataSource.cloneWithRows(listData),
+                                listData: content,
+                                totalPages: data.backData.totalPages,
+                                hasMore: this.state.pageIndex < data.backData.totalPages - 1
+                            });
+                        } else {
+                            Toast.info(data.backMsg);
+                        }
+                        this.setState({
+                            refreshing: false,
+                            initLoaded: true
+                        });
+                    }
+                );
+            }
+            );
+        }, 100);
     }
 
     /**
@@ -105,6 +265,7 @@ class Index extends React.Component {
             }
         }, () => {
             this.querySumOne(tempTime.value, tempCondition.value);
+            this.getSumList()
         })
     }
 
@@ -174,7 +335,7 @@ class Index extends React.Component {
     }
 
     handleLike = (type, thumbupId) => {
-        const { userId, time } = this.state;
+        const { userId, listData } = this.state;
         if (!userId) {
             this.showAlert({
                 info: '请先登录',
@@ -194,6 +355,8 @@ class Index extends React.Component {
             if (data.success) {
                 this.setState({
                     params: Object.assign({}, this.state.params, { flag: new Date().getTime() })
+                }, () => {
+                    this.refreshList(thumbupId, data.backData, type)
                 })
             } else {
                 Toast.fail(data.backMsg, 2);
@@ -201,6 +364,28 @@ class Index extends React.Component {
         }).catch(err => {
             Toast.fail('服务异常', 2);
         })
+    }
+
+    refreshList = (id, obj, type) => {
+        const { listData, dataSource } = this.state
+
+        const newListData = listData.map((item) => {
+            if (item.id === id) {
+                const newItem = {
+                    ...item,
+                    thumbupNum: obj.thumbupNum,
+                    thumbup: type ? true : false
+                }
+
+                return newItem
+            }
+            return item
+        })
+
+        this.setState({
+            dataSource: dataSource.cloneWithRows(newListData),
+            listData: newListData
+        }, () => { })
     }
 
     // querySumList = () => {
@@ -250,8 +435,14 @@ class Index extends React.Component {
             userInfo,
             firstUser,
             outerLink,
-            params
+            dataSource,
+            initLoaded,
+            refreshing,
+            isLoading,
+            listData
         } = this.state;
+
+        const empty = listData.length === 0;
 
         const bgFile = firstUser.bgFile;
 
@@ -302,9 +493,7 @@ class Index extends React.Component {
                 }}>
                     <i className="iconfont iconqueding" /> &nbsp;确认
                 </div>
-                <div className="condition-other-btn" onClick={() => {
-                    this.toOuterUrl()
-                }}>
+                <div className="condition-other-btn">
                     <Button
                         size="small"
                         className="green-blue-btn"
@@ -443,13 +632,39 @@ class Index extends React.Component {
                                 : <UnLogin />
 
                         }
+                        <WhiteSpace size="lg" />
 
-                        <CardList
+                        <ListView
+                            ref={el => this.lv = el}
+                            dataSource={dataSource}
+                            renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+                                {
+                                    empty
+                                        ?
+                                        <Empty />
+                                        :
+                                        initLoaded && !refreshing ? (isLoading ? '正在加载...' : '没有了啦~') : null
+                                }
+                            </div>)}
+                            renderBodyComponent={() => <MyBody />}
+                            renderRow={row}
+                            className="zui-cardlist"
+                            style={{
+                                height: this.state.height,
+                                overflow: 'auto',
+                            }}
+                            pageSize={4}
+                            scrollRenderAheadDistance={500}
+                            onEndReached={this.onEndReached}
+                            onEndReachedThreshold={500}
+                        />
+
+                        {/* <CardList
                             className="user-sum-list"
                             pageUrl={'user/querySumList'}
                             params={params}
                             row={row}
-                        />
+                        /> */}
 
                         {/* 
                         <PullToRefresh
