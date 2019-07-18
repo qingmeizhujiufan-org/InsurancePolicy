@@ -101,7 +101,6 @@ class Index extends React.Component {
                                         ]
                                     })}
                                     clear
-
                                     placeholder="请输入注册手机号"
                                 ><i className="iconfont iconyonghu" /></InputItem>
                                 <InputItem

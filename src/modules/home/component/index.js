@@ -334,8 +334,10 @@ class Index extends React.Component {
         ]);
     }
 
-    handleLike = (type, thumbupId) => {
-        const { userId, listData } = this.state;
+    handleLike = (type, data) => {
+        const { userId } = this.state;
+
+        const { id, thumbup } = data;
         if (!userId) {
             this.showAlert({
                 info: '请先登录',
@@ -343,20 +345,31 @@ class Index extends React.Component {
             })
             return;
         }
-        if (userId === thumbupId) {
+        if (userId === id) {  // 排除自己点赞自己
             return;
         }
-        const param = {
-            userId,
-            thumbupId: thumbupId
-        };
-        const api = type === 1 ? 'user/like' : 'user/unlike';
+        let param = {},
+            api = '';
+
+        if (type === 0) {
+            param = {
+                id: thumbup.id  // 删除点赞记录id
+            }
+            api = 'user/unlike'
+        } else {
+            param = {
+                userId,
+                thumbupId: id  // 增加点赞记录
+            }
+            api = 'user/like'
+        }
+
         axios.post(api, param).then(res => res.data).then(data => {
             if (data.success) {
                 this.setState({
                     params: Object.assign({}, this.state.params, { flag: new Date().getTime() })
                 }, () => {
-                    this.refreshList(thumbupId, data.backData, type)
+                    this.refreshList(id, data.backData, type)
                 })
             } else {
                 Toast.fail(data.backMsg, 2);
@@ -365,6 +378,7 @@ class Index extends React.Component {
             Toast.fail('服务异常', 2);
         })
     }
+
 
     refreshList = (id, obj, type) => {
         const { listData, dataSource } = this.state
@@ -545,11 +559,11 @@ class Index extends React.Component {
                 <div className="sort-item-right">
                     {
                         data.thumbup
-                            ? <div className="item-like-num" onClick={() => this.handleLike(0, data.id)}>
+                            ? <div className="item-like-num" onClick={() => this.handleLike(0, data)}>
                                 <div>{data.thumbupNum}</div>
                                 <div className="iconfont icondianzan-xuanzhong text-red"></div>
                             </div>
-                            : <div className="item-like-num" onClick={() => this.handleLike(1, data.id)}>
+                            : <div className="item-like-num" onClick={() => this.handleLike(1, data)}>
                                 <div>{data.thumbupNum}</div>
                                 <div className="iconfont icondianzan-weixuanzhong"></div>
                             </div>
