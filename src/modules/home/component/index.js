@@ -337,7 +337,7 @@ class Index extends React.Component {
     handleLike = (type, data) => {
         const { userId } = this.state;
 
-        const { id, thumbup } = data;
+        const { id } = data;
         if (!userId) {
             this.showAlert({
                 info: '请先登录',
@@ -348,21 +348,14 @@ class Index extends React.Component {
         if (userId === id) {  // 排除自己点赞自己
             return;
         }
-        let param = {},
-            api = '';
 
-        if (type === 0) {
-            param = {
-                id: thumbup.id  // 删除点赞记录id
-            }
-            api = 'user/unlike'
-        } else {
-            param = {
-                userId,
-                thumbupId: id  // 增加点赞记录
-            }
-            api = 'user/like'
-        }
+
+        let param = {
+            userId,
+            thumbupId: id
+        };
+        const api = type === 0 ? 'user/unlike' : 'user/like'
+
 
         axios.post(api, param).then(res => res.data).then(data => {
             if (data.success) {
@@ -672,78 +665,6 @@ class Index extends React.Component {
                             onEndReached={this.onEndReached}
                             onEndReachedThreshold={500}
                         />
-
-                        {/* <CardList
-                            className="user-sum-list"
-                            pageUrl={'user/querySumList'}
-                            params={params}
-                            row={row}
-                        /> */}
-
-                        {/* 
-                        <PullToRefresh
-                            className="sum-list"
-                            damping={100}
-                            ref={el => this.ptr = el}
-                            style={{
-                                height: height,
-                                overflow: 'scroll',
-                            }}
-                            indicator={{
-
-                                activate: (
-                                    <div className='loader'>
-                                        <div className="loader-inner">
-                                            <Icon type="down" /> <span>释放加载</span>
-                                        </div>
-                                    </div>
-                                ),
-
-                                deactivate: (
-                                    <div className='loader'>
-                                        <div className="loader-inner">
-                                            <Icon type="up" /><span>上拉加载</span>
-                                        </div>
-                                    </div>
-                                ),
-
-                                release: (
-                                    <div className='loader'>
-                                        <div className="loader-inner">
-                                            <Icon type="loading" /><span>正在加载</span>
-                                        </div>
-                                    </div>
-                                ),
-
-                                finish: (
-                                    <div className='loader'>
-                                        {
-                                            hasMore
-                                                ? <div className="loader-inner">
-                                                    <Icon type="up" /> <span>上拉加载</span>
-                                                </div>
-                                                : <div className="loader-inner">
-                                                    <span>没有了！</span>
-                                                </div>
-                                        }
-                                    </div>
-                                )
-
-                            }}
-                            direction={'up'}
-                            refreshing={refreshing}
-                            onRefresh={() => { this.onRefresh() }}
-                        >
-                            {dataSource.map((item, index) => (
-                                <SortItem key={index}
-                                    className="user-sum-item"
-                                    data={{
-                                        ...item,
-                                        index: index + 1
-                                    }}>
-                                </SortItem>
-                            ))}
-                        </PullToRefresh> */}
 
                         <Modal
                             className="home-modal"

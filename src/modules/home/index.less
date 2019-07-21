@@ -5,6 +5,10 @@
 .@{cardlist-prefix-cls} {
     font-size: .24rem;
 
+    .am-list-view-scrollview-content {
+        width: 100%;
+    }
+
     /* 下拉loading */
     .ball-beat>div {
         background-color: @theme_color;
@@ -353,10 +357,12 @@
     .sort-item-left {
         display: flex;
         align-items: center;
-        flex: 3;
+        flex: 3 0;
         margin-left: .2rem;
+        overflow: hidden;
 
         .item-sort-num {
+            flex: none;
             width: 1rem;
             font-size: .32rem;
             text-align: center;
@@ -364,6 +370,7 @@
         }
 
         .item-src {
+            flex: none;
             width: .64rem;
             height: .64rem;
             border-radius: 20px;
@@ -376,7 +383,11 @@
         }
 
         .item-info {
+            flex: 1;
             margin-left: .1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
 
             >div {
                 color: #728095;
