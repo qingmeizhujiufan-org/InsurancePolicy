@@ -315,7 +315,7 @@ class Index extends React.Component {
     }
 
     showAlert = ({ info, url }) => {
-        Modal.alert('警告', `${info}，是否确定？`, [
+        Modal.alert('提示', `${info}，是否确定？`, [
             {
                 text: '取消', onPress: () => {
                     this.setState({

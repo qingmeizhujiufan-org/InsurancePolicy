@@ -114,13 +114,33 @@ class Index extends React.Component {
         })
     }
 
+    resetBeginDate = () => {
+        this.setState({
+            beginDate: null
+        }, () => {
+            this.checkDate()
+        })
+    }
+
+    resetEndDate = () => {
+        this.setState({
+            endDate: null
+        }, () => {
+            this.checkDate()
+        })
+    }
+
     checkDate = () => {
+
         const { beginDate, endDate } = this.state;
-        const begin = new Date(beginDate).getTime()
-        const end = new Date(endDate).getTime()
-        if (begin > end) {
-            Toast.fail('起始时间不能大于终止时间！', 2)
-            return
+        if (beginDate && endDate) {
+            const begin = new Date(beginDate).getTime()
+            const end = new Date(endDate).getTime()
+
+            if (begin > end) {
+                Toast.fail('起始时间不能大于终止时间！', 2)
+                return
+            }
         }
 
         this.setState({
@@ -258,6 +278,7 @@ class Index extends React.Component {
                                     format="YYYY-MM-DD"
                                     value={beginDate ? new Date(beginDate) : null}
                                     onOk={date => this.setBeginDate(date)}
+                                    onDismiss={() => { this.resetBeginDate() }}
                                 >
                                     <List.Item className='wrap-date' extra={beginDate}>始：</List.Item>
                                 </DatePicker>
@@ -268,6 +289,7 @@ class Index extends React.Component {
                                     format="YYYY-MM-DD"
                                     value={endDate ? new Date(endDate) : null}
                                     onOk={date => this.setEndDate(date)}
+                                    onDismiss={() => { this.resetEndDate() }}
                                 >
                                     <List.Item className='wrap-date' extra={endDate}>终：</List.Item>
                                 </DatePicker>

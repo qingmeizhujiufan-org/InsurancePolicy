@@ -167,7 +167,7 @@ class Index extends React.Component {
                 <Layout className="custom">
                     <Layout.Content>
                         <SearchBar
-                            placeholder="请输入搜索关键字"
+                            placeholder="请输入客户姓名或电话后四位"
                             maxLength={16}
                             onSubmit={this.onSearch}
                             onClear={this.onClear}

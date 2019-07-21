@@ -95,25 +95,25 @@ class Index extends React.Component {
     })
   }
 
-  showAlert = ({ info, url }) => {
-    Modal.alert('警告', `${info}`, [
-      {
-        text: '取消', onPress: () => {
-          this.setState({
-            canAdd: false,
-            errMsg: info
-          })
-        }, style: 'default'
-      },
-      {
-        text: '确认', onPress: () => {
-          this.context.router.push({
-            pathname: url
-          })
-        }
-      },
-    ]);
-  }
+  // showAlert = ({ info, url }) => {
+  //   Modal.alert('提示', `${info}`, [
+  //     {
+  //       text: '取消', onPress: () => {
+  //         this.setState({
+  //           canAdd: false,
+  //           errMsg: info
+  //         })
+  //       }, style: 'default'
+  //     },
+  //     {
+  //       text: '确认', onPress: () => {
+  //         this.context.router.push({
+  //           pathname: url
+  //         })
+  //       }
+  //     },
+  //   ]);
+  // }
 
   // queryClientList = () => {
   //   const param = {
