@@ -214,7 +214,7 @@ class Index extends React.Component {
             <ListView
                 ref={el => this.lv = el}
                 dataSource={dataSource}
-                renderFooter={() => (<div style={{ padding: '10px 0', textAlign: 'center' }}>
+                renderFooter={() => (<div style={{ padding: '20px 0', textAlign: 'center' }}>
                     {
                         empty
                             ?
