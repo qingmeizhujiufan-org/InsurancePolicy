@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, List, Icon, Toast, Button, SearchBar, DatePicker, Flex, Calendar, Card } from 'antd-mobile';
+import { Modal, List, Icon, Toast, Button, SearchBar, DatePicker, Flex, SwipeAction, Card } from 'antd-mobile';
 import { Layout, Empty } from 'zui-mobile';
 import { CardList } from 'Comps';
 import localStorage from 'Utils/localStorage'
@@ -98,7 +98,6 @@ class Index extends React.Component {
     // }
 
     setBeginDate = date => {
-        console.log(date)
         this.setState({
             beginDate: moment(date).format('YYYY-MM-DD')
         }, () => {
@@ -131,7 +130,6 @@ class Index extends React.Component {
     }
 
     checkDate = () => {
-
         const { beginDate, endDate } = this.state;
         if (beginDate && endDate) {
             const begin = new Date(beginDate).getTime()
@@ -188,9 +186,7 @@ class Index extends React.Component {
         });
     }
 
-    onDeleteComfirm = (e, id) => {
-        console.log(e)
-        e.preventDefault();
+    onDeleteComfirm = (id) => {
         Modal.alert('提示', '是否确定删除?', [
             {
                 text: '取消',
@@ -208,7 +204,6 @@ class Index extends React.Component {
 
         axios.post('order/delete', { id }).then(res => res.data).then(data => {
             if (data.success) {
-
                 Toast.success('删除成功', 2, () => {
                     this.setState({
                         params: assign({}, this.state.params, { flag: new Date().getTime() })
@@ -229,32 +224,43 @@ class Index extends React.Component {
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <Card full className="order-card" key={rowID}>
-                    <Card.Header
-                        title={
-                            <div className="order-title">
-                                <div className="order-id">保单号：{obj.insurancePolicyNo}</div>
-                            </div>
+                <SwipeAction
+                    style={{ backgroundColor: 'gray', marginBottom: '.3rem' }}
+                    autoClose
+                    right={[
+                        {
+                            text: '删除',
+                            onPress: () => this.onDeleteComfirm(obj.id),
+                            style: { backgroundColor: '#F4333C', color: 'white', width: '1.2rem' },
                         }
-                        extra={<span style={{ color: '#f61a1a', fontSize: '.28rem' }} onClick={(e) => this.onDeleteComfirm(e, obj.id)}>删除</span>}
-                    />
-                    <Card.Body onClick={() => { this.onDetail(obj.id) }}>
-                        <div className="order-company">产品名称：{obj.insuranceName}</div>
-                        <div className="order-detail">
-                            <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
-                            <div className="order-detail-item"> 生效时间：{obj.insuredTime}</div>
-                            <div className="order-detail-item">被保人：{obj.insuredName}</div>
-                            <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
-                            <div className="order-detail-item">保费：{obj.insurance} 元</div>
-                            <div className="order-detail-item">订单渠道：{obj.channelName}</div>
-                        </div>
-                    </Card.Body>
-                    <Card.Footer content={
-                        <div className="order-footer">
-                            备注：<span>{obj.mark}</span>
-                        </div>
-                    } />
-                </Card>
+                    ]}
+                >
+                    <Card full className="order-card" key={rowID} onClick={() => { this.onDetail(obj.id) }}>
+                        <Card.Header
+                            title={
+                                <div className="order-title">
+                                    保单号：{obj.insurancePolicyNo}
+                                </div>
+                            }
+                        />
+                        <Card.Body>
+                            <div className="order-company">产品名称：{obj.insuranceName}</div>
+                            <div className="order-detail">
+                                <div className="order-detail-item"> 投保人：{obj.policyholderName}</div>
+                                <div className="order-detail-item"> 生效时间：{obj.insuredTime}</div>
+                                <div className="order-detail-item">被保人：{obj.insuredName}</div>
+                                <div className="order-detail-item">缴费年限：{obj.paymentDuration} 年</div>
+                                <div className="order-detail-item">保费：{obj.insurance} 元</div>
+                                <div className="order-detail-item">订单渠道：{obj.channelName}</div>
+                            </div>
+                        </Card.Body>
+                        <Card.Footer content={
+                            <div className="order-footer">
+                                备注：<span>{obj.mark}</span>
+                            </div>
+                        } />
+                    </Card>
+                </SwipeAction>
             );
         };
 

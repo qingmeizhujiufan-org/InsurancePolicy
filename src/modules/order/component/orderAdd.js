@@ -52,7 +52,7 @@ class Index extends React.Component {
 
   componentWillMount() {
     this.queryCompanyList();
-    // this.queryClientList();
+    this.queryClientList();
     this.queryChannelList();
   }
 
@@ -115,38 +115,31 @@ class Index extends React.Component {
   //   ]);
   // }
 
-  // queryClientList = () => {
-  //   const param = {
-  //     pageSize: 1000,
-  //     pageNumber: 1,
-  //     userId: this.state.userId
-  //   };
-  //   axios.get('custom/queryList', {
-  //     params: param
-  //   }).then(res => res.data).then(data => {
-  //     if (data.success) {
-  //       let backData = data.backData.content || [];
-  //       if (backData.length === 0) {
-  //         this.showAlert({
-  //           info: '暂无客户信息，是否添加相关客户？',
-  //           url: '/custom/add'
-  //         })
-  //         return;
-  //       }
-  //       let list = backData.map(item => {
-  //         return {
-  //           value: item.id,
-  //           label: item.customName
-  //         }
-  //       })
-  //       this.setState({
-  //         Client: list,
-  //       });
-  //     }
-  //   }).catch(err => {
-  //     Toast.fail('服务异常', 2);
-  //   })
-  // }
+  queryClientList = () => {
+    const param = {
+      pageSize: 1000,
+      pageNumber: 1,
+      userId: this.state.userId
+    };
+    axios.get('custom/queryList', {
+      params: param
+    }).then(res => res.data).then(data => {
+      if (data.success) {
+        let backData = data.backData.content || [];
+        let list = backData.map(item => {
+          return {
+            value: item.id,
+            label: item.customName
+          }
+        })
+        this.setState({
+          Client: list,
+        });
+      }
+    }).catch(err => {
+      Toast.fail('服务异常', 2);
+    })
+  }
 
   queryCompanyList = () => {
     const param = {
@@ -212,6 +205,14 @@ class Index extends React.Component {
     }
   }
 
+  validatePhone = (rule, value, callback) => {
+    const reg = /^[0-9]{4}$/;
+    if (value && value !== '' && !reg.test(value)) {
+      callback(new Error('手机号格式不正确'));
+    } else {
+      callback();
+    }
+  }
 
   onSubmit = () => {
     const { canAdd, errMsg } = this.state;
@@ -259,7 +260,7 @@ class Index extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const { order, Channel, companyList, type } = this.state;
+    const { order, Channel, Client, companyList, type } = this.state;
 
     return (
       <DocumentTitle title={type === 'add' ? '添加订单' : '修改订单'}>
@@ -377,22 +378,21 @@ class Index extends React.Component {
                 </Picker>
               </List>
 
-              {/* <List renderHeader={() => '关联客户'} className="order-add-list">
+              <List renderHeader={() => '关联客户'} className="order-add-list">
                 <Picker
                   data={Client}
                   cols={1}
+                  extra={'非必填'}
                   {...getFieldProps('clientId', {
                     initialValue: order.clientId ? [order.clientId] : '',
                     rules: [
-                      { required: true, message: '请选择关联客户' }
+                      { required: false }
                     ]
                   })}
-                  error={!!getFieldError('clientId')}
                 >
                   <Item arrow="horizontal">客户</Item>
                 </Picker>
-
-              </List> */}
+              </List>
 
               <List renderHeader={() => '投保人信息'} className="order-add-list">
                 <InputItem

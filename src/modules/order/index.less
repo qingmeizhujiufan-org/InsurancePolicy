@@ -12,14 +12,19 @@
     .order-card {
         padding-bottom: 0;
 
-        &:not(:first-child) {
-            margin-top: .3rem;
+        &::before {
+            height: 0;
         }
 
         .am-card-header {
             padding: .32rem .3rem .2rem;
             font-size: .30rem;
-            color: #222222;
+            // color: #222222;
+
+            .order-title {
+                color: #222;
+                font-weight: bold;
+            }
         }
 
         .am-card-body {

@@ -8,6 +8,7 @@ import axios from 'Utils/axios';
 import localStorage from 'Utils/localStorage'
 import restUrl from "RestUrl";
 import avator from 'Img/hand-loging.png';
+import bgIMG from 'Img/bg.png';
 
 const Item = List.Item;
 
@@ -170,7 +171,7 @@ class Index extends React.Component {
                             {
                                 bgImg && bgImg.id
                                     ? <img className='user-bg' src={restUrl.FILE_ASSET + bgImg.id + bgImg.fileType} />
-                                    : null
+                                    : <img className='user-bg' src={bgIMG} />
                             }
                             <input
                                 type='file'
