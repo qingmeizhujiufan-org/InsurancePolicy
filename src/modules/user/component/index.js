@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 import { List, Tabs, Toast, Button, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
@@ -35,6 +36,9 @@ class Index extends React.Component {
     };
 
     componentWillMount() {
+        if (!localStorage.get('userId')) {
+            return this.context.router.push('/public/login')
+        }
         this.setState({
             userId: localStorage.get('userId')
         });

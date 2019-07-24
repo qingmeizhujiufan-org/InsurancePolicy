@@ -243,7 +243,7 @@ class Index extends React.Component {
               this.context.router.push(`/order/list`);
             });
           } else {
-            Toast.fail('提交失败', 2);
+            Toast.fail(`提交失败，${data.backMsg}`, 2);
           }
         }).catch(() => {
           Toast.fail('服务异常', 2);
@@ -409,7 +409,7 @@ class Index extends React.Component {
                   {...getFieldProps('policyholderBirthday', {
                     initialValue: order.policyholderBirthday ? new Date(order.policyholderBirthday) : '',
                     rules: [
-                      { required: true, message: '请选择' },
+                      { required: true, message: '请选择投保人生日' },
                       { validator: this.validateDatePicker },
                     ],
                   })}
@@ -435,6 +435,9 @@ class Index extends React.Component {
                   cols={1}
                   {...getFieldProps('policyholderSex', {
                     initialValue: order.policyholderSex ? [order.policyholderSex] : '',
+                    rules: [
+                      { required: true, message: '请选择投保人性别' }
+                    ],
                   })}
                 >
                   <Item arrow="horizontal">性别</Item>
@@ -471,7 +474,7 @@ class Index extends React.Component {
                   {...getFieldProps('insuredTelephone', {
                     initialValue: order.insuredTelephone,
                     rules: [
-                      { required: true, message: '请输入' },
+                      { required: true, message: '请输入被保人电话' },
                       { validator: this.validatePhone },
                     ],
                   })}
@@ -483,8 +486,10 @@ class Index extends React.Component {
                   cols={1}
                   {...getFieldProps('insuredSex', {
                     initialValue: order.insuredSex ? [order.insuredSex] : '',
+                    rules: [
+                      { required: true, message: '请选择被保人性别' }
+                    ],
                   })}
-                  error={!!getFieldError('insuredSex')}
                 >
                   <Item arrow="horizontal">性别</Item>
                 </Picker>

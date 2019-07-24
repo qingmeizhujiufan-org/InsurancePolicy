@@ -191,10 +191,7 @@ class Index extends React.Component {
                                         ]
                                     })}
                                     clear
-                                    error={!!getFieldError('realname')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('realname').join('、'));
-                                    }}
+
                                     placeholder="请输入"
                                 >姓名</InputItem>
                                 <Picker

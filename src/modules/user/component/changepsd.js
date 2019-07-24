@@ -100,10 +100,7 @@ class Index extends React.Component {
                                     })}
                                     type={inputType1}
                                     clear
-                                    error={!!getFieldError('oldPassword')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('oldPassword').join('、'));
-                                    }}
+
                                     placeholder="请输入旧密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(1)}></i>}
                                 >旧密码</InputItem>
@@ -116,12 +113,7 @@ class Index extends React.Component {
                                         ]
                                     })}
                                     type={inputType2}
-
                                     clear
-                                    error={!!getFieldError('password')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('telphone').join('、'));
-                                    }}
                                     placeholder="请输入新密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(2)}></i>}
                                 >新密码</InputItem>
@@ -134,13 +126,8 @@ class Index extends React.Component {
                                     })}
                                     type={inputType3}
                                     clear
-                                    error={!!getFieldError('password2')}
-                                    onErrorClick={() => {
-                                        Toast.info(getFieldError('password2').join('、'));
-                                    }}
                                     placeholder="请再次输入新密码"
                                     extra={<i className="tip-btn iconfont iconchakan" onClick={() => this.showPassword(3)}></i>}
-
                                 >确认密码</InputItem>
                             </List>
 
