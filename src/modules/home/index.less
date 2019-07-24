@@ -10,7 +10,7 @@
     }
 
     /* 下拉loading */
-    .ball-beat>div {
+    .ball-beat > div {
         background-color: @theme_color;
         width: 10px;
         height: 10px;
@@ -23,12 +23,13 @@
         animation: ball-beat 0.7s 0s infinite linear;
     }
 
-    .ball-beat>div:nth-child(2n-1) {
+    .ball-beat > div:nth-child(2n-1) {
         -webkit-animation-delay: 0.35s !important;
         animation-delay: 0.35s !important;
     }
 
-    .am-pull-to-refresh-indicator {}
+    .am-pull-to-refresh-indicator {
+    }
 
     @keyframes ball-beat {
         50% {
@@ -209,7 +210,7 @@
                 height: .42rem;
                 line-height: .42rem;
 
-                text-shadow: 2px 2px 2px rgba(0, 0, 0, .8);
+                text-shadow: 2px 2px 2px rgba(0, 0, 0, .6);
                 font-size: .3rem;
                 font-weight: 500;
             }
@@ -228,7 +229,7 @@
                     }
 
                     width: auto;
-                    padding:.16rem .20rem;
+                    padding: .16rem .20rem;
                     text-align: center;
                     border-radius: .2rem;
                     color: #fff;
@@ -240,7 +241,7 @@
             .am-flexbox-item {
                 text-align: center;
 
-                >div {
+                > div {
                     &:first-child {
                         margin-bottom: .1rem;
                     }
@@ -248,7 +249,7 @@
             }
         }
 
-        &+.user-sum-item .item-fee-num {
+        & + .user-sum-item .item-fee-num {
             color: #00C1B1;
         }
     }
@@ -387,7 +388,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
 
-            >div {
+            > div {
                 color: #728095;
                 font-size: .26rem;
                 overflow: hidden;
