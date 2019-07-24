@@ -3,9 +3,10 @@
  */
 
 import React from 'react';
-import {Route, IndexRoute} from 'react-router';
-import {Icon} from 'antd-mobile';
+import { Route, IndexRoute } from 'react-router';
+import { Icon } from 'antd-mobile';
 import Loadable from 'react-loadable';
+import localStorage from 'Utils/localStorage'
 
 function Loading(props) {
     if (props.error) {
@@ -17,7 +18,7 @@ function Loading(props) {
             <div style={{
                 padding: '30px 0',
                 textAlign: 'center'
-            }}><Icon type='loading'/></div>
+            }}><Icon type='loading' /></div>
         );
     } else {
         return null;
@@ -97,37 +98,37 @@ const Changepsd = Loadable({
 
 const requireAuth = (nextState, replace) => {
     if (!localStorage.userId) {
-        replace({pathname: '/public/login'})
+        replace({ pathname: '/public/login' })
     }
 }
 
 module.exports = (
     <Route path="/" component={App}>
-        <IndexRoute component={Index}/>
+        <IndexRoute component={Index} />
         <Route path="index" component={App}>
-            <IndexRoute component={Index}/>
+            <IndexRoute component={Index} />
         </Route>
         <Route path="public" component={App}>
-            <IndexRoute component={Login}/>
-            <Route path="login" component={Login}/>
-            <Route path="register" component={Register}/>
-            <Route path="retrievepad" component={Retrievepsd}/>
+            <IndexRoute component={Login} />
+            <Route path="login" component={Login} />
+            <Route path="register" component={Register} />
+            <Route path="retrievepad" component={Retrievepsd} />
         </Route>
         <Route path="order" component={App} onEnter={requireAuth}>
-            <IndexRoute component={OrderList}/>
-            <Route path="list" component={OrderList}/>
-            <Route path="add" component={OrderAdd}/>
+            <IndexRoute component={OrderList} />
+            <Route path="list" component={OrderList} />
+            <Route path="add" component={OrderAdd} />
         </Route>
         <Route path="custom" component={App} onEnter={requireAuth}>
-            <IndexRoute component={CustomList}/>
-            <Route path="list" component={CustomList}/>
-            <Route path="add" component={CustomAdd}/>
+            <IndexRoute component={CustomList} />
+            <Route path="list" component={CustomList} />
+            <Route path="add" component={CustomAdd} />
         </Route>
         <Route path="user" component={App} onEnter={requireAuth}>
-            <IndexRoute component={Personal}/>
-            <Route path="personal" component={Personal}/>
-            <Route path="edit" component={Edit}/>
-            <Route path="changepsd" component={Changepsd}/>
+            <IndexRoute component={Personal} />
+            <Route path="personal" component={Personal} />
+            <Route path="edit" component={Edit} />
+            <Route path="changepsd" component={Changepsd} />
         </Route>
     </Route>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
-import { List, Tabs, Toast, Button, Flex, WingBlank, WhiteSpace, Icon, ImagePicker } from 'antd-mobile';
+import { List, Tabs, Toast, Button, WhiteSpace } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import '../index.less';
 import DocumentTitle from "react-document-title";
