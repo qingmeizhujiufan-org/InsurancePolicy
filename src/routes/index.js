@@ -97,7 +97,7 @@ const Changepsd = Loadable({
 })
 
 const requireAuth = (nextState, replace) => {
-    if (!localStorage.userId) {
+    if (!localStorage.get("userId")) {
         replace({ pathname: '/public/login' })
     }
 }
