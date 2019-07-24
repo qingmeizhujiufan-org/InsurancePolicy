@@ -183,14 +183,14 @@ class Index extends React.Component {
     axios.get('order/queryOne', {
       params: param
     }).then(res => res.data).then(data => {
-      if (data.backData) {
+      if (data.success && data.backData) {
         const backData = data.backData;
         this.setState({
           order: backData
         });
         Toast.hide()
       } else {
-        Toast.fail('查询失败', 2);
+        Toast.fail(data.backMsg, 2);
       }
     }).catch(err => {
       Toast.fail('服务异常', 2);
@@ -243,7 +243,7 @@ class Index extends React.Component {
               this.context.router.push(`/order/list`);
             });
           } else {
-            Toast.fail(`提交失败，${data.backMsg}`, 2);
+            Toast.fail(data.backMsg, 2);
           }
         }).catch(() => {
           Toast.fail('服务异常', 2);

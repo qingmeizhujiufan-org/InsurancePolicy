@@ -54,7 +54,7 @@ class Index extends React.Component {
     onSubmit = () => {
         this.props.form.validateFields({ force: true }, (error) => {
             if (!error) {
-                const { orderId, userId, type } = this.state;
+                const { userId } = this.state;
                 Toast.loading('正在提交', 0);
                 const values = this.props.form.getFieldsValue(['oldPassword', 'password']);
                 const param = assign({}, { id: userId }, values);

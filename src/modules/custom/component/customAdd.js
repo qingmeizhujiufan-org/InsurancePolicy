@@ -112,7 +112,7 @@ class Index extends React.Component {
                             this.context.router.push(`/custom/list`);
                         });
                     } else {
-                        Toast.fail('提交失败', 2);
+                        Toast.fail(data.backMsg, 2);
                     }
                 }).catch(() => {
                     Toast.fail('服务异常', 2);
