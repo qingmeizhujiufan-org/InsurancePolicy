@@ -249,7 +249,7 @@ class Index extends React.Component {
                                 }
                                 arrow="horizontal" onClick={() => {
                                     window.location.href = `${Links.pointMallUrl}`
-                                }}>积分商城
+                                }}>云服商城
                             </Item>
                         </List>
 

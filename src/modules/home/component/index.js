@@ -454,9 +454,9 @@ class Index extends React.Component {
         const bgFile = firstUser.bgFile;
 
         const times = [
-            { value: 0, label: '月度排行' },
-            { value: 1, label: '季度排行' },
-            { value: 2, label: '年度排行' },
+            { value: 0, label: '月度业绩' },
+            { value: 1, label: '季度业绩' },
+            { value: 2, label: '年度业绩' },
         ];
         const conditions = [
             { value: 0, label: '累计保费' },
