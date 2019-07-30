@@ -232,21 +232,37 @@ class Index extends React.Component {
       Toast.fail(errMsg, 2);
       return;
     }
+
     this.props.form.validateFields({ force: true }, (error) => {
       if (!error) {
         const { orderId, userId, type } = this.state;
         Toast.loading('正在提交', 0);
         const values = this.props.form.getFieldsValue();
+        // console.log(values)
         const param = assign({}, { userId }, values);
-        param.insuranceCompany = param.insuranceCompany[0] || "";
-        param.policyholderSex = param.policyholderSex[0] || "";
-        param.insuredSex = param.insuredSex[0] || "";
-        param.paymentDuration = param.paymentDuration[0] || "";
-        param.orderChannel = param.orderChannel[0] || "";
+        if (param.insuranceCompany.length > 0) {
+          param.insuranceCompany = param.insuranceCompany[0];
+        } else {
+          param.insuranceCompany = "";
+        }
+
+        if (param.orderChannel.length > 0) {
+          param.orderChannel = param.orderChannel[0];
+        } else {
+          param.orderChannel = "";
+        }
+
+        if (param.clientId.length > 0) {
+          param.clientId = param.clientId[0];
+        } else {
+          param.clientId = "";
+        }
+        param.policyholderSex = param.policyholderSex[0];
+        param.insuredSex = param.insuredSex[0];
+        param.paymentDuration = param.paymentDuration[0];
         param.insuredTime = moment(param.insuredTime).format('YYYY/MM/DD');
         param.policyholderBirthday = moment(param.policyholderBirthday).format('YYYY/MM/DD');
         param.insuredBirthday = moment(param.insuredBirthday).format('YYYY/MM/DD');
-        param.clientId = param.clientId[0] || "";
 
         if (orderId) {
           param.id = orderId;
@@ -309,7 +325,7 @@ class Index extends React.Component {
                   data={companyList}
                   cols={1}
                   {...getFieldProps('insuranceCompany', {
-                    initialValue: order.insuranceCompany ? [order.insuranceCompany] : '',
+                    initialValue: order.insuranceCompany ? [order.insuranceCompany] : [],
                     rules: [
                       { required: true, message: '请输入保险公司' }
                     ],
@@ -334,7 +350,7 @@ class Index extends React.Component {
                   data={getDuration(30)}
                   cols={1}
                   {...getFieldProps('paymentDuration', {
-                    initialValue: order.paymentDuration ? [order.paymentDuration] : '',
+                    initialValue: order.paymentDuration ? [order.paymentDuration] : [],
                     rules: [
                       { required: true, message: '请选择缴费年限' }
                     ],
@@ -382,7 +398,7 @@ class Index extends React.Component {
                   data={Channel}
                   cols={1}
                   {...getFieldProps('orderChannel', {
-                    initialValue: order.orderChannel ? [order.orderChannel] : '',
+                    initialValue: order.orderChannel ? [order.orderChannel] : [],
                     rules: [
                       { required: true, message: '请选择订单渠道' }
                     ]
@@ -399,7 +415,7 @@ class Index extends React.Component {
                   cols={1}
                   extra={'非必填'}
                   {...getFieldProps('clientId', {
-                    initialValue: order.clientId ? [order.clientId] : '',
+                    initialValue: order.clientId ? [order.clientId] : [],
                     rules: [
                       { required: false }
                     ]
@@ -449,7 +465,7 @@ class Index extends React.Component {
                   data={sexs}
                   cols={1}
                   {...getFieldProps('policyholderSex', {
-                    initialValue: order.policyholderSex ? [order.policyholderSex] : '',
+                    initialValue: order.policyholderSex ? [order.policyholderSex] : [],
                     rules: [
                       { required: true, message: '请选择投保人性别' }
                     ],
@@ -500,7 +516,7 @@ class Index extends React.Component {
                   data={sexs}
                   cols={1}
                   {...getFieldProps('insuredSex', {
-                    initialValue: order.insuredSex ? [order.insuredSex] : '',
+                    initialValue: order.insuredSex ? [order.insuredSex] : [],
                     rules: [
                       { required: true, message: '请选择被保人性别' }
                     ],
