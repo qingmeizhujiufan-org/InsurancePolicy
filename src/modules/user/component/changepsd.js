@@ -62,7 +62,7 @@ class Index extends React.Component {
                 axios.post(`user/changePassword`, param).then(res => res.data).then(data => {
                     if (data.success) {
                         Toast.success('提交成功', 1, () => {
-                            this.context.router.push(`user/personal`);
+                            this.context.router.push('public/login');
                         });
                     } else {
                         Toast.fail(data.backMsg, 2);
