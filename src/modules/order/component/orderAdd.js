@@ -29,7 +29,7 @@ const sexs = [{
 },
 {
   label: '女',
-  value: 0,
+  value: 2,
 }];
 
 function getDuration(max = 30) {
@@ -227,15 +227,21 @@ class Index extends React.Component {
   }
 
   onSubmit = () => {
-    const { canAdd, errMsg } = this.state;
+    const { canAdd, userId, errMsg } = this.state;
+
+    if (!userId) {
+      Toast.fail("请先登录", 2);
+      return;
+    }
     if (!canAdd) {
       Toast.fail(errMsg, 2);
       return;
     }
 
+
     this.props.form.validateFields({ force: true }, (error) => {
       if (!error) {
-        const { orderId, userId, type } = this.state;
+        const { orderId, type } = this.state;
         Toast.loading('正在提交', 0);
         const values = this.props.form.getFieldsValue();
         // console.log(values)
