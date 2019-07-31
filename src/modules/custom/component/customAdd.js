@@ -179,7 +179,9 @@ class Index extends React.Component {
                                     data={sexs}
                                     cols={1}
                                     {...getFieldProps('customSex', {
-                                        initialValue: custom.customSex ? [custom.customSex] : '',
+                                        initialValue: custom.customSex !== undefined
+                                            && custom.customSex !== null
+                                            && custom.customSex !== "" ? [custom.customSex] : [],
                                         rules: [
                                             { required: true, message: '请选择客户性别' }
                                         ],
