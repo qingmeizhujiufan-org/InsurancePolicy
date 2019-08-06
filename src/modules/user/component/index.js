@@ -14,9 +14,9 @@ import bgIMG from 'Img/bg.png';
 const Item = List.Item;
 
 const tabs = [
-    { title: '月度排行', sub: '1' },
-    { title: '季度排行', sub: '2' },
-    { title: '年度排行', sub: '3' },
+    { title: '月度业绩', sub: '1' },
+    { title: '季度业绩', sub: '2' },
+    { title: '年度业绩', sub: '3' },
 ];
 
 
