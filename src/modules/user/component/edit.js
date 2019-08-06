@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, InputItem, Toast, Button, ImagePicker, WingBlank, WhiteSpace, Picker } from 'antd-mobile';
+import { List, InputItem, Toast, Button, DatePicker, WingBlank, WhiteSpace, Picker } from 'antd-mobile';
 import { Layout } from 'zui-mobile';
 import { createForm } from 'rc-form';
 import localStorage from 'Utils/localStorage'
-import { assign, find } from 'lodash';
+import { assign } from 'lodash';
+import moment from 'moment';
 import '../index.less';
 import DocumentTitle from "react-document-title";
 import axios from 'Utils/axios';
@@ -117,6 +118,14 @@ class Index extends React.Component {
         })
     }
 
+    validateDatePicker = (rule, date, callback) => {
+        if (date) {
+            callback();
+        } else {
+            callback(new Error('请选择日期'));
+        }
+    }
+
     onSubmit = () => {
 
         this.props.form.validateFields({ force: true }, (error) => {
@@ -126,6 +135,7 @@ class Index extends React.Component {
                 const values = this.props.form.getFieldsValue();
                 values.company = values.company[0];
                 const param = assign({}, { id: userId, headimgurl: headimgurl }, values);
+                param.birthday = moment(param.birthday).format('YYYY/MM/DD');
 
                 axios.post(`user/update`, param).then(res => res.data).then(data => {
                     if (data.success) {
@@ -194,6 +204,20 @@ class Index extends React.Component {
 
                                     placeholder="请输入"
                                 >姓名</InputItem>
+                                <DatePicker
+                                    {...getFieldProps('birthday', {
+                                        initialValue: user.birthday ? new Date(user.birthday) : '',
+                                        rules: [
+                                            { required: true, message: '请选择生日' },
+                                            { validator: this.validateDatePicker },
+                                        ],
+                                    })}
+                                    mode="date"
+                                    minDate={new Date(1950, 1, 1, 0, 0, 0)}
+                                    maxDate={new Date()}
+                                >
+                                    <Item arrow="horizontal">生日</Item>
+                                </DatePicker>
                                 <Picker
                                     data={companyList}
                                     cols={1}
